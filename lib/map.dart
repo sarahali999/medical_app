@@ -1,98 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-
-      home: const MyHomePage(title: 'الخريطة',),
-    );
-  }
-}
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  late MapController mapController;
+class _MyAppState extends State<MyApp> {
+  final MapController _mapController = MapController();
+  var currentLocation = LatLng(0, 0);
 
   @override
   void initState() {
     super.initState();
-    mapController = MapController(
-      initPosition: GeoPoint(latitude: 14.599512, longitude: 120.984222),
-      areaLimit: const BoundingBox.world(),
-    );
+    _locateUser();
   }
 
-  Future<void> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    mapController.changeLocation(GeoPoint(latitude: position.latitude, longitude: position.longitude));
+  _locateUser() async {
+    var location = Location();
+    var userLocation = await location.getLocation();
+    setState(() {
+      currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
+    });
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-   appBar:   AppBar(
-        title: Text(widget.title),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-
-      body: Stack(
-        children: <Widget>[
-          OSMFlutter(
-            controller: mapController,
-            osmOption: OSMOption(
-              userTrackingOption: UserTrackingOption(enableTracking: true),
-              zoomOption: ZoomOption(
-                initZoom: 8,
-              ),
-            ),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('User Location Map'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              // Navigate back to the previous page
+              // This will work if your current page was pushed onto the navigation stack
+              Navigator.of(context).pop();
+            },
           ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _determinePosition,
-        tooltip: 'Go to my location',
-        child: const Icon(Icons.my_location),
+        ),
+
+        body: FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+              center: new LatLng(32.6076326,44.093935),
+              zoom: 10.0
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c'],
+            ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  width: 80.0,
+                  height: 80.0,
+                  point: new LatLng(32.6206034,44.0526547),
+                  child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+
+                ),
+              ],
+
+            ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  width: 80.0,
+                  height: 80.0,
+                  point: new LatLng(32.6003987,44.0272621),
+                  child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+
+                ),
+              ],
+
+            ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  width: 80.0,
+                  height: 80.0,
+                  point: new LatLng(32.595453,44.0210427),
+                  child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+
+                ),
+              ],
+
+            ),
+
+
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            var location = Location();
+
+            var serviceEnabled = await location.serviceEnabled();
+            if (!serviceEnabled) {
+              serviceEnabled = await location.requestService();
+              if (!serviceEnabled) {
+                return;
+              }
+            }
+
+            var permissionGranted = await location.hasPermission();
+            if (permissionGranted == PermissionStatus.denied) {
+              permissionGranted = await location.requestPermission();
+              if (permissionGranted != PermissionStatus.granted) {
+                return;
+              }
+            }
+
+            var userLocation = await location.getLocation();
+            setState(() {
+              currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
+              _mapController.move(currentLocation, 15.0);
+            });
+          },
+          tooltip: 'Locate Me',
+          child: Icon(Icons.my_location),
+        ),
+
       ),
     );
   }

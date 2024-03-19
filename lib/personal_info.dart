@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import 'QRPage.dart';
+
 class PersonalInfoPage extends StatefulWidget {
   final Language selectedLanguage;
 
@@ -103,16 +103,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           color:Color(0xFF00897B),
         ),
         textAlign: TextAlign.right,
-      ),
-    );
-  }
-  void _handleSaveButtonPressed(PersonalInfoPage personalInfo) {
-    // عرض صفحة الرمز مع بيانات المستخدم
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return QRPage(personalInfo: personalInfo);
-        },
       ),
     );
   }
