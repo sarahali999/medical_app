@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'personal_info.dart';
 import 'map.dart';
 import 'text_field.dart' as myTextField;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 enum Language { Arabic, English, Persian, Kurdish, Turkmen }
 
@@ -40,14 +41,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var textDirection = selectedLanguage == Language.Arabic && selectedLanguage == Language.Persian ? TextDirection.rtl : TextDirection.ltr;
+    var textDirection = selectedLanguage == Language.Arabic && selectedLanguage == Language.Persian&& selectedLanguage == Language.Kurdish? TextDirection.rtl : TextDirection.ltr;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Color(0xFF00897B),
         title: Text(
-          selectedLanguage == Language.Arabic ? 'اللغات' : selectedLanguage == Language.English ? 'Languages' :selectedLanguage == Language.Persian? 'زبان‌ها':"",
+          selectedLanguage == Language.Arabic ? 'اللغات' : selectedLanguage == Language.English ? 'Languages' :selectedLanguage == Language.Persian? 'زبان‌ها':          selectedLanguage == Language.Kurdish ? 'زمانەکان' : "", // Sorani for "Languages"
           textDirection: textDirection,
         ),
       ),
@@ -61,7 +62,10 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0xFF00897B),
               ),
               child: Text(
-                selectedLanguage == Language.Arabic ? 'اختيار اللغة' : selectedLanguage == Language.English ? 'Language Selection' :selectedLanguage == Language.Persian? 'انتخاب زبان':"",
+                selectedLanguage == Language.Arabic ? 'اختيار اللغة' :
+                selectedLanguage == Language.English ? 'Language Selection' :
+                selectedLanguage == Language.Persian ? 'انتخاب زبان' :
+                selectedLanguage == Language.Kurdish ? 'هەڵبژاردنی زمان' : "", // Sorani for "Language Selection"
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Cairo',
@@ -83,7 +87,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () => _handleLanguageChange(Language.English),
             ),
             ListTile(
-              title: Text('Kurdî'), // Kurdish for "Kurdish"
+              title: Text('کوردی'), // Kurdish for "Kurdish"
               onTap: () => _handleLanguageChange(Language.Kurdish),
             ),
             ListTile(
@@ -104,7 +108,7 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
             ),
             child: Column(
-              crossAxisAlignment: selectedLanguage == Language.Arabic || selectedLanguage == Language.Persian   ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment: selectedLanguage == Language.Arabic || selectedLanguage == Language.Persian ||selectedLanguage == Language.Kurdish? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 AnimatedContainer(
                   duration: Duration(milliseconds: 500),
@@ -124,7 +128,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  selectedLanguage == Language.Arabic ? 'دليل طبي' : selectedLanguage == Language.English ? 'Medical Guide' :selectedLanguage == Language.Persian? 'راهنمای پزشکی':"",
+                  selectedLanguage == Language.Arabic ? 'دليل طبي' : selectedLanguage == Language.English ? 'Medical Guide' :selectedLanguage == Language.Persian? 'راهنمای پزشکی':  selectedLanguage == Language.Kurdish ? 'رێبەری پزیشکی' : "", // Sorani for "Medical Guide"
+
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,
@@ -176,9 +181,8 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: selectedLanguage ==Language.Arabic || selectedLanguage == Language.Persian
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
+                  crossAxisAlignment: selectedLanguage == Language.Arabic || selectedLanguage == Language.Persian ||selectedLanguage == Language.Kurdish? CrossAxisAlignment.end : CrossAxisAlignment.start,
+
                   children: [
                     InkWell(
                       onTap: () {
@@ -206,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
-                              crossAxisAlignment: selectedLanguage == Language.Arabic || selectedLanguage == Language.Persian ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                              crossAxisAlignment: selectedLanguage == Language.Arabic || selectedLanguage == Language.Persian ||selectedLanguage == Language.Kurdish? CrossAxisAlignment.end : CrossAxisAlignment.start,
                               children: [
                                 Icon(
                                   Icons.info,
@@ -215,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  selectedLanguage == Language.Arabic ? 'معلومات الزائر' : selectedLanguage == Language.English ? 'Personal Information' :selectedLanguage == Language.Persian? 'اطلاعات شخصی':"",
+                                  selectedLanguage == Language.Arabic ? 'معلومات الزائر' : selectedLanguage == Language.English ? 'Personal Information' :selectedLanguage == Language.Persian? 'اطلاعات شخصی':  selectedLanguage == Language.Kurdish ? 'رێبەری پزیشکی' : "", // Sorani for "Medical Guide"
                                   style: myTextField.getGulzarTextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -225,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                                 if (isPersonalInfoLoading)
                                   Align(
                                     alignment: Alignment.center,
-                                    child: CircularProgressIndicator(),
+                                    child: SpinKitFadingCircle(),
                                   ),
                               ],
                             ),
@@ -261,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
-                              crossAxisAlignment: selectedLanguage ==Language.Arabic || selectedLanguage == Language.Persian ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                              crossAxisAlignment: selectedLanguage == Language.Arabic || selectedLanguage == Language.Persian ||selectedLanguage == Language.Kurdish? CrossAxisAlignment.end : CrossAxisAlignment.start,
                               children: [
                                 Icon(
                                   Icons.map,
@@ -270,7 +274,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  selectedLanguage == Language.Arabic ? 'الخريطة' : selectedLanguage == Language.English ? 'Map' :selectedLanguage == Language.Persian? 'نقشه':"",
+                                  selectedLanguage == Language.Arabic ? 'الخريطة' : selectedLanguage == Language.English ? 'Map' :selectedLanguage == Language.Persian? 'نقشه':  selectedLanguage == Language.Kurdish ? 'نەخشە' : "", // Sorani for "Map"
+
                                   style: myTextField.getGulzarTextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -280,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                                 if (isMapLoading)
                                   Align(
                                     alignment: Alignment.center,
-                                    child: CircularProgressIndicator(),
+                                    child: SpinKitFadingCircle(),
                                   ),
                               ],
                             ),
@@ -312,12 +317,19 @@ class LoadingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            SpinKitFadingCircle(
+              color: Colors.blue,
+              size: 50.0,
             ),
             SizedBox(height: 20),
             Text(
-              selectedLanguage == Language.Arabic ? "جاري التحميل..." : selectedLanguage == Language.English ? "Loading..." : selectedLanguage == Language.Persian?"در حال بارگذاری...":"",
+              selectedLanguage == Language.Arabic
+                  ? "جاري التحميل..."
+                  : selectedLanguage == Language.English
+                  ? "Loading..."
+                  : selectedLanguage == Language.Persian
+                  ? "در حال بارگذاری..."
+                  :  selectedLanguage == Language.Kurdish ? "بارکردن..." : "", // Sorani for "Loading..."
               style: TextStyle(
                 fontSize: 18,
                 fontFamily: 'Cairo',
