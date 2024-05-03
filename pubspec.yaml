@@ -13,28 +13,32 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  pinput: ^2.2.12
   flutter_map: ^6.1.0
   location: ^5.0.0
   flutter_spinkit: ^5.2.0
   http: ^1.2.0
   flutter_map_location_marker: ^8.0.8
+  lottie: ^3.1.0
+  introduction_screen: ^2.1.0
+  intro_screen_onboarding_flutter: ^1.0.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
   flutter_lints: ^2.0.0
 
 flutter:
-
   uses-material-design: true
-
   assets:
-    - images/
+    - assets/images/
+    - assets/lottie/
 
   fonts:
     - family: Cairo
       fonts:
         - asset: fonts/Cairo.ttf
+    - family: Dancing Script
+      fonts:
+        - asset: fonts/Danc.ttf

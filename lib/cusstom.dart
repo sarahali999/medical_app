@@ -10,8 +10,7 @@ class CustomTextField extends StatelessWidget {
 
   CustomTextField(
       this.hintText,
-      this.controller,
-      {
+      this.controller, {
         this.textStyle = const TextStyle(
           fontSize: 18,
           color: Colors.black,
