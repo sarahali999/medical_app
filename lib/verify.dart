@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'login_reg.dart';
 
 class MyVerify extends StatefulWidget {
   const MyVerify({Key? key}) : super(key: key);
@@ -117,10 +118,12 @@ class _MyVerifyState extends State<MyVerify> {
                               (route) => false,
                         );
                       },
+
                       child: Text(
                         "Edit Phone Number ?",
                         style: TextStyle(color: Colors.black),
-                      ))
+                      )
+                  )
                 ],
               )
             ],

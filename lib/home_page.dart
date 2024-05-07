@@ -12,9 +12,7 @@ class HomePage extends StatefulWidget {
 
   @override
   _HomePageState createState() => _HomePageState();
-
 }
-
 class _HomePageState extends State<HomePage> {
   Language selectedLanguage = Language.Arabic; // Initial language
   final Color primaryColor = Color(0xFF00897B);
@@ -191,17 +189,17 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       InkWell(
                         onTap: () {
-                          _handleDownload('personal_info');
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PersonalInfoPage(selectedLanguage: selectedLanguage);
-                            },
-                          ).then((_) {
-                            setState(() {
-                              isPersonalInfoLoading = false;
-                            });
-                          });
+                          // _handleDownload('personal_info');
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) {
+                          //     return PersonalInfoPage(selectedLanguage: selectedLanguage);
+                          //   },
+                          // ).then((_) {
+                          //   setState(() {
+                          //     isPersonalInfoLoading = false;
+                          //   });
+                          // });
                         },
                         child: Card(
                           elevation: 80.0,

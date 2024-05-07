@@ -7,6 +7,8 @@ class CustomTextField extends StatelessWidget {
   final TextDirection textDirection;
   final IconData? icon;
   final String? Function(String?)? validator;
+  final double width;
+  final double height;
 
   CustomTextField(
       this.hintText,
@@ -19,6 +21,8 @@ class CustomTextField extends StatelessWidget {
         required this.textDirection,
         this.icon,
         this.validator,
+        this.width = 0.0,
+        this.height = 0.0,
       });
 
   @override
@@ -26,16 +30,34 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: textStyle,
-        icon: icon != null ? Icon(icon) : null,
+        labelText: hintText,
+        filled: true,
+        fillColor: Colors.grey[100]!,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0),
+          borderSide: BorderSide(),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0),
+          borderSide: BorderSide(color:  Color(0xFF80CBC4)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0),
+          borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
+        ),
       ),
-      style: textStyle,
+      validator: validator ?? (val) {
+        if (val!.isEmpty) {
+          return "Email cannot be empty";
+        }
+        return null;
+      },
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(fontFamily: "Poppins"),
       textAlign: textDirection == TextDirection.rtl
           ? TextAlign.right
           : TextAlign.left,
       textDirection: textDirection,
-      validator: validator,
     );
   }
 }

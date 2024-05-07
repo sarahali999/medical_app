@@ -33,7 +33,8 @@ class WelcomeScreen extends StatelessWidget {
               const Text(
                 'Welcome Back',
                 style: TextStyle(
-                    fontSize: 30,
+                  fontFamily: 'Dancing Script',
+                    fontSize: 50,
                     color: Colors.white
                 ),
               ),

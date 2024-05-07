@@ -25,22 +25,29 @@ class IntroScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Earn a kwikbuck by selling products, providing services or completing tasks",
+                  "برنامجك الطبي الاول",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey.shade500, shadows: [
-                    Shadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 5,
-                      offset: Offset(1, 1),
-                    )
-                  ]),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Caveat',
+                    shadows: [
+                      Shadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 5,
+                        offset: Offset(1, 1),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
-            footer: Text("this is footer"),
             titleWidget: Text(
-              "this is custom title",
-              style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
+              "برنامجك الطبي الاول",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'Caveat',
+              ),
             ),
           ),
           PageViewModel(
@@ -55,20 +62,26 @@ class IntroScreen extends StatelessWidget {
                 SizedBox(height: 20),
                 Center(
                   child: Text(
-                    "Instantly connect with Buyers & Sellers near you",
+                    "برنامجك الطبي الاول",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey.shade500, shadows: [
-                      Shadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 5,
-                        offset: Offset(1, 1),
-                      )
-                    ]),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Caveat',
+                      shadows: [
+                        Shadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 5,
+                          offset: Offset(1, 1),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-            title: "Save Time",
+            titleWidget: Text(
+              "دليل طبي",
+            ),
           ),
           PageViewModel(
             bodyWidget: Column(
@@ -82,20 +95,26 @@ class IntroScreen extends StatelessWidget {
                 SizedBox(height: 20),
                 Center(
                   child: Text(
-                    "Work when you want & earn what you need",
+                    "برنامجك الطبي الاول",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey.shade500, shadows: [
-                      Shadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 5,
-                        offset: Offset(1, 1),
-                      )
-                    ]),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Caveat',
+                      shadows: [
+                        Shadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 5,
+                          offset: Offset(1, 1),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-            title: "Enjoy Freedom",
+            titleWidget: Text(
+              "دليل طبي",
+            ),
           ),
         ],
         onDone: () {
@@ -126,20 +145,25 @@ class IntroScreen extends StatelessWidget {
           height: 60,
           width: 60,
           decoration: BoxDecoration(
-            color: Color(0xff20D5B2),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF00897B),
+                Color(0xFF80CBC4),
+              ],
+            ),
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.shade300,
-                blurRadius: 10,
+                blurRadius: 40,
                 offset: Offset(4, 4),
               ),
             ],
           ),
           child: Center(
             child: Text(
-              "Skip",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              "تخطي",
+              style: TextStyle(color: Colors.white, fontFamily: 'Caveat', fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -148,13 +172,18 @@ class IntroScreen extends StatelessWidget {
           width: 60,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: Color(0xff20D5B2), width: 2),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF00897B),
+                Color(0xFF80CBC4),
+              ],
+            ),
           ),
           child: Center(
             child: Icon(
               Icons.navigate_next,
               size: 30,
-              color: Color(0xff20D5B2),
+              color: Colors.white,
             ),
           ),
         ),
@@ -162,7 +191,12 @@ class IntroScreen extends StatelessWidget {
           height: 60,
           width: 60,
           decoration: BoxDecoration(
-            color: Color(0xff20D5B2),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF00897B),
+                Color(0xFF80CBC4),
+              ],
+            ),
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
               BoxShadow(

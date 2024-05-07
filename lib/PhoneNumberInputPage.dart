@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'verify.dart';
+
 class MyPhone extends StatefulWidget {
   const MyPhone({Key? key}) : super(key: key);
 
@@ -28,7 +29,7 @@ class _MyPhoneState extends State<MyPhone> {
             children: [
               Image.asset(
                 'assets/images/img1.png',
-                width: 150,
+                width : 150,
                 height: 150,
               ),
               SizedBox(
