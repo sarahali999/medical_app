@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
   pinput: ^2.2.12
   intl_phone_field: ^3.2.0
@@ -22,11 +21,10 @@ dependencies:
   flutter_map_location_marker: ^8.0.8
   lottie: ^3.1.0
   introduction_screen: ^2.1.0
+  flutter_svg: ^2.0.10+1
   intro_screen_onboarding_flutter: ^1.0.0
   carousel_slider: ^4.2.1
   curved_navigation_bar: ^1.0.0
-
-
 
 dev_dependencies:
   flutter_test:
@@ -38,7 +36,6 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
-
   fonts:
     - family: Cairo
       fonts:
@@ -49,4 +46,6 @@ flutter:
     - family: Caveat
       fonts:
         - asset: fonts/Caveat.ttf
-
+    - family: Darine-Regular
+      fonts:
+        - asset: fonts/Darine.ttf

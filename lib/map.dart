@@ -104,6 +104,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+         // backgroundColor: Colors.white,
           title: TextField(
             controller: searchController,
             decoration: InputDecoration(
@@ -115,13 +116,13 @@ class _MyAppState extends State<MyApp> {
             ),
             onSubmitted: (value) => _searchAndNavigate(),
           ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-
-              Navigator.of(context).pop();
-            },
-          ),
+        //   leading: IconButton(
+        //     icon: Icon(Icons.arrow_back),
+        //     onPressed: () {
+        //
+        //       Navigator.of(context).pop();
+        //     },
+        //   ),
         ),
         body: FlutterMap(
           mapController: _mapController,

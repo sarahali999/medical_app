@@ -29,7 +29,11 @@ class IntroScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
-                    fontFamily: 'Caveat',
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Darine-Regular',
+                    fontSize: 20,
+
+
                     shadows: [
                       Shadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -46,7 +50,10 @@ class IntroScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: 'Caveat',
+                fontFamily: 'Darine-Regular',
+                  fontWeight: FontWeight.bold,
+                fontSize: 20,
+
               ),
             ),
           ),
@@ -66,7 +73,10 @@ class IntroScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontFamily: 'Caveat',
+                      fontFamily: 'Darine-Regular',
+    fontWeight: FontWeight.bold,
+                      fontSize: 20,
+
                       shadows: [
                         Shadow(
                           color: Colors.grey.withOpacity(0.5),
@@ -81,6 +91,13 @@ class IntroScreen extends StatelessWidget {
             ),
             titleWidget: Text(
               "دليل طبي",
+            style: TextStyle(
+    color: Colors.black,
+    fontFamily: 'Darine-Regular',
+                fontWeight: FontWeight.bold,
+              fontSize: 20,
+
+            ),
             ),
           ),
           PageViewModel(
@@ -99,7 +116,10 @@ class IntroScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontFamily: 'Caveat',
+                      fontFamily: 'Darine-Regular',
+    fontWeight: FontWeight.bold,
+                      fontSize: 20,
+
                       shadows: [
                         Shadow(
                           color: Colors.grey.withOpacity(0.5),
@@ -114,6 +134,13 @@ class IntroScreen extends StatelessWidget {
             ),
             titleWidget: Text(
               "دليل طبي",
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'Darine-Regular',
+                  fontWeight: FontWeight.bold,
+                fontSize: 20,
+
+              ),
             ),
           ),
         ],
@@ -163,7 +190,8 @@ class IntroScreen extends StatelessWidget {
           child: Center(
             child: Text(
               "تخطي",
-              style: TextStyle(color: Colors.white, fontFamily: 'Caveat', fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.white, fontFamily: 'Darine-Regular', fontWeight: FontWeight.bold,fontSize: 14,
+              ),
             ),
           ),
         ),
@@ -208,8 +236,14 @@ class IntroScreen extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              "Done",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              "تم",
+              style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Darine-Regular',
+                  fontWeight: FontWeight.bold,
+                fontSize: 14,
+
+              ),
             ),
           ),
         ),

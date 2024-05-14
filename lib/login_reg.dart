@@ -31,11 +31,14 @@ class WelcomeScreen extends StatelessWidget {
                 height: 100,
               ),
               const Text(
-                'Welcome Back',
+                'تسجيل الزائر',
                 style: TextStyle(
-                  fontFamily: 'Dancing Script',
-                    fontSize: 50,
+                    fontFamily: 'Darine-Regular',
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+
                     color: Colors.white
+
                 ),
               ),
               const SizedBox(height: 30,),
@@ -56,10 +59,12 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: const Center(
                     child: Text(
-                      'SIGN IN',
+                      'تسجيل دخول',
                       style: TextStyle(
-                          fontSize: 20,
+                          fontFamily: 'Darine-Regular',
                           fontWeight: FontWeight.bold,
+
+                          fontSize: 20,
                           color: Colors.white
                       ),
                     ),
@@ -84,8 +89,10 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: const Center(
                     child: Text(
-                      'SIGN UP',
+                      'تسجيل جديد',
                       style: TextStyle(
+                          fontFamily: 'Darine-Regular',
+
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black

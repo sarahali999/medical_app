@@ -37,6 +37,7 @@ class CustomTextField extends StatelessWidget {
           style: getGulzarTextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         TextField(
@@ -76,9 +77,8 @@ TextStyle getGulzarTextStyle({
   Color color = Colors.black,
 }) {
   return TextStyle(
-    fontFamily: 'Cairo',
-    fontSize: fontSize,
-    fontWeight: fontWeight,
+    fontFamily: 'Darine-Regular',
+    fontWeight: FontWeight.bold,    fontSize: fontSize,
     color: color,
   );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'cusstom.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'homee.dart';
 
 class PersonalInfoPage extends StatefulWidget {
 
@@ -119,7 +120,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               style: TextStyle(
                 fontSize: 22,
                 fontFamily: 'Cairo',
-                color: Colors.black87,
+                color: Colors.black,
               ),
               textAlign: widget.selectedLanguage == Language.Arabic ||
                   widget.selectedLanguage == Language.Persian ||
@@ -234,7 +235,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         border: Border.all(color: Colors.grey[100]!, width: 1.0),
         color: Colors.grey[100], // Background color
       ),
-      child: DropdownButtonFormField<String>(
+      child: DropdownButton<String>(
         value: selectedGender.isNotEmpty ? selectedGender : null,
         items: _getGenderOptions().map((String value) {
           return DropdownMenuItem<String>(
@@ -244,7 +245,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               child: Text(
                 value,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 20,
                   color: Colors.black,
                 ),
               ),
@@ -256,14 +257,18 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             selectedGender = value!;
           });
         },
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          labelText: widget.selectedLanguage == Language.Arabic ? 'الجنس' :
+        hint: Text(
+          widget.selectedLanguage == Language.Arabic ? 'الجنس' :
           widget.selectedLanguage == Language.Persian ? 'جنس' :
           widget.selectedLanguage == Language.Kurdish ? 'رەگەز' :
           'Gender',
-          contentPadding: EdgeInsets.zero,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
         ),
+        underline: SizedBox(),
+        isExpanded: true,
       ),
     );
   }
@@ -279,6 +284,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           widget.selectedLanguage == Language.Persian ? 'سن' :
           widget.selectedLanguage == Language.Kurdish ? 'ساڵ' :
           'Age',
+
           ageController,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
@@ -297,16 +303,17 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   ? 'تكایە ساڵ داخل بكە'
                   :
               'Please enter the age';
+
+
             }
             return null;
           },
+
         ),
         SizedBox(height: 8),
       ],
     );
-  }
-
-  Widget _buildDateOfBirthField() {
+  }Widget _buildDateOfBirthField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       textDirection: widget.selectedLanguage == Language.Arabic ||
@@ -326,7 +333,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 0),
+        SizedBox(height:15),
         Row(
           mainAxisAlignment: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
@@ -338,11 +345,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               child: Container(
                 height: 55.0,
                 width: 15.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50.0),
-                  border: Border.all(color: Colors.grey[300]!), // Border color
-                  color: Colors.grey[100], // Background color
-                ),
                 child: Directionality(
                   textDirection: widget.selectedLanguage == Language.Arabic ||
                       widget.selectedLanguage == Language.Persian ||
@@ -355,12 +357,30 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       widget.selectedLanguage == Language.Persian ? 'روز' :
                       widget.selectedLanguage == Language.Kurdish ? 'ڕۆژ' :
                       'Day',
+
+
+                      filled: true,
+                      fillColor: Colors.grey[100]!,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color:  Color(0xFF80CBC4)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
+                      ),
+
                     ),
                     value: selectedDay,
                     items: List.generate(31, (index) => index + 1)
                         .map((day) => DropdownMenuItem<int>(
                       value: day,
                       child: Text(day.toString()),
+
                     ))
                         .toList(),
                     onChanged: (int? value) {
@@ -377,11 +397,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               child: Container(
                 height: 55.0,
                 width: 15.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50.0),
-                  border: Border.all(color: Colors.grey[300]!), // Border color
-                  color: Colors.grey[100], // Background color
-                ),
                 child: Directionality(
                   textDirection: widget.selectedLanguage == Language.Arabic ||
                       widget.selectedLanguage == Language.Persian ||
@@ -399,7 +414,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                           widget.selectedLanguage == Language.Persian ? ' $month' :
                           widget.selectedLanguage == Language.Kurdish ? ' $month' :
                           ' $month',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
                         ),
+
                       );
                     }),
                     onChanged: (value) {
@@ -412,21 +432,31 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       widget.selectedLanguage == Language.Persian ? 'ماه' :
                       widget.selectedLanguage == Language.Kurdish ? 'مانگ' :
                       'Month',
+                      filled: true,
+                      fillColor: Colors.grey[100]!,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color:  Color(0xFF80CBC4)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+
             SizedBox(width: 8),
             Expanded(
               child: Container(
                 height: 55.0,
                 width: 15.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50.0),
-                  border: Border.all(color: Colors.grey[300]!), // Border color
-                  color: Colors.grey[100], // Background color
-                ),
                 child: Directionality(
                   textDirection: widget.selectedLanguage == Language.Arabic ||
                       widget.selectedLanguage == Language.Persian ||
@@ -441,6 +471,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                         value: year.toString(),
                         child: Text(
                           year.toString(),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+
                         ),
                       );
                     }),
@@ -454,11 +489,26 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       widget.selectedLanguage == Language.Persian ? 'سال' :
                       widget.selectedLanguage == Language.Kurdish ? 'ساڵ' :
                       'Year',
+                      filled: true,
+                      fillColor: Colors.grey[100]!,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color:  Color(0xFF80CBC4)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+
           ],
         ),
       ],
@@ -478,6 +528,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         fontFamily: 'Cairo',
         color: Colors.black,
       ),
+
       textAlign: widget.selectedLanguage == Language.Arabic ||
           widget.selectedLanguage == Language.Persian ||
           widget.selectedLanguage == Language.Kurdish
@@ -617,54 +668,51 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ],
     );
   }
-
   Widget _buildBloodTypeDropdown() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50.0),
-        border: Border.all(color: Colors.grey[100]!, width: 1.0),
+        borderRadius: BorderRadius.circular(35.0),
+        border: Border.all(color: Colors.grey[100]!),
         color: Colors.grey[100], // Background color
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.0),
-          border: Border.all(color: Colors.grey[300]!, width: 1.0), // Add border here
-        ),
-        child: DropdownButtonFormField<String>(
-          value: selectedBloodType.isNotEmpty ? selectedBloodType : null,
-          items: bloodTypeOptions.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
+      child: DropdownButton<String>(
+        value: selectedBloodType.isNotEmpty ? selectedBloodType : null,
+        items: bloodTypeOptions.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
                 ),
               ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedBloodType = value!;
-            });
-          },
-          decoration: InputDecoration(
-            labelText: widget.selectedLanguage == Language.Arabic ? 'فصيلة الدم' :
-            widget.selectedLanguage == Language.Persian ? 'گروه خون' :
-            widget.selectedLanguage == Language.Kurdish ? 'جۆری خوێن' :
-            'Blood Type',
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            border: InputBorder.none,
+            ),
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            selectedBloodType = value!;
+          }
+          );
+        },
+        hint: Text(
+          widget.selectedLanguage == Language.Arabic ? 'فصيلة الدم' :
+          widget.selectedLanguage == Language.Persian ? 'گروه خون' :
+          widget.selectedLanguage == Language.Kurdish ? 'جۆری خوێن' :
+          'Blood Type',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
           ),
         ),
+        underline: SizedBox(),
+        isExpanded: true,
       ),
     );
   }
-
 
   Widget _buildEmergencyContactAddressTitle() {
     return Text(
@@ -787,261 +835,265 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  height: 700,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF00897B),
-                        Color(0xFF80CBC4),
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 70),
-                  child: SizedBox(
-                    height: 900, // Set a fixed height for the SizedBox
-                    child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: 900,
-                        minWidth: double.infinity,
-                      ),
+        body: Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 700,
+                      width: double.infinity,
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(200),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF00897B),
+                            Color(0xFF80CBC4),
+                          ],
                         ),
-                        color: Colors.white,
                       ),
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 7),
-                        child: Directionality(
-                          textDirection: widget.selectedLanguage ==
-                              Language.Arabic ||
-                              widget.selectedLanguage == Language.Persian ||
-                              widget.selectedLanguage == Language.Kurdish
-                              ? TextDirection.rtl
-                              : TextDirection.ltr,
-                          child: Column(
-                            crossAxisAlignment: widget.selectedLanguage ==
-                                Language.Arabic ||
-                                widget.selectedLanguage == Language.Persian ||
-                                widget.selectedLanguage == Language.Kurdish
-                                ? CrossAxisAlignment.start
-                                : CrossAxisAlignment.end,
-                            children: [
-                              _buildSectionTitle(
-                                widget.selectedLanguage == Language.Arabic
-                                    ? 'البيانات الشخصية للزائر'
-                                    :
-                                widget.selectedLanguage == Language.Persian
-                                    ? 'اطلاعات شخصی بازدیدکنندگان'
-                                    :
-                                widget.selectedLanguage == Language.Kurdish
-                                    ? 'داتای کەسی سەردانکەرەوە'
-                                    :
-                                'Visitor personal data',
-                              ),
-                              _buildNameFields(),
-                              SizedBox(height: 16),
-                              _buildAgeeFields(),
-                              SizedBox(height: 16),
-                              _buildDateOfBirthField(),
-                              SizedBox(height: 16),
-                              _buildGenderDropdown(),
-                              SizedBox(height: 16),
-                              _buildPhoneNumbersSection(),
-                              SizedBox(height: 16),
-                              _buildAddressTitle(),
-                              SizedBox(height: 16),
-                              _buildAddressFields(),
-                              SizedBox(height: 16),
-                              _buildBloodTypeDropdown(),
-                              SizedBox(height: 16),
-                              CustomTextField(
-                                widget.selectedLanguage == Language.Arabic
-                                    ? 'الأمراض المزمنة والعلاجات المأخوذة'
-                                    : widget.selectedLanguage ==
-                                    Language.Persian
-                                    ? 'بیماری‌های مزمن و درمان‌های انجام‌شده'
-                                    : widget.selectedLanguage ==
-                                    Language.Kurdish
-                                    ? 'نەخۆشییەکانی دوامدار و چارەسەرەکانی بەکارهێنراو'
-                                    : 'Chronic Diseases and Taken Treatments',
-                                chronicDiseasesController,
-                                textStyle: TextStyle(fontFamily: 'Cairo',),
-                                textDirection: widget.selectedLanguage ==
-                                    Language.Arabic ||
-                                    widget.selectedLanguage ==
-                                        Language.Persian ||
-                                    widget.selectedLanguage == Language.Kurdish
-                                    ? TextDirection.rtl
-                                    : TextDirection.ltr,
-                              ),
-                              SizedBox(height: 16),
-                              CustomTextField(
-                                widget.selectedLanguage == Language.Arabic
-                                    ? 'المواد والأدوية التي يتحسس منها الزائر'
-                                    : widget.selectedLanguage ==
-                                    Language.Persian
-                                    ? 'مواد و داروهایی که بازدید کننده حساسیت نشان می‌دهد'
-                                    : widget.selectedLanguage ==
-                                    Language.Kurdish
-                                    ? 'مادە و دەرمانەکان کە سەردانکەر حەساسیتیان پێیە'
-                                    : 'Substances and Medicines Visitor is Allergic to',
-                                allergiesController,
-                                textStyle: TextStyle(
-                                  fontFamily: 'Cairo',
-                                ),
-                                textDirection: widget.selectedLanguage ==
-                                    Language.Arabic ||
-                                    widget.selectedLanguage ==
-                                        Language.Persian ||
-                                    widget.selectedLanguage == Language.Kurdish
-                                    ? TextDirection.rtl
-                                    : TextDirection.ltr,
-                              ),
-                              SizedBox(height: 16),
-                              _buildSectionTitle(
-                                widget.selectedLanguage == Language.Arabic
-                                    ? 'معلومات شخص مقرب'
-                                    : widget.selectedLanguage ==
-                                    Language.Persian
-                                    ? 'اطلاعات نزدیک شخص'
-                                    : widget.selectedLanguage ==
-                                    Language.Kurdish
-                                    ? 'زانیاری کەسێکی نزیک'
-                                    : 'Close Person Information',
-                              ),
-                              CustomTextField(
-                                widget.selectedLanguage == Language.Arabic
-                                    ? 'الاسم'
-                                    : widget.selectedLanguage ==
-                                    Language.Persian
-                                    ? 'نام '
-                                    : widget.selectedLanguage ==
-                                    Language.Kurdish
-                                    ? 'ناوی کەسەکە'
-                                    : 'Person\'s Name',
-                                emergencyContactNameController,
-                                textStyle: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: 'Cairo',
-                                  color: Colors.black,
-                                ),
-                                textDirection: widget.selectedLanguage ==
-                                    Language.Arabic ||
-                                    widget.selectedLanguage ==
-                                        Language.Persian ||
-                                    widget.selectedLanguage == Language.Kurdish
-                                    ? TextDirection.rtl
-                                    : TextDirection.ltr,
-                              ),
-                              SizedBox(height: 20),
-                              _buildEmergencyContactAddressTitle(),
-                              _buildEmergencyContactAddressFields(),
-                              CustomTextField(
-                                widget.selectedLanguage == Language.Arabic
-                                    ? 'صلة القرابة'
-                                    : widget.selectedLanguage ==
-                                    Language.Persian
-                                    ? 'رابطه خویشاوندی'
-                                    : widget.selectedLanguage ==
-                                    Language.Kurdish
-                                    ? 'پەیوەندیی خیزانی'
-                                    : 'Relationship',
-                                emergencyContactRelationshipController,
-                                textStyle: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: 'Cairo',
-                                  color: Colors.black,
-                                ),
-                                textDirection: widget.selectedLanguage ==
-                                    Language.Arabic ||
-                                    widget.selectedLanguage ==
-                                        Language.Persian ||
-                                    widget.selectedLanguage == Language.Kurdish
-                                    ? TextDirection.rtl
-                                    : TextDirection.ltr,
-                              ),
-                              SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(double.infinity, 50),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ).copyWith(
-                                  backgroundColor: MaterialStateProperty
-                                      .resolveWith(
-                                        (states) {
-                                      // Create a LinearGradient
-                                      LinearGradient gradient = LinearGradient(
-                                        colors: [
-                                          Color(0xFF00897B),
-                                          Color(0xFF80CBC4),
-                                        ],
-                                      );
-
-                                      // Extract the color from LinearGradient
-                                      return gradient.colors.first;
-                                    },
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.selectedLanguage == Language.Arabic
-                                          ? 'حفظ'
-                                          : widget.selectedLanguage ==
-                                          Language.Persian
-                                          ? 'ذخیره'
-                                          : widget.selectedLanguage ==
-                                          Language.Kurdish
-                                          ? 'پاشکەوتکردن'
-                                          : 'Save',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Cairo',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 70),
+                      child: SizedBox(
+                          height: 900,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(200),
+                            ),
+                            child:Container(
+                              constraints: BoxConstraints(
+                                minHeight: 900,
+                                minWidth: double.infinity,
+                              ),
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(200),
+                                ),
+                                color: Colors.white,
 
-          ),
-        ],
-      ),
-    );
-  }
-  }
+                              ),
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 7),
+
+                                child: Directionality(
+                                  textDirection: widget.selectedLanguage ==
+                                      Language.Arabic ||
+                                      widget.selectedLanguage == Language.Persian ||
+                                      widget.selectedLanguage == Language.Kurdish
+                                      ? TextDirection.rtl
+                                      : TextDirection.ltr,
+                                  child: Column(
+                                    crossAxisAlignment: widget.selectedLanguage ==
+                                        Language.Arabic ||
+                                        widget.selectedLanguage == Language.Persian ||
+                                        widget.selectedLanguage == Language.Kurdish
+                                        ? CrossAxisAlignment.start
+                                        : CrossAxisAlignment.end,
+                                    children: [
+                                      _buildSectionTitle(
+                                        widget.selectedLanguage == Language.Arabic
+                                            ? 'البيانات الشخصية للزائر'
+                                            :
+                                        widget.selectedLanguage == Language.Persian
+                                            ? 'اطلاعات شخصی بازدیدکنندگان'
+                                            :
+                                        widget.selectedLanguage == Language.Kurdish
+                                            ? 'داتای کەسی سەردانکەرەوە'
+                                            :
+                                        'Visitor personal data',
+                                      ),
+                                      _buildNameFields(),
+                                      SizedBox(height: 16),
+                                      _buildAgeeFields(),
+                                      SizedBox(height: 16),
+                                      _buildDateOfBirthField(),
+                                      SizedBox(height: 16),
+                                      _buildGenderDropdown(),
+                                      SizedBox(height: 16),
+                                      _buildPhoneNumbersSection(),
+                                      SizedBox(height: 16),
+                                      _buildAddressTitle(),
+                                      SizedBox(height: 16),
+                                      _buildAddressFields(),
+                                      SizedBox(height: 16),
+                                      _buildBloodTypeDropdown(),
+                                      SizedBox(height: 16),
+                                      CustomTextField(
+                                        widget.selectedLanguage == Language.Arabic
+                                            ? 'الأمراض المزمنة والعلاجات المأخوذة'
+                                            : widget.selectedLanguage ==
+                                            Language.Persian
+                                            ? 'بیماری‌های مزمن و درمان‌های انجام‌شده'
+                                            : widget.selectedLanguage ==
+                                            Language.Kurdish
+                                            ? 'نەخۆشییەکانی دوامدار و چارەسەرەکانی بەکارهێنراو'
+                                            : 'Chronic Diseases and Taken Treatments',
+                                        chronicDiseasesController,
+                                        textStyle: TextStyle(fontFamily: 'Cairo',),
+                                        textDirection: widget.selectedLanguage ==
+                                            Language.Arabic ||
+                                            widget.selectedLanguage ==
+                                                Language.Persian ||
+                                            widget.selectedLanguage == Language.Kurdish
+                                            ? TextDirection.rtl
+                                            : TextDirection.ltr,
+                                      ),
+                                      SizedBox(height: 16),
+                                      CustomTextField(
+                                        widget.selectedLanguage == Language.Arabic
+                                            ? 'المواد والأدوية التي يتحسس منها الزائر'
+                                            : widget.selectedLanguage ==
+                                            Language.Persian
+                                            ? 'مواد و داروهایی که بازدید کننده حساسیت نشان می‌دهد'
+                                            : widget.selectedLanguage ==
+                                            Language.Kurdish
+                                            ? 'مادە و دەرمانەکان کە سەردانکەر حەساسیتیان پێیە'
+                                            : 'Substances and Medicines Visitor is Allergic to',
+                                        allergiesController,
+                                        textStyle: TextStyle(
+                                          fontFamily: 'Cairo',
+                                        ),
+                                        textDirection: widget.selectedLanguage ==
+                                            Language.Arabic ||
+                                            widget.selectedLanguage ==
+                                                Language.Persian ||
+                                            widget.selectedLanguage == Language.Kurdish
+                                            ? TextDirection.rtl
+                                            : TextDirection.ltr,
+                                      ),
+                                      SizedBox(height: 16),
+                                      _buildSectionTitle(
+                                        widget.selectedLanguage == Language.Arabic
+                                            ? 'معلومات شخص مقرب'
+                                            : widget.selectedLanguage ==
+                                            Language.Persian
+                                            ? 'اطلاعات نزدیک شخص'
+                                            : widget.selectedLanguage ==
+                                            Language.Kurdish
+                                            ? 'زانیاری کەسێکی نزیک'
+                                            : 'Close Person Information',
+                                      ),
+                                      CustomTextField(
+                                        widget.selectedLanguage == Language.Arabic
+                                            ? 'الاسم'
+                                            : widget.selectedLanguage ==
+                                            Language.Persian
+                                            ? 'نام '
+                                            : widget.selectedLanguage ==
+                                            Language.Kurdish
+                                            ? 'ناوی کەسەکە'
+                                            : 'Person\'s Name',
+                                        emergencyContactNameController,
+                                        textStyle: TextStyle(
+                                          fontSize: 22,
+                                          fontFamily: 'Cairo',
+                                          color: Colors.black,
+                                        ),
+                                        textDirection: widget.selectedLanguage ==
+                                            Language.Arabic ||
+                                            widget.selectedLanguage ==
+                                                Language.Persian ||
+                                            widget.selectedLanguage == Language.Kurdish
+                                            ? TextDirection.rtl
+                                            : TextDirection.ltr,
+                                      ),
+                                      SizedBox(height: 20),
+                                      _buildEmergencyContactAddressTitle(),
+                                      _buildEmergencyContactAddressFields(),
+                                      CustomTextField(
+                                        widget.selectedLanguage == Language.Arabic
+                                            ? 'صلة القرابة'
+                                            : widget.selectedLanguage ==
+                                            Language.Persian
+                                            ? 'رابطه خویشاوندی'
+                                            : widget.selectedLanguage ==
+                                            Language.Kurdish
+                                            ? 'پەیوەندیی خیزانی'
+                                            : 'Relationship',
+                                        emergencyContactRelationshipController,
+                                        textStyle: TextStyle(
+                                          fontSize: 22,
+                                          fontFamily: 'Cairo',
+                                          color: Colors.black,
+                                        ),
+                                        textDirection: widget.selectedLanguage ==
+                                            Language.Arabic ||
+                                            widget.selectedLanguage ==
+                                                Language.Persian ||
+                                            widget.selectedLanguage == Language.Kurdish
+                                            ? TextDirection.rtl
+                                            : TextDirection.ltr,
+                                      ),
+                                      SizedBox(height: 16),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => MyHomePage2()),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(double.infinity, 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(30),
+                                          ),
+                                        ).copyWith(
+                                          backgroundColor: MaterialStateProperty
+                                              .resolveWith(
+                                                (states) {
+                                              // Create a LinearGradient
+                                              LinearGradient gradient = LinearGradient(
+                                                colors: [
+                                                  Color(0xFF00897B),
+                                                  Color(0xFF80CBC4),
+                                                ],
+                                              );
+                                              return gradient.colors.first;
+                                            },
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              widget.selectedLanguage == Language.Arabic
+                                                  ? 'حفظ'
+                                                  : widget.selectedLanguage ==
+                                                  Language.Persian
+                                                  ? 'ذخیره'
+                                                  : widget.selectedLanguage ==
+                                                  Language.Kurdish
+                                                  ? 'پاشکەوتکردن'
+                                                  : 'Save',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontFamily: 'Cairo',
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),)
+                      ),
+                    )
+                  ],
+                ),
+
+              ),
+            ],
+            ),
+       );
+    }
+}
