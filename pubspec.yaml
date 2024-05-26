@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   intro_screen_onboarding_flutter: ^1.0.0
   carousel_slider: ^4.2.1
+  dots_indicator: ^2.1.2
   curved_navigation_bar: ^1.0.0
 
 dev_dependencies:
@@ -36,6 +37,8 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+    - assets/icons/
+
   fonts:
     - family: Cairo
       fonts:
@@ -46,6 +49,11 @@ flutter:
     - family: Caveat
       fonts:
         - asset: fonts/Caveat.ttf
+    - family: Changa-VariableFont_wght
+      fonts:
+        - asset: fonts/Changa.ttf
+
     - family: Darine-Regular
       fonts:
-        - asset: fonts/Darine.ttf
+         - asset: fonts/Darine.ttf
+

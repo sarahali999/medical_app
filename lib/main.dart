@@ -1,29 +1,40 @@
 import 'package:flutter/material.dart';
+import 'splash_screen.dart';
 import 'introduction_screen.dart';
-import 'home_page.dart';
+import 'lang.dart';
+import 'homee.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Language _selectedLanguage = Language.Arabic;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: TextTheme(
           bodyText1: TextStyle(
-            fontFamily: 'Cairo',
+            fontFamily: 'Changa-VariableFont_wght',
           ),
           bodyText2: TextStyle(
-            fontFamily: 'Cairo',
+            fontFamily: 'Changa-VariableFont_wght',
           ),
         ),
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => IntroScreen(selectedLanguage: Language.Arabic), // Provide a default language or use a user-selected language here
-        '/home': (context) => HomePage(),
+        '/': (context) => SplashScreen(selectedLanguage: _selectedLanguage),
+        '/intro': (context) => IntroScreen(selectedLanguage: _selectedLanguage),
+        '/home': (context) => HomeScreen(selectedLanguage: _selectedLanguage),
       },
     );
   }

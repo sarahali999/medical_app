@@ -1,108 +1,133 @@
 import 'package:flutter/material.dart';
 import 'package:medicapp/PhoneNumberInputPage.dart';
 import 'package:medicapp/personal_info.dart';
-import 'home_page.dart';
+import 'introduction_screen.dart';
+import 'lang.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final Language selectedLanguage;
 
-  const WelcomeScreen({Key? key, required this.selectedLanguage}) : super(key: key);
+  const WelcomeScreen({Key? key, required this.selectedLanguage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String loginText = '';
+    String registerText = '';
+
+    // Define text for each language
+    switch (selectedLanguage) {
+      case Language.Arabic:
+        loginText = 'تسجيل دخول';
+        registerText = 'تسجيل جديد';
+        break;
+      case Language.English:
+        loginText = 'Sign In';
+        registerText = 'Sign Up';
+        break;
+      case Language.Persian:
+        loginText = 'ورود';
+        registerText = 'ثبت نام';
+        break;
+      case Language.Kurdish:
+        loginText = 'چوونەژوورەوە';
+        registerText = 'تۆمارکردن';
+        break;
+      case Language.Turkmen:
+        loginText = 'Giriş';
+        registerText = 'Hasap aç';
+        break;
+    }
+
     return Scaffold(
       body: Container(
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  Color(0xFF00897B),
-                  Color(0xFF80CBC4),
-                ]
-            )
+          gradient: LinearGradient(
+            colors: [Color(0xFF00897B), Color(0xFF80CBC4)],
+          ),
         ),
         child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 200.0),
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 200.0),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+            Text(
+              selectedLanguage == Language.Arabic ? 'تسجيل الزائر' :
+              selectedLanguage == Language.English ? 'Visitor Registration' :
+              selectedLanguage == Language.Persian ? 'ثبت نام بازدیدکننده' :
+              selectedLanguage == Language.Kurdish ? 'خواردنی سەردان' :
+              selectedLanguage == Language.Turkmen ? 'Çişmäniň girişi' : '',
+              style: const TextStyle(
+                fontFamily: 'Changa-VariableFont_wght',
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              const SizedBox(
-                height: 100,
-              ),
-              const Text(
-                'تسجيل الزائر',
-                style: TextStyle(
-                    fontFamily: 'Darine-Regular',
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-
-                    color: Colors.white
-
+            ),
+            const SizedBox(height: 30,),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyPhone(selectedLanguage: selectedLanguage,)),
+                );
+              },
+              child: Container(
+                height: 53,
+                width: 320,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: Colors.white),
                 ),
-              ),
-              const SizedBox(height: 30,),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyPhone()),
-                  );
-                },
-
-                child: Container(
-                  height: 53,
-                  width: 320,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'تسجيل دخول',
-                      style: TextStyle(
-                          fontFamily: 'Darine-Regular',
-                          fontWeight: FontWeight.bold,
-
-                          fontSize: 20,
-                          color: Colors.white
-                      ),
+                child: Center(
+                  child: Text(
+                    loginText,
+                    style: const TextStyle(
+                      fontFamily: 'Changa-VariableFont_wght',
+                      fontSize: 24,
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 30,),
-              GestureDetector(
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PersonalInfoPage(selectedLanguage: selectedLanguage)),
-                  );
-                },
-                child: Container(
-                  height: 53,
-                  width: 320,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white),
+            ),
+            const SizedBox(height: 30,),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PersonalInfoPage(selectedLanguage: selectedLanguage),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'تسجيل جديد',
-                      style: TextStyle(
-                          fontFamily: 'Darine-Regular',
-
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black
-                      ),
+                );
+              },
+              child: Container(
+                height: 53,
+                width: 320,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: Colors.white),
+                ),
+                child: Center(
+                  child: Text(
+                    registerText,
+                    style: const TextStyle(
+                      fontFamily: 'Changa-VariableFont_wght',
+                      fontSize: 24,
+                      color: Colors.black,
                     ),
                   ),
                 ),
               ),
-              const Spacer(),
-            ]
+            ),
+            const Spacer(),
+          ],
         ),
       ),
     );

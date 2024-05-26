@@ -104,6 +104,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+    backgroundColor: Color.fromRGBO(255, 255, 200, 0.5000),
          // backgroundColor: Colors.white,
           title: TextField(
             controller: searchController,

@@ -37,6 +37,8 @@ class CustomTextField extends StatelessWidget {
           style: getGulzarTextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Changa-VariableFont_wght',
+
             color: Colors.black,
           ),
         ),
@@ -74,10 +76,12 @@ class CustomTextField extends StatelessWidget {
 TextStyle getGulzarTextStyle({
   double fontSize = 16,
   FontWeight fontWeight = FontWeight.normal,
+  fontFamily: 'Changa-VariableFont_wght',
+
   Color color = Colors.black,
 }) {
   return TextStyle(
-    fontFamily: 'Darine-Regular',
+    fontFamily: 'Changa-VariableFont_wght',
     fontWeight: FontWeight.bold,    fontSize: fontSize,
     color: color,
   );

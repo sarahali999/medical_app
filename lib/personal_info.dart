@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 import 'cusstom.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'lang.dart';
 import 'homee.dart';
 
 class PersonalInfoPage extends StatefulWidget {
@@ -58,6 +58,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   ];
   String selectedBloodType = '';
 
+  get selectedLanguage => Language.Arabic;
+
   @override
   void initState() {
     super.initState();
@@ -97,7 +99,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         style: TextStyle(
           fontSize: 25,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Cairo',
+          fontFamily: 'Changa-VariableFont_wght',
           color: Color(0xFF00897B),
         ),
         textAlign: widget.selectedLanguage == Language.Arabic ||
@@ -119,7 +121,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               '',
               style: TextStyle(
                 fontSize: 22,
-                fontFamily: 'Cairo',
+                fontFamily: 'Changa-VariableFont_wght',
                 color: Colors.black,
               ),
               textAlign: widget.selectedLanguage == Language.Arabic ||
@@ -141,7 +143,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   fourthNameController,
                   textStyle: TextStyle(
                     fontSize: 10,
-                    fontFamily: 'Cairo',
+                    fontFamily: 'Changa-VariableFont_wght',
                     color: Colors.black,
                   ),
                   textDirection: widget.selectedLanguage == Language.Arabic ||
@@ -176,7 +178,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   lastNameController,
                   textStyle: TextStyle(
                     fontSize: 10,
-                    fontFamily: 'Cairo',
+                    fontFamily: 'Changa-VariableFont_wght',
                     color: Colors.black,
                   ),
                   textDirection: widget.selectedLanguage == Language.Arabic ||
@@ -212,7 +214,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   middleNameController,
                   textStyle: TextStyle(
                     fontSize: 10,
-                    fontFamily: 'Cairo',
+                    fontFamily: 'Changa-VariableFont_wght',
                     color: Colors.black,
                   ),
                   textDirection: widget.selectedLanguage == Language.Arabic ||
@@ -233,7 +235,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50.0),
         border: Border.all(color: Colors.grey[100]!, width: 1.0),
-        color: Colors.grey[100], // Background color
+        color: Colors.grey[100],
       ),
       child: DropdownButton<String>(
         value: selectedGender.isNotEmpty ? selectedGender : null,
@@ -246,6 +248,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 value,
                 style: TextStyle(
                   fontSize: 20,
+                  fontFamily: 'Changa-VariableFont_wght',
+
                   color: Colors.black,
                 ),
               ),
@@ -264,6 +268,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           'Gender',
           style: TextStyle(
             fontSize: 20,
+            fontFamily: 'Changa-VariableFont_wght',
+
             color: Colors.black,
           ),
         ),
@@ -329,6 +335,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           widget.selectedLanguage == Language.Kurdish ? 'رێکەوتی لەدایکبوون' :
           'Date of Birth',
           style: TextStyle(
+            fontFamily: 'Changa-VariableFont_wght',
+
             fontSize: 20,
             color: Colors.black,
           ),
@@ -416,6 +424,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                           ' $month',
                           style: TextStyle(
                             fontSize: 14,
+                            fontFamily: 'Changa-VariableFont_wght',
+
                             color: Colors.black,
                           ),
                         ),
@@ -473,6 +483,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                           year.toString(),
                           style: TextStyle(
                             fontSize: 14,
+                            fontFamily: 'Changa-VariableFont_wght',
+
                             color: Colors.black,
                           ),
 
@@ -525,7 +537,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       style: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
-        fontFamily: 'Cairo',
+        fontFamily: 'Changa-VariableFont_wght',
         color: Colors.black,
       ),
 
@@ -548,12 +560,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           children: [
             SizedBox(height: 8),
             Container(
-              width: double.infinity, // Set width to fill available space
-              height: 60.0, // Set desired height
+              width: double.infinity,
+              height: 60.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50.0),
                 border: Border.all(color: Colors.grey[300]!),
-                color: Colors.grey[100], // Background color
+                color: Colors.grey[100],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -570,7 +582,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                               : widget.selectedLanguage == Language.Kurdish
                               ? 'ژمارەی تەلەفۆن'
                               : 'Phone Number',
-                          border: InputBorder.none, // Remove border around the field
+                          border: InputBorder.none,
                         ),
                         initialCountryCode: 'TR',
                         onChanged: (phone) {
@@ -673,7 +685,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(35.0),
         border: Border.all(color: Colors.grey[100]!),
-        color: Colors.grey[100], // Background color
+        color: Colors.grey[100],
       ),
       child: DropdownButton<String>(
         value: selectedBloodType.isNotEmpty ? selectedBloodType : null,
@@ -725,7 +737,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       style: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
-        fontFamily: 'Cairo',
+        fontFamily: 'Changa-VariableFont_wght',
         color: Colors.black,
       ),
       textDirection: widget.selectedLanguage == Language.Arabic ||
@@ -835,26 +847,41 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 700,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF00897B),
-                            Color(0xFF80CBC4),
-                          ],
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      body: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  height: 700,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF00897B),
+                        Color(0xFF80CBC4),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  ),
+                ),
+                Positioned(
+                  top: 50,
+                  left: 10,
+                  child: Container(
+                    width: 70.0,
+                    height: 70.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/i.jpg'),
+                        fit: BoxFit.cover,
                       ),
                     ),
+                  ),
+                ),
                     Padding(
                       padding: const EdgeInsets.only(top: 70),
                       child: SizedBox(
@@ -933,7 +960,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                             ? 'نەخۆشییەکانی دوامدار و چارەسەرەکانی بەکارهێنراو'
                                             : 'Chronic Diseases and Taken Treatments',
                                         chronicDiseasesController,
-                                        textStyle: TextStyle(fontFamily: 'Cairo',),
+                                        textStyle: TextStyle(                       fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Changa-VariableFont_wght',
+                                          color: Colors.black,),
                                         textDirection: widget.selectedLanguage ==
                                             Language.Arabic ||
                                             widget.selectedLanguage ==
@@ -955,7 +985,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                             : 'Substances and Medicines Visitor is Allergic to',
                                         allergiesController,
                                         textStyle: TextStyle(
-                                          fontFamily: 'Cairo',
+                                          fontFamily: 'Changa-VariableFont_wght',
                                         ),
                                         textDirection: widget.selectedLanguage ==
                                             Language.Arabic ||
@@ -990,7 +1020,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                         emergencyContactNameController,
                                         textStyle: TextStyle(
                                           fontSize: 22,
-                                          fontFamily: 'Cairo',
+                                          fontFamily: 'Changa-VariableFont_wght',
                                           color: Colors.black,
                                         ),
                                         textDirection: widget.selectedLanguage ==
@@ -1017,7 +1047,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                         emergencyContactRelationshipController,
                                         textStyle: TextStyle(
                                           fontSize: 22,
-                                          fontFamily: 'Cairo',
+                                          fontFamily: 'Changa-VariableFont_wght',
                                           color: Colors.black,
                                         ),
                                         textDirection: widget.selectedLanguage ==
@@ -1034,9 +1064,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => MyHomePage2()),
+                                              builder: (context) => HomeScreen(selectedLanguage: selectedLanguage),
+                                            ),
                                           );
                                         },
+
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: Size(double.infinity, 50),
                                           shape: RoundedRectangleBorder(
@@ -1046,7 +1078,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                           backgroundColor: MaterialStateProperty
                                               .resolveWith(
                                                 (states) {
-                                              // Create a LinearGradient
                                               LinearGradient gradient = LinearGradient(
                                                 colors: [
                                                   Color(0xFF00897B),
@@ -1072,7 +1103,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                                   : 'Save',
                                               style: TextStyle(
                                                 fontSize: 18,
-                                                fontFamily: 'Cairo',
+                                                fontFamily: 'Changa-VariableFont_wght',
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                               ),

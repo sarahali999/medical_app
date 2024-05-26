@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
         this.textStyle = const TextStyle(
           fontSize: 18,
           color: Colors.black,
-          fontFamily: 'Cairo',
+          fontFamily: 'Changa-VariableFont_wght',
         ),
         required this.textDirection,
         this.icon,
@@ -53,7 +53,8 @@ class CustomTextField extends StatelessWidget {
         return null;
       },
       keyboardType: TextInputType.emailAddress,
-      style: TextStyle(fontFamily: "Poppins"),
+      style: TextStyle(        fontFamily: 'Changa-VariableFont_wght',
+      ),
       textAlign: textDirection == TextDirection.rtl
           ? TextAlign.right
           : TextAlign.left,

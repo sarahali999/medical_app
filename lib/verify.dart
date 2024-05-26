@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'login_reg.dart';
+import 'PhoneNumberInputPage.dart';
+import 'lang.dart';
 
 class MyVerify extends StatefulWidget {
-  const MyVerify({Key? key}) : super(key: key);
+
+  final Language selectedLanguage;
+
+  const MyVerify({Key? key, required this.selectedLanguage}) : super(key: key);
 
   @override
   State<MyVerify> createState() => _MyVerifyState();
@@ -16,38 +20,57 @@ class _MyVerifyState extends State<MyVerify> {
       width: 56,
       height: 56,
       textStyle: TextStyle(
-          fontSize: 20,
-          color: Color.fromRGBO(30, 60, 87, 1),
-          fontWeight: FontWeight.w600),
+        fontSize: 20,
+        color: Color.fromRGBO(30, 60, 87, 1),
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Changa-VariableFont_wght',
+      ),
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
         borderRadius: BorderRadius.circular(20),
       ),
     );
-
-    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
-      borderRadius: BorderRadius.circular(8),
-    );
-
-    final submittedPinTheme = defaultPinTheme.copyWith(
-      decoration: defaultPinTheme.decoration?.copyWith(
-        color: Color.fromRGBO(234, 239, 243, 1),
-      ),
-    );
+    //
+    // final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+    //   border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
+    //   borderRadius: BorderRadius.circular(8),
+    // );
+    //
+    // final submittedPinTheme = defaultPinTheme.copyWith(
+    //   decoration: defaultPinTheme.decoration?.copyWith(
+    //     color: Color.fromRGBO(234, 239, 243, 1),
+    //   ),
+    // );
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Colors.black,
-          ),
+        leading: Column(
+          children: [
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
         elevation: 0,
       ),
@@ -67,16 +90,37 @@ class _MyVerifyState extends State<MyVerify> {
                 height: 25,
               ),
               Text(
-                "Phone Verification",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                widget.selectedLanguage == Language.Arabic
+                    ? "التحقق من رقم الهاتف"
+                    : widget.selectedLanguage == Language.Persian
+                    ? "تأیید شماره تلفن"
+                    : widget.selectedLanguage == Language.English
+                    ? "Verify Phone Number"
+                    : widget.selectedLanguage == Language.Kurdish
+                    ? "پشتیوانیی شمارەی تلفن"
+                    : "Unsupported Language",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Changa-VariableFont_wght',
+                ),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "We need to register your phone without getting started!",
+                widget.selectedLanguage == Language.Arabic
+                    ? "نحن بحاجة إلى تسجيل هاتفك دون البدء!"
+                    : widget.selectedLanguage == Language.Persian
+                    ? "ما باید تلفن شما را ثبت کنیم قبل از شروع!"
+                    : widget.selectedLanguage == Language.English
+                    ? "We need to register your phone before getting started!"
+                    : widget.selectedLanguage == Language.Kurdish
+                    ? "پێویستی بە رەکەوتنی موبایلەکەت پێش دەستپێدراو بنێریت!"
+                    : "Unsupported Language",
                 style: TextStyle(
                   fontSize: 16,
+                  fontFamily: 'Changa-VariableFont_wght',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -99,33 +143,60 @@ class _MyVerifyState extends State<MyVerify> {
                 width: double.infinity,
                 height: 45,
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF00897B),
-                      onPrimary: Color(0xFF80CBC4),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),  onPressed: () {},
-                    child: Text("Verify Phone Number",style: TextStyle(color: Colors.white),)),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF00897B),
+                    onPrimary: Color(0xFF80CBC4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    widget.selectedLanguage == Language.Arabic
+                        ? "التحقق من رقم الهاتف"
+                        : widget.selectedLanguage == Language.Persian
+                        ? "تأیید شماره تلفن"
+                        : widget.selectedLanguage == Language.English
+                        ? "Verify Phone Number"
+                        : widget.selectedLanguage == Language.Kurdish
+                        ? "پشتیوانیی شمارەی تلفن"
+                        : "Unsupported Language",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                ),
               ),
               Row(
                 children: [
                   TextButton(
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          'phone',
-                              (route) => false,
-                        );
-                      },
-
-                      child: Text(
-                        "Edit Phone Number ?",
-                        style: TextStyle(color: Colors.black),
-                      )
-                  )
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyPhone(selectedLanguage: widget.selectedLanguage),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      widget.selectedLanguage == Language.Arabic
+                          ? "تعديل رقم الهاتف؟"
+                          : widget.selectedLanguage == Language.Persian
+                          ? "ویرایش شماره تلفن؟"
+                          : widget.selectedLanguage == Language.English
+                          ? "Edit Phone Number?"
+                          : widget.selectedLanguage == Language.Kurdish
+                          ? "ژمارەی تلفن بگۆڕە؟"
+                          : "Unsupported Language",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Changa-VariableFont_wght',
+                      ),
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
