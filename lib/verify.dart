@@ -6,13 +6,10 @@ import 'lang.dart';
 class MyVerify extends StatefulWidget {
 
   final Language selectedLanguage;
-
   const MyVerify({Key? key, required this.selectedLanguage}) : super(key: key);
-
   @override
   State<MyVerify> createState() => _MyVerifyState();
 }
-
 class _MyVerifyState extends State<MyVerify> {
   @override
   Widget build(BuildContext context) {
@@ -30,47 +27,20 @@ class _MyVerifyState extends State<MyVerify> {
         borderRadius: BorderRadius.circular(20),
       ),
     );
-    //
-    // final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-    //   border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
-    //   borderRadius: BorderRadius.circular(8),
-    // );
-    //
-    // final submittedPinTheme = defaultPinTheme.copyWith(
-    //   decoration: defaultPinTheme.decoration?.copyWith(
-    //     color: Color.fromRGBO(234, 239, 243, 1),
-    //   ),
-    // );
+
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: Column(
-          children: [
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios_rounded,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.black,
+          ),
         ),
         elevation: 0,
       ),
@@ -129,10 +99,6 @@ class _MyVerifyState extends State<MyVerify> {
               ),
               Pinput(
                 length: 6,
-                // defaultPinTheme: defaultPinTheme,
-                // focusedPinTheme: focusedPinTheme,
-                // submittedPinTheme: submittedPinTheme,
-
                 showCursor: true,
                 onCompleted: (pin) => print(pin),
               ),

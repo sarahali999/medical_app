@@ -22,8 +22,10 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('assets/images/iii.png'),
             Text(
-              'Medical Project',
+              ' برنامجك الطبي',
+
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

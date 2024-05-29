@@ -104,7 +104,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-    backgroundColor: Color.fromRGBO(255, 255, 200, 0.5000),
+    backgroundColor: Color.fromRGBO(199, 255, 200, 0.5000),
          // backgroundColor: Colors.white,
           title: TextField(
             controller: searchController,
@@ -117,13 +117,13 @@ class _MyAppState extends State<MyApp> {
             ),
             onSubmitted: (value) => _searchAndNavigate(),
           ),
-        //   leading: IconButton(
-        //     icon: Icon(Icons.arrow_back),
-        //     onPressed: () {
-        //
-        //       Navigator.of(context).pop();
-        //     },
-        //   ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+
+              Navigator.of(context).pop();
+            },
+          ),
         ),
         body: FlutterMap(
           mapController: _mapController,
@@ -168,6 +168,7 @@ class _MyAppState extends State<MyApp> {
             );
           },
           tooltip: 'Locate Me',
+          backgroundColor: Color.fromRGBO(199, 255, 200, 0.5000),
           child: Icon(Icons.my_location),
         ),
       ),

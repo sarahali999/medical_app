@@ -7,11 +7,11 @@ import 'homee.dart';
 class PersonalInfoPage extends StatefulWidget {
 
   final Language selectedLanguage;
-
   PersonalInfoPage({required this.selectedLanguage});
-
   @override
+
   _PersonalInfoPageState createState() => _PersonalInfoPageState();
+
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
@@ -229,56 +229,51 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           ),
         ]
     );
-  }
-  Widget _buildGenderDropdown() {
+  }Widget _buildGenderDropdown() {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50.0),
-        border: Border.all(color: Colors.grey[100]!, width: 1.0),
+        border: Border.all(color: Colors.grey[300]!, width: 1.0),
         color: Colors.grey[100],
       ),
-      child: DropdownButton<String>(
-        value: selectedGender.isNotEmpty ? selectedGender : null,
-        items: _getGenderOptions().map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Container(
-              padding: EdgeInsets.all(16.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selectedGender.isNotEmpty ? selectedGender : null,
+          items: _getGenderOptions().map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
               child: Text(
                 value,
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'Changa-VariableFont_wght',
-
                   color: Colors.black,
                 ),
               ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedGender = value!;
+            });
+          },
+          hint: Text(
+            widget.selectedLanguage == Language.Arabic ? 'الجنس' :
+            widget.selectedLanguage == Language.Persian ? 'جنس' :
+            widget.selectedLanguage == Language.Kurdish ? 'رەگەز' :
+            'Gender',
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Changa-VariableFont_wght',
+              color: Colors.black,
             ),
-          );
-        }).toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedGender = value!;
-          });
-        },
-        hint: Text(
-          widget.selectedLanguage == Language.Arabic ? 'الجنس' :
-          widget.selectedLanguage == Language.Persian ? 'جنس' :
-          widget.selectedLanguage == Language.Kurdish ? 'رەگەز' :
-          'Gender',
-          style: TextStyle(
-            fontSize: 20,
-            fontFamily: 'Changa-VariableFont_wght',
-
-            color: Colors.black,
           ),
+          isExpanded: true,
         ),
-        underline: SizedBox(),
-        isExpanded: true,
       ),
     );
   }
-
 
   Widget _buildAgeeFields() {
     return Column(
@@ -290,7 +285,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           widget.selectedLanguage == Language.Persian ? 'سن' :
           widget.selectedLanguage == Language.Kurdish ? 'ساڵ' :
           'Age',
-
           ageController,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
@@ -309,12 +303,9 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   ? 'تكایە ساڵ داخل بكە'
                   :
               'Please enter the age';
-
-
             }
             return null;
           },
-
         ),
         SizedBox(height: 8),
       ],
@@ -336,12 +327,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           'Date of Birth',
           style: TextStyle(
             fontFamily: 'Changa-VariableFont_wght',
-
             fontSize: 20,
             color: Colors.black,
           ),
         ),
-        SizedBox(height:15),
+        SizedBox(height: 15),
         Row(
           mainAxisAlignment: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
@@ -352,7 +342,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             Expanded(
               child: Container(
                 height: 55.0,
-                width: 15.0,
                 child: Directionality(
                   textDirection: widget.selectedLanguage == Language.Arabic ||
                       widget.selectedLanguage == Language.Persian ||
@@ -365,8 +354,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       widget.selectedLanguage == Language.Persian ? 'روز' :
                       widget.selectedLanguage == Language.Kurdish ? 'ڕۆژ' :
                       'Day',
-
-
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Changa-VariableFont_wght',
+                        color: Colors.black,
+                      ),
                       filled: true,
                       fillColor: Colors.grey[100]!,
                       border: OutlineInputBorder(
@@ -375,22 +367,27 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color:  Color(0xFF80CBC4)),
+                        borderSide: BorderSide(color: Color(0xFF80CBC4)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(35.0),
                         borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
                       ),
-
                     ),
                     value: selectedDay,
-                    items: List.generate(31, (index) => index + 1)
-                        .map((day) => DropdownMenuItem<int>(
-                      value: day,
-                      child: Text(day.toString()),
-
-                    ))
-                        .toList(),
+                    items: List.generate(31, (index) => index + 1).map((day) {
+                      return DropdownMenuItem<int>(
+                        value: day,
+                        child: Text(
+                          day.toString(),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Changa-VariableFont_wght',
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                     onChanged: (int? value) {
                       setState(() {
                         selectedDay = value!;
@@ -404,7 +401,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             Expanded(
               child: Container(
                 height: 55.0,
-                width: 15.0,
                 child: Directionality(
                   textDirection: widget.selectedLanguage == Language.Arabic ||
                       widget.selectedLanguage == Language.Persian ||
@@ -412,36 +408,16 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       ? TextDirection.rtl
                       : TextDirection.ltr,
                   child: DropdownButtonFormField<String>(
-                    value: selectedMonth,
-                    items: List.generate(12, (index) {
-                      final month = index + 1;
-                      return DropdownMenuItem<String>(
-                        value: month.toString(),
-                        child: Text(
-                          widget.selectedLanguage == Language.Arabic ? ' $month' :
-                          widget.selectedLanguage == Language.Persian ? ' $month' :
-                          widget.selectedLanguage == Language.Kurdish ? ' $month' :
-                          ' $month',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Changa-VariableFont_wght',
-
-                            color: Colors.black,
-                          ),
-                        ),
-
-                      );
-                    }),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedMonth = value!;
-                      });
-                    },
                     decoration: InputDecoration(
                       labelText: widget.selectedLanguage == Language.Arabic ? 'الشهر' :
                       widget.selectedLanguage == Language.Persian ? 'ماه' :
                       widget.selectedLanguage == Language.Kurdish ? 'مانگ' :
                       'Month',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Changa-VariableFont_wght',
+                        color: Colors.black,
+                      ),
                       filled: true,
                       fillColor: Colors.grey[100]!,
                       border: OutlineInputBorder(
@@ -450,23 +426,41 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color:  Color(0xFF80CBC4)),
+                        borderSide: BorderSide(color: Color(0xFF80CBC4)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(35.0),
                         borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
                       ),
                     ),
+                    value: selectedMonth,
+                    items: List.generate(12, (index) {
+                      final month = index + 1;
+                      return DropdownMenuItem<String>(
+                        value: month.toString(),
+                        child: Text(
+                          month.toString(),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Changa-VariableFont_wght',
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedMonth = value!;
+                      });
+                    },
                   ),
                 ),
               ),
             ),
-
             SizedBox(width: 8),
             Expanded(
               child: Container(
                 height: 55.0,
-                width: 15.0,
                 child: Directionality(
                   textDirection: widget.selectedLanguage == Language.Arabic ||
                       widget.selectedLanguage == Language.Persian ||
@@ -474,6 +468,31 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       ? TextDirection.rtl
                       : TextDirection.ltr,
                   child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: widget.selectedLanguage == Language.Arabic ? 'السنة' :
+                      widget.selectedLanguage == Language.Persian ? 'سال' :
+                      widget.selectedLanguage == Language.Kurdish ? 'ساڵ' :
+                      'Year',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Changa-VariableFont_wght',
+                        color: Colors.black,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100]!,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color: Color(0xFF80CBC4)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35.0),
+                        borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
+                      ),
+                    ),
                     value: selectedYear,
                     items: List.generate(DateTime.now().year - 1900 + 1, (index) {
                       final year = DateTime.now().year - index;
@@ -484,70 +503,45 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: 'Changa-VariableFont_wght',
-
                             color: Colors.black,
                           ),
-
                         ),
                       );
-                    }),
+                    }).toList(),
                     onChanged: (value) {
                       setState(() {
                         selectedYear = value!;
                       });
                     },
-                    decoration: InputDecoration(
-                      labelText: widget.selectedLanguage == Language.Arabic ? 'السنة' :
-                      widget.selectedLanguage == Language.Persian ? 'سال' :
-                      widget.selectedLanguage == Language.Kurdish ? 'ساڵ' :
-                      'Year',
-                      filled: true,
-                      fillColor: Colors.grey[100]!,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color:  Color(0xFF80CBC4)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
-                      ),
-                    ),
                   ),
                 ),
               ),
             ),
-
           ],
         ),
       ],
     );
   }
-
   Widget _buildAddressTitle() {
     return Text(
-
       widget.selectedLanguage == Language.Arabic ? 'العنوان' :
       widget.selectedLanguage == Language.Persian ? 'آدرس' :
       widget.selectedLanguage == Language.Kurdish ? 'ناونیشان' :
       'Address',
+      textDirection: widget.selectedLanguage == Language.Arabic ||
+          widget.selectedLanguage == Language.Persian ||
+          widget.selectedLanguage == Language.Kurdish
+          ? TextDirection.rtl
+          : TextDirection.ltr,
       style: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
         fontFamily: 'Changa-VariableFont_wght',
         color: Colors.black,
       ),
-
-      textAlign: widget.selectedLanguage == Language.Arabic ||
-          widget.selectedLanguage == Language.Persian ||
-          widget.selectedLanguage == Language.Kurdish
-          ? TextAlign.right
-          : TextAlign.left,
     );
   }
+
   Widget _buildPhoneNumbersSection() {
     List<Widget> phoneFields = [];
 
@@ -682,52 +676,54 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   }
   Widget _buildBloodTypeDropdown() {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(35.0),
-        border: Border.all(color: Colors.grey[100]!),
+        border: Border.all(color: Colors.grey[300]!, width: 1.0),
         color: Colors.grey[100],
       ),
-      child: DropdownButton<String>(
-        value: selectedBloodType.isNotEmpty ? selectedBloodType : null,
-        items: bloodTypeOptions.map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Container(
-              padding: EdgeInsets.all(16.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selectedBloodType.isNotEmpty ? selectedBloodType : null,
+          items: bloodTypeOptions.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
               child: Text(
                 value,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 20,
+                  fontFamily: 'Changa-VariableFont_wght',
                   color: Colors.black,
                 ),
               ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedBloodType = value!;
+            });
+          },
+          hint: Text(
+            widget.selectedLanguage == Language.Arabic ? 'فصيلة الدم' :
+            widget.selectedLanguage == Language.Persian ? 'گروه خون' :
+            widget.selectedLanguage == Language.Kurdish ? 'جۆری خوێن' :
+            'Blood Type',
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Changa-VariableFont_wght',
+              color: Colors.black,
             ),
-          );
-        }).toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedBloodType = value!;
-          }
-          );
-        },
-        hint: Text(
-          widget.selectedLanguage == Language.Arabic ? 'فصيلة الدم' :
-          widget.selectedLanguage == Language.Persian ? 'گروه خون' :
-          widget.selectedLanguage == Language.Kurdish ? 'جۆری خوێن' :
-          'Blood Type',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black,
           ),
+          isExpanded: true,
         ),
-        underline: SizedBox(),
-        isExpanded: true,
       ),
     );
   }
 
   Widget _buildEmergencyContactAddressTitle() {
+
     return Text(
+
       widget.selectedLanguage == Language.Arabic ? 'العنوان ' :
       widget.selectedLanguage == Language.Persian ? 'آدرس تماس اضطراری' :
       widget.selectedLanguage == Language.Kurdish

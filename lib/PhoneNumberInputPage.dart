@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'verify.dart';
 import 'lang.dart';
 
@@ -59,7 +60,7 @@ class _MyPhoneState extends State<MyPhone> {
             children: [
               Image.asset(
                 'assets/images/img1.png',
-                width : 150,
+                width: 150,
                 height: 150,
               ),
               SizedBox(
@@ -77,64 +78,36 @@ class _MyPhoneState extends State<MyPhone> {
                 height: 10,
               ),
               Text(
-                widget.selectedLanguage == Language.Arabic ? "نحن بحاجة إلى تسجيل هاتفك قبل البدء!" :
-                widget.selectedLanguage == Language.Persian ? "ما نیاز به ثبت شماره تلفن شما داریم قبل از شروع!" :
-                widget.selectedLanguage == Language.English ? "We need to register your phone before starting!" :
-                widget.selectedLanguage == Language.Kurdish ? "پێویستیمان بەرەوپێشتیی ژمارەی تەلەفۆنەکەت بکەین پێش دەستپێکردن!" : "",
+                widget.selectedLanguage == Language.Arabic
+                    ? "نحن بحاجة إلى تسجيل هاتفك قبل البدء!"
+                    : widget.selectedLanguage == Language.Persian
+                    ? "ما نیاز به ثبت شماره تلفن شما داریم قبل از شروع!"
+                    : widget.selectedLanguage == Language.English
+                    ? "We need to register your phone before starting!"
+                    : widget.selectedLanguage == Language.Kurdish
+                    ? "پێویستیمان بەرەوپێشتیی ژمارەی تەلەفۆنەکەت بکەین پێش دەستپێکردن!"
+                    : "",
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Changa-VariableFont_wght',
                 ),
                 textAlign: TextAlign.center,
               ),
-
               SizedBox(
                 height: 30,
               ),
-              Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10),
+              IntlPhoneField(
+                decoration: InputDecoration(
+                  labelText: phoneHintText,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(),
+                    borderRadius: BorderRadius.circular(30), // Rounded corners
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 10,
-                    ),
-                    SizedBox(
-                      width: 40,
-                      child: TextField(
-                        controller: countryController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "|",
-                      style: TextStyle(
-                        fontSize: 33,
-                        fontFamily: 'Changa-VariableFont_wght',
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: phoneHintText,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                initialCountryCode: 'IN',
+                onChanged: (phone) {
+                  print(phone.completeNumber);
+                },
               ),
               SizedBox(
                 height: 20,
@@ -147,20 +120,27 @@ class _MyPhoneState extends State<MyPhone> {
                     primary: Color(0xFF00897B),
                     onPrimary: Color(0xFF80CBC4),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyVerify(selectedLanguage: widget.selectedLanguage)),
+                      MaterialPageRoute(
+                          builder: (context) => MyVerify(
+                              selectedLanguage: widget.selectedLanguage)),
                     );
                   },
                   child: Text(
-                    widget.selectedLanguage == Language.Arabic ? "أرسل الرمز" :
-                    widget.selectedLanguage == Language.Persian ? "ارسال کد" :
-                    widget.selectedLanguage == Language.English ? "Send Code" :
-                    widget.selectedLanguage == Language.Kurdish ? "کۆد بنێرە" : "",
+                    widget.selectedLanguage == Language.Arabic
+                        ? "أرسل الرمز"
+                        : widget.selectedLanguage == Language.Persian
+                        ? "ارسال کد"
+                        : widget.selectedLanguage == Language.English
+                        ? "Send Code"
+                        : widget.selectedLanguage == Language.Kurdish
+                        ? "کۆد بنێرە"
+                        : "",
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Changa-VariableFont_wght',

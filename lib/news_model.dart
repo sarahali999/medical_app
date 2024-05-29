@@ -1,43 +1,31 @@
-class Product {
-  final int id;
+class Article {
+  final String id;
   final String title;
   final String description;
-  final double price;
-  final double discountPercentage;
-  final double rating;
-  final int stock;
-  final String brand;
-  final String category;
-  final String thumbnail;
-  final List<String> images;
+  final String url;
+  final String imageUrl;
+  final String publishedAt;
+  final String source;
 
-  Product({
+  Article({
     required this.id,
     required this.title,
     required this.description,
-    required this.price,
-    required this.discountPercentage,
-    required this.rating,
-    required this.stock,
-    required this.brand,
-    required this.category,
-    required this.thumbnail,
-    required this.images,
+    required this.url,
+    required this.imageUrl,
+    required this.publishedAt,
+    required this.source,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
-      price: json['price'].toDouble(),
-      discountPercentage: json['discountPercentage'].toDouble(),
-      rating: json['rating'].toDouble(),
-      stock: json['stock'],
-      brand: json['brand'],
-      category: json['category'],
-      thumbnail: json['thumbnail'],
-      images: List<String>.from(json['images']),
+  factory Article.fromJson(Map<String, dynamic> json) {
+    return Article(
+      id: json['id'] ?? '', // Adjust this if the API provides a different field for ID
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      url: json['url'] ?? '',
+      imageUrl: json['image_url'] ?? '',
+      publishedAt: json['published_at'] ?? '',
+      source: json['source']['name'] ?? '', // Assuming source is an object with a name field
     );
   }
 }

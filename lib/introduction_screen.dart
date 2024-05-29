@@ -34,7 +34,6 @@ class _IntroScreenState extends State<IntroScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-
       ),
       drawer: Drawer(
         width: 250,

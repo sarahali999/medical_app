@@ -8,6 +8,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'lang.dart';
 
 class HomeScreen extends StatefulWidget {
+
   final Language selectedLanguage;
 
   HomeScreen({required this.selectedLanguage});
@@ -17,12 +18,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Product>> futureProducts;
+  late Future<List<Article>> futureProducts;
+  late Future<List<Article>> futureArticles;
+
+  // Language _selectedLanguage = Language.Arabic; // Define selectedLanguage as a private variable
+
+  // Getter for selectedLanguage
+  // Language get selectedLanguage => _selectedLanguage;
+  //
+  // // Setter for selectedLanguage
+  // void setSelectedLanguage(Language language) {
+  //   setState(() {
+  //     _selectedLanguage = language;
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
-    futureProducts = ProductService().fetchProducts();
+    futureArticles = ArticleService().fetchArticles();
   }
 
   @override
@@ -64,11 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        widget.selectedLanguage == Language.Arabic
+                        widget.   selectedLanguage == Language.Arabic
                             ? "دليل طبي "
-                            : widget.selectedLanguage == Language.Persian
-                            ? "راهنمای پزشکی"
-                            : widget.selectedLanguage == Language.English
+                            :widget. selectedLanguage == Language.Persian
+                            ? "راهنمای پزشکی":
+                        widget. selectedLanguage == Language.English
                             ? "Medical Guide"
                             : widget.selectedLanguage == Language.Kurdish
                             ? "راهنمای پزیشکی"
@@ -86,7 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         widget.selectedLanguage == Language.Arabic
                             ? "رفيقك الصحي "
-                            : widget.selectedLanguage == Language.Persian
+
+                        :widget. selectedLanguage == Language.Persian
                             ? "همراه سلامت شما"
                             : widget.selectedLanguage == Language.English
                             ? "Your Health Companion"
@@ -113,11 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               key: Key('1'),
                               title: widget.selectedLanguage == Language.Arabic
                                   ? "الخريطة"
-                                  : widget.selectedLanguage == Language.Persian
+
+                                  :widget. selectedLanguage == Language.Persian
                                   ? "نقشه"
-                                  : widget.selectedLanguage == Language.English
+                                  :widget. selectedLanguage == Language.English
                                   ? "Map"
-                                  : widget.selectedLanguage == Language.Kurdish
+                                  :widget. selectedLanguage == Language.Kurdish
                                   ? "نەخشە"
                                   : "",
                               press: () {
@@ -136,9 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               key: Key('2'),
                               title: widget.selectedLanguage == Language.Arabic
                                   ? "معلومات الزائر "
+
                                   : widget.selectedLanguage == Language.Persian
                                   ? "اطلاعات بازدید کننده"
-                                  : widget.selectedLanguage == Language.English
+                                  :widget. selectedLanguage == Language.English
                                   ? "Visitor Information"
                                   : widget.selectedLanguage == Language.Kurdish
                                   ? "زانیاری سەرنجەمەند"
@@ -149,13 +166,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 10.0),
                             CategoryCard(
                               key: Key('3'),
-                              title: widget.selectedLanguage == Language.Arabic
+                              title:widget. selectedLanguage == Language.Arabic
                                   ? "عدد الزيارات "
+
                                   : widget.selectedLanguage == Language.Persian
                                   ? "تعداد بازدیدها"
-                                  : widget.selectedLanguage == Language.English
+                                  :widget. selectedLanguage == Language.English
                                   ? "Number of Visits"
-                                  : widget.selectedLanguage == Language.Kurdish
+                                  :widget. selectedLanguage == Language.Kurdish
                                   ? "ژمارەی سەردانەکان"
                                   : "",
                               press: () {},
@@ -175,13 +193,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                widget.selectedLanguage == Language.Arabic
+                                widget.  selectedLanguage == Language.Arabic
                                     ? 'اخر الاحداث'
-                                    : widget.selectedLanguage == Language.Persian
+
+                                    :widget. selectedLanguage == Language.Persian
                                     ? 'آخرین اخبار'
-                                    : widget.selectedLanguage == Language.English
+                                    :widget. selectedLanguage == Language.English
                                     ? 'Latest News'
-                                    : widget.selectedLanguage == Language.Kurdish
+                                    :widget. selectedLanguage == Language.Kurdish
                                     ? 'وەڵامەکانی نوێترین'
                                     : '',
                                 style: Theme.of(context).textTheme.headline6?.copyWith(
@@ -195,15 +214,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    FutureBuilder<List<Product>>(
-                      future: futureProducts,
+                    FutureBuilder<List<Article>>(
+                      future: futureArticles,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
-                          return Center(child: Text('Failed to load products'));
+                          return Center(child: Text('Failed to load articles'));
                         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return Center(child: Text('No products available'));
+                          return Center(child: Text('No articles available'));
                         } else {
                           return CarouselSlider(
                             options: CarouselOptions(
@@ -211,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               autoPlay: true,
                               enlargeCenterPage: true,
                             ),
-                            items: snapshot.data!.map((product) {
+                            items: snapshot.data!.map((article) {
                               return Builder(
                                 builder: (BuildContext context) {
                                   return Container(
@@ -224,20 +243,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            product.images.isNotEmpty
-                                                ? Image.network(product.images[0], height: 200, fit: BoxFit.cover)
-                                                : Container(height: 200, color: Colors.grey),
+                                            Image.network(article.imageUrl, height: 200, fit: BoxFit.cover),
                                             Padding(
                                               padding: const EdgeInsets.all(8.0),
                                               child: Text(
-                                                product.title,
+                                                article.title,
                                                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                                               ),
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                               child: Text(
-                                                product.description,
+                                                article.description,
                                                 style: TextStyle(fontSize: 14.0),
                                               ),
                                             ),
