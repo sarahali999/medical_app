@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'introduction_screen.dart';
-import 'lang.dart';
+import '../languages/lang.dart';
 
 class SplashScreen extends StatelessWidget {
   final Language selectedLanguage;

@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'cusstom.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'lang.dart';
-import 'homee.dart';
+import '../languages/lang.dart';
+import '../home_page_all/homee.dart';
 
 class PersonalInfoPage extends StatefulWidget {
 
   final Language selectedLanguage;
   PersonalInfoPage({required this.selectedLanguage});
   @override
-
   _PersonalInfoPageState createState() => _PersonalInfoPageState();
-
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
   int? selectedDay;
   String? selectedMonth;
   String? selectedYear;
-
   TextEditingController firstNameController = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -41,9 +38,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   TextEditingController emergencyContactPhoneControllers = TextEditingController();
   TextEditingController medicalHistoryController = TextEditingController();
   final TextEditingController agenController = TextEditingController();
-
   List<TextEditingController> phoneControllers = [TextEditingController()];
-
   late List<String> genderOptions;
   String selectedGender = '';
   List<String> bloodTypeOptions = [
@@ -57,15 +52,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     'O-',
   ];
   String selectedBloodType = '';
-
   get selectedLanguage => Language.Arabic;
-
   @override
   void initState() {
     super.initState();
     genderOptions = _getGenderOptions();
   }
-
   List<String> _getGenderOptions() {
     switch (widget.selectedLanguage) {
       case Language.Arabic:
@@ -78,19 +70,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         return ['Male', 'Female'];
     }
   }
-
-  void _addPhoneNumberField() {
-    setState(() {
-      phoneControllers.add(TextEditingController());
-    });
-  }
-
-  void _removePhoneNumberField(int index) {
-    setState(() {
-      phoneControllers.removeAt(index);
-    });
-  }
-
   Widget _buildSectionTitle(String title) {
     return Container(
       margin: EdgeInsets.only(bottom: 8),
@@ -110,7 +89,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ),
     );
   }
-
   Widget _buildNameFields() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -153,14 +131,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       : TextDirection.ltr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return widget.selectedLanguage == Language.Arabic
-                          ? 'يرجى إدخال الاسم الأول'
+                      return widget.selectedLanguage == Language.Arabic ? 'يرجى إدخال الاسم الأول'
                           :
-                      widget.selectedLanguage == Language.Persian
-                          ? 'لطفاً نام اول را وارد کنید'
+                      widget.selectedLanguage == Language.Persian ? 'لطفاً نام اول را وارد کنید'
                           :
-                      widget.selectedLanguage == Language.Kurdish
-                          ? 'تکایە ناوی یەکەم داخل بکە'
+                      widget.selectedLanguage == Language.Kurdish ? 'تکایە ناوی یەکەم داخل بکە'
                           :
                       'Please enter the first name';
                     }
@@ -204,7 +179,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 ),
               ),
               SizedBox(width: 8),
-
               Expanded(
                 child: CustomTextField(
                   widget.selectedLanguage == Language.Arabic ? 'الاسم الثالث' :
@@ -274,7 +248,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ),
     );
   }
-
   Widget _buildAgeeFields() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -541,7 +514,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ),
     );
   }
-
   Widget _buildPhoneNumbersSection() {
     List<Widget> phoneFields = [];
 
@@ -595,7 +567,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     }
     return Column(children: phoneFields);
   }
-
   Widget _buildAddressFields() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -611,7 +582,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               widget.selectedLanguage == Language.Kurdish
               ? TextDirection.rtl
               : TextDirection.ltr,
-
         ),
         SizedBox(height: 8),
         CustomTextField(
@@ -640,7 +610,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               widget.selectedLanguage == Language.Kurdish
               ? TextDirection.rtl
               : TextDirection.ltr,
-
         ),
         SizedBox(height: 8),
         CustomTextField(
@@ -801,10 +770,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         ),
         SizedBox(height: 8),
         CustomTextField(
-          widget.selectedLanguage == Language.Arabic
-              ? 'الزقاق'
-              : widget.selectedLanguage == Language.Persian
-              ? 'کوچه'
+          widget.selectedLanguage == Language.Arabic ? 'الزقاق'
+              : widget.selectedLanguage == Language.Persian ? 'کوچه'
               : widget.selectedLanguage == Language.Kurdish
               ? 'کۆڵانەوە'
               : 'Alley',
@@ -819,14 +786,9 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         ),
         SizedBox(height: 8),
         CustomTextField(
-          widget.selectedLanguage == Language.Arabic
-              ? 'الدار'
-              : widget.selectedLanguage == Language.Persian
-              ? 'خانه'
-              : widget.selectedLanguage == Language.Kurdish
-              ? 'خانوو'
-              : 'House',
-
+          widget.selectedLanguage == Language.Arabic ? 'الدار'
+              : widget.selectedLanguage == Language.Persian ? 'خانه'
+              : widget.selectedLanguage == Language.Kurdish ? 'خانوو' : 'House',
           emergencyContactAddressController,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
@@ -896,12 +858,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                   topLeft: Radius.circular(200),
                                 ),
                                 color: Colors.white,
-
                               ),
                               child: SingleChildScrollView(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 7),
-
                                 child: Directionality(
                                   textDirection: widget.selectedLanguage ==
                                       Language.Arabic ||
@@ -918,15 +878,9 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                         : CrossAxisAlignment.end,
                                     children: [
                                       _buildSectionTitle(
-                                        widget.selectedLanguage == Language.Arabic
-                                            ? 'البيانات الشخصية للزائر'
-                                            :
-                                        widget.selectedLanguage == Language.Persian
-                                            ? 'اطلاعات شخصی بازدیدکنندگان'
-                                            :
-                                        widget.selectedLanguage == Language.Kurdish
-                                            ? 'داتای کەسی سەردانکەرەوە'
-                                            :
+                                        widget.selectedLanguage == Language.Arabic ? 'البيانات الشخصية للزائر' :
+                                        widget.selectedLanguage == Language.Persian ? 'اطلاعات شخصی بازدیدکنندگان' :
+                                        widget.selectedLanguage == Language.Kurdish ? 'داتای کەسی سەردانکەرەوە' :
                                         'Visitor personal data',
                                       ),
                                       _buildNameFields(),
@@ -946,14 +900,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       _buildBloodTypeDropdown(),
                                       SizedBox(height: 16),
                                       CustomTextField(
-                                        widget.selectedLanguage == Language.Arabic
-                                            ? 'الأمراض المزمنة والعلاجات المأخوذة'
+                                        widget.selectedLanguage == Language.Arabic ? 'الأمراض المزمنة والعلاجات المأخوذة'
                                             : widget.selectedLanguage ==
-                                            Language.Persian
-                                            ? 'بیماری‌های مزمن و درمان‌های انجام‌شده'
+                                            Language.Persian ? 'بیماری‌های مزمن و درمان‌های انجام‌شده'
                                             : widget.selectedLanguage ==
-                                            Language.Kurdish
-                                            ? 'نەخۆشییەکانی دوامدار و چارەسەرەکانی بەکارهێنراو'
+                                            Language.Kurdish ? 'نەخۆشییەکانی دوامدار و چارەسەرەکانی بەکارهێنراو'
                                             : 'Chronic Diseases and Taken Treatments',
                                         chronicDiseasesController,
                                         textStyle: TextStyle(                       fontSize: 22,
@@ -970,14 +921,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       ),
                                       SizedBox(height: 16),
                                       CustomTextField(
-                                        widget.selectedLanguage == Language.Arabic
-                                            ? 'المواد والأدوية التي يتحسس منها الزائر'
+                                        widget.selectedLanguage == Language.Arabic ? 'المواد والأدوية التي يتحسس منها الزائر'
                                             : widget.selectedLanguage ==
-                                            Language.Persian
-                                            ? 'مواد و داروهایی که بازدید کننده حساسیت نشان می‌دهد'
+                                            Language.Persian ? 'مواد و داروهایی که بازدید کننده حساسیت نشان می‌دهد'
                                             : widget.selectedLanguage ==
-                                            Language.Kurdish
-                                            ? 'مادە و دەرمانەکان کە سەردانکەر حەساسیتیان پێیە'
+                                            Language.Kurdish ? 'مادە و دەرمانەکان کە سەردانکەر حەساسیتیان پێیە'
                                             : 'Substances and Medicines Visitor is Allergic to',
                                         allergiesController,
                                         textStyle: TextStyle(
@@ -993,25 +941,19 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       ),
                                       SizedBox(height: 16),
                                       _buildSectionTitle(
-                                        widget.selectedLanguage == Language.Arabic
-                                            ? 'معلومات شخص مقرب'
+                                        widget.selectedLanguage == Language.Arabic ? 'معلومات شخص مقرب'
                                             : widget.selectedLanguage ==
-                                            Language.Persian
-                                            ? 'اطلاعات نزدیک شخص'
+                                            Language.Persian ? 'اطلاعات نزدیک شخص'
                                             : widget.selectedLanguage ==
-                                            Language.Kurdish
-                                            ? 'زانیاری کەسێکی نزیک'
+                                            Language.Kurdish ? 'زانیاری کەسێکی نزیک'
                                             : 'Close Person Information',
                                       ),
                                       CustomTextField(
-                                        widget.selectedLanguage == Language.Arabic
-                                            ? 'الاسم'
+                                        widget.selectedLanguage == Language.Arabic ? 'الاسم'
                                             : widget.selectedLanguage ==
-                                            Language.Persian
-                                            ? 'نام '
+                                            Language.Persian ? 'نام '
                                             : widget.selectedLanguage ==
-                                            Language.Kurdish
-                                            ? 'ناوی کەسەکە'
+                                            Language.Kurdish ? 'ناوی کەسەکە'
                                             : 'Person\'s Name',
                                         emergencyContactNameController,
                                         textStyle: TextStyle(
@@ -1031,14 +973,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       _buildEmergencyContactAddressTitle(),
                                       _buildEmergencyContactAddressFields(),
                                       CustomTextField(
-                                        widget.selectedLanguage == Language.Arabic
-                                            ? 'صلة القرابة'
+                                        widget.selectedLanguage == Language.Arabic ? 'صلة القرابة'
                                             : widget.selectedLanguage ==
-                                            Language.Persian
-                                            ? 'رابطه خویشاوندی'
+                                            Language.Persian ? 'رابطه خویشاوندی'
                                             : widget.selectedLanguage ==
-                                            Language.Kurdish
-                                            ? 'پەیوەندیی خیزانی'
+                                            Language.Kurdish ? 'پەیوەندیی خیزانی'
                                             : 'Relationship',
                                         emergencyContactRelationshipController,
                                         textStyle: TextStyle(
@@ -1064,7 +1003,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                             ),
                                           );
                                         },
-
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: Size(double.infinity, 50),
                                           shape: RoundedRectangleBorder(
@@ -1088,14 +1026,11 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              widget.selectedLanguage == Language.Arabic
-                                                  ? 'حفظ'
+                                              widget.selectedLanguage == Language.Arabic ? 'حفظ'
                                                   : widget.selectedLanguage ==
-                                                  Language.Persian
-                                                  ? 'ذخیره'
+                                                  Language.Persian ? 'ذخیره'
                                                   : widget.selectedLanguage ==
-                                                  Language.Kurdish
-                                                  ? 'پاشکەوتکردن'
+                                                  Language.Kurdish ? 'پاشکەوتکردن'
                                                   : 'Save',
                                               style: TextStyle(
                                                 fontSize: 18,
@@ -1107,7 +1042,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                           ],
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),

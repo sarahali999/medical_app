@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medicapp/PhoneNumberInputPage.dart';
-import 'package:medicapp/personal_info.dart';
+import 'package:medicapp/phones/PhoneNumberInputPage.dart';
+import 'package:medicapp/forms/personal_info.dart';
 import 'introduction_screen.dart';
-import 'lang.dart';
+import '../languages/lang.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final Language selectedLanguage;

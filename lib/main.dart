@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'splash_screen.dart';
-import 'introduction_screen.dart';
-import 'lang.dart';
-import 'homee.dart';
+import 'pagess/splash_screen.dart';
+import 'pagess/introduction_screen.dart';
+import 'languages/lang.dart';
+import 'home_page_all/homee.dart';
 
 void main() {
   runApp(MyApp());

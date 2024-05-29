@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
-import 'lang.dart';
+import '../languages/lang.dart';
 import 'login_reg.dart';
 
 class IntroScreen extends StatefulWidget {

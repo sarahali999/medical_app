@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'PhoneNumberInputPage.dart';
-import 'lang.dart';
+import '../languages/lang.dart';
 
 class MyVerify extends StatefulWidget {
-
   final Language selectedLanguage;
   const MyVerify({Key? key, required this.selectedLanguage}) : super(key: key);
   @override
@@ -167,6 +166,6 @@ class _MyVerifyState extends State<MyVerify> {
           ),
         ),
       ),
-    );
+      );
   }
 }

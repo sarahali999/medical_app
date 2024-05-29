@@ -5,33 +5,18 @@ import 'map.dart';
 import 'news_service.dart';
 import 'news_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'lang.dart';
+import '../languages/lang.dart';
 
 class HomeScreen extends StatefulWidget {
-
   final Language selectedLanguage;
 
-  HomeScreen({required this.selectedLanguage});
+  const HomeScreen({Key? key, required this.selectedLanguage}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
-
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Article>> futureProducts;
   late Future<List<Article>> futureArticles;
-
-  // Language _selectedLanguage = Language.Arabic; // Define selectedLanguage as a private variable
-
-  // Getter for selectedLanguage
-  // Language get selectedLanguage => _selectedLanguage;
-  //
-  // // Setter for selectedLanguage
-  // void setSelectedLanguage(Language language) {
-  //   setState(() {
-  //     _selectedLanguage = language;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -47,14 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(20, 50, 20, 30),
+            padding:const EdgeInsets.fromLTRB(20, 50, 20, 30),
             height: size.height * .32,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF00897B),
-                  Color(0xFF80CBC4),
+                  Color(0xFF00897B), Color(0xFF80CBC4),
                 ],
               ),
             ),
@@ -78,11 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        widget.   selectedLanguage == Language.Arabic
-                            ? "دليل طبي "
-                            :widget. selectedLanguage == Language.Persian
-                            ? "راهنمای پزشکی":
-                        widget. selectedLanguage == Language.English
+                        widget.selectedLanguage == Language.Arabic
+                            ? "دليل طبي"
+                            : widget.selectedLanguage == Language.Persian
+                            ? "راهنمای پزشکی"
+                            : widget.selectedLanguage == Language.English
                             ? "Medical Guide"
                             : widget.selectedLanguage == Language.Kurdish
                             ? "راهنمای پزیشکی"
@@ -99,9 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         widget.selectedLanguage == Language.Arabic
-                            ? "رفيقك الصحي "
-
-                        :widget. selectedLanguage == Language.Persian
+                            ? "رفيقك الصحي"
+                            : widget.selectedLanguage == Language.Persian
                             ? "همراه سلامت شما"
                             : widget.selectedLanguage == Language.English
                             ? "Your Health Companion"
@@ -128,12 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               key: Key('1'),
                               title: widget.selectedLanguage == Language.Arabic
                                   ? "الخريطة"
-
-                                  :widget. selectedLanguage == Language.Persian
+                                  : widget.selectedLanguage == Language.Persian
                                   ? "نقشه"
-                                  :widget. selectedLanguage == Language.English
+                                  : widget.selectedLanguage == Language.English
                                   ? "Map"
-                                  :widget. selectedLanguage == Language.Kurdish
+                                  : widget.selectedLanguage == Language.Kurdish
                                   ? "نەخشە"
                                   : "",
                               press: () {
@@ -151,11 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             CategoryCard(
                               key: Key('2'),
                               title: widget.selectedLanguage == Language.Arabic
-                                  ? "معلومات الزائر "
-
+                                  ? "معلومات الزائر"
                                   : widget.selectedLanguage == Language.Persian
                                   ? "اطلاعات بازدید کننده"
-                                  :widget. selectedLanguage == Language.English
+                                  : widget.selectedLanguage == Language.English
                                   ? "Visitor Information"
                                   : widget.selectedLanguage == Language.Kurdish
                                   ? "زانیاری سەرنجەمەند"
@@ -166,14 +147,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 10.0),
                             CategoryCard(
                               key: Key('3'),
-                              title:widget. selectedLanguage == Language.Arabic
-                                  ? "عدد الزيارات "
-
+                              title: widget.selectedLanguage == Language.Arabic
+                                  ? "عدد الزيارات"
                                   : widget.selectedLanguage == Language.Persian
                                   ? "تعداد بازدیدها"
-                                  :widget. selectedLanguage == Language.English
+                                  : widget.selectedLanguage == Language.English
                                   ? "Number of Visits"
-                                  :widget. selectedLanguage == Language.Kurdish
+                                  : widget.selectedLanguage == Language.Kurdish
                                   ? "ژمارەی سەردانەکان"
                                   : "",
                               press: () {},
@@ -193,14 +173,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                widget.  selectedLanguage == Language.Arabic
+                                widget.selectedLanguage == Language.Arabic
                                     ? 'اخر الاحداث'
-
-                                    :widget. selectedLanguage == Language.Persian
+                                    : widget.selectedLanguage == Language.Persian
                                     ? 'آخرین اخبار'
-                                    :widget. selectedLanguage == Language.English
+                                    : widget.selectedLanguage == Language.English
                                     ? 'Latest News'
-                                    :widget. selectedLanguage == Language.Kurdish
+                                    : widget.selectedLanguage == Language.Kurdish
                                     ? 'وەڵامەکانی نوێترین'
                                     : '',
                                 style: Theme.of(context).textTheme.headline6?.copyWith(
