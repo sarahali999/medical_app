@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -22,31 +23,28 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _locateUser();
     _addMarkers();
-
   }
+
   _addMarkers() {
     markers = [
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(32.6076326,44.093935),
+        point: LatLng(32.6076326, 44.093935),
         child: Container(
           child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
         ),
       ),
-    Marker(
-    width: 80.0,
-    height: 80.0,
-    point: LatLng(32.6185146,44.0812222),
-    child: Container(
-     child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
-    ),
-    ),
-     ];
-
+      Marker(
+        width: 80.0,
+        height: 80.0,
+        point: LatLng(32.6185146, 44.0812222),
+        child: Container(
+          child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+        ),
+      ),
+    ];
   }
-
-
 
   _updateUserLocationMarker() {
     Marker userLocationMarker = Marker(
@@ -93,8 +91,7 @@ class _MyAppState extends State<MyApp> {
           _mapController.move(currentLocation, 15.0);
         });
       }
-    }
-    catch (e) {
+    } catch (e) {
       print("Error: $e");
     }
   }
@@ -104,8 +101,18 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-    backgroundColor: Color.fromRGBO(199, 255, 200, 0.5000),
-         // backgroundColor: Colors.white,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF5CBBE3),
+                  Color(0xFFE9ECEC),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
           title: TextField(
             controller: searchController,
             decoration: InputDecoration(
@@ -120,7 +127,6 @@ class _MyAppState extends State<MyApp> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-
               Navigator.of(context).pop();
             },
           ),
@@ -129,7 +135,7 @@ class _MyAppState extends State<MyApp> {
           mapController: _mapController,
           options: MapOptions(
             center: currentLocation,
-            zoom: 3.0
+            zoom: 3.0,
           ),
           children: [
             TileLayer(
@@ -137,12 +143,12 @@ class _MyAppState extends State<MyApp> {
               subdomains: ['a', 'b', 'c'],
             ),
             CurrentLocationLayer(),
-
+            // Add markers layer if needed
           ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            var location = new Location();
+            var location = Location();
 
             bool serviceEnabled = await location.serviceEnabled();
             if (!serviceEnabled) {
@@ -164,14 +170,14 @@ class _MyAppState extends State<MyApp> {
             setState(() {
               currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
               _mapController.move(currentLocation, 15.0);
-            }
-            );
+            });
           },
           tooltip: 'Locate Me',
-          backgroundColor: Color.fromRGBO(199, 255, 200, 0.5000),
+          backgroundColor: Color(0xFF5CBBE3), // Use a single color
           child: Icon(Icons.my_location),
         ),
       ),
     );
   }
 }
+

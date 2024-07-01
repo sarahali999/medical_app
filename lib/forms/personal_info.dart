@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'cusstom.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../languages/lang.dart';
-import '../home_page_all/homee.dart';
+import 'package:medicapp/home_page_all/home.dart';
 
 class PersonalInfoPage extends StatefulWidget {
-
   final Language selectedLanguage;
   PersonalInfoPage({required this.selectedLanguage});
   @override
@@ -34,7 +33,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   TextEditingController emergencyContactNameController = TextEditingController();
   TextEditingController emergencyContactPhoneController = TextEditingController();
   TextEditingController emergencyContactAddressController = TextEditingController();
-  TextEditingController emergencyContactRelationshipController = TextEditingController();
+  TextEditingController  emergencyContactaddress1=TextEditingController();
+  TextEditingController  emergencyContactaddress2=TextEditingController();
+  TextEditingController emergencyContactadress3 =TextEditingController();
+  TextEditingController emergencyContactadress4 =TextEditingController();
+  TextEditingController emergencyContactadress5 =TextEditingController();
+
+      TextEditingController emergencyContactRelationshipController = TextEditingController();
   TextEditingController emergencyContactPhoneControllers = TextEditingController();
   TextEditingController medicalHistoryController = TextEditingController();
   final TextEditingController agenController = TextEditingController();
@@ -79,7 +84,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           fontSize: 25,
           fontWeight: FontWeight.bold,
           fontFamily: 'Changa-VariableFont_wght',
-          color: Color(0xFF00897B),
+          color: Color(0xFF5CBBE3),
         ),
         textAlign: widget.selectedLanguage == Language.Arabic ||
             widget.selectedLanguage == Language.Persian ||
@@ -207,7 +212,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50.0),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey[300]!, width: 1.0),
         color: Colors.grey[100],
       ),
@@ -335,15 +340,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       filled: true,
                       fillColor: Colors.grey[100]!,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color: Color(0xFF80CBC4)),
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Color(0xFF5CBBE3)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
                       ),
                     ),
@@ -394,15 +399,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       filled: true,
                       fillColor: Colors.grey[100]!,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
+                        borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color: Color(0xFF80CBC4)),
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Color(0xFF5CBBE3)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
+                        borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
                       ),
                     ),
@@ -454,15 +459,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       filled: true,
                       fillColor: Colors.grey[100]!,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
+                        borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
-                        borderSide: BorderSide(color: Color(0xFF80CBC4)),
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Color(0xFF5CBBE3)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35.0),
+                        borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(color: Colors.grey[100]!, width: 1.0),
                       ),
                     ),
@@ -529,7 +534,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               width: double.infinity,
               height: 60.0,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
+                borderRadius: BorderRadius.circular(10.0),
                 border: Border.all(color: Colors.grey[300]!),
                 color: Colors.grey[100],
               ),
@@ -647,7 +652,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(35.0),
+        borderRadius: BorderRadius.circular(10.0),
         border: Border.all(color: Colors.grey[300]!, width: 1.0),
         color: Colors.grey[100],
       ),
@@ -727,7 +732,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               ? 'وڵات'
               : 'Country',
 
-          emergencyContactAddressController,
+          emergencyContactaddress1,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
               widget.selectedLanguage == Language.Kurdish
@@ -744,7 +749,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               ? 'پارێزگا'
               : 'Province',
 
-          emergencyContactAddressController,
+          emergencyContactaddress2,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
               widget.selectedLanguage == Language.Kurdish
@@ -761,7 +766,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               : widget.selectedLanguage == Language.Kurdish
               ? 'دادوەری'
               : 'Judiciary',
-          emergencyContactAddressController,
+          emergencyContactadress3,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
               widget.selectedLanguage == Language.Kurdish
@@ -776,7 +781,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               ? 'کۆڵانەوە'
               : 'Alley',
 
-          emergencyContactAddressController,
+          emergencyContactadress4,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
               widget.selectedLanguage == Language.Kurdish
@@ -789,7 +794,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           widget.selectedLanguage == Language.Arabic ? 'الدار'
               : widget.selectedLanguage == Language.Persian ? 'خانه'
               : widget.selectedLanguage == Language.Kurdish ? 'خانوو' : 'House',
-          emergencyContactAddressController,
+          emergencyContactadress5,
           textDirection: widget.selectedLanguage == Language.Arabic ||
               widget.selectedLanguage == Language.Persian ||
               widget.selectedLanguage == Language.Kurdish
@@ -805,24 +810,26 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 Container(
+                  padding: const EdgeInsets.all(50),
                   height: 700,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xFF00897B),
-                        Color(0xFF80CBC4),
+                        Color(0xFF5CBBE3),
+                        Color(0xFF5CBBE3),
                       ],
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.all(100),
                   ),
                 ),
                 Positioned(
@@ -831,13 +838,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   child: Container(
                     width: 70.0,
                     height: 70.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/i.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    // decoration: BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   image: DecorationImage(
+                    //     image: AssetImage('assets/images/iii.png'),
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
                   ),
                 ),
                     Padding(
@@ -846,22 +853,22 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                           height: 900,
                           child: ClipRRect(
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(200),
+                              topLeft: Radius.circular(100),
                             ),
                             child:Container(
                               constraints: BoxConstraints(
-                                minHeight: 900,
+                                // minHeight: 25,
                                 minWidth: double.infinity,
                               ),
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(200),
+                                  topLeft: Radius.circular(100),
                                 ),
                                 color: Colors.white,
                               ),
                               child: SingleChildScrollView(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 7),
+                                padding: const EdgeInsets.all(15),
+
                                 child: Directionality(
                                   textDirection: widget.selectedLanguage ==
                                       Language.Arabic ||
@@ -999,14 +1006,14 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => HomeScreen(selectedLanguage: selectedLanguage),
+                                              builder: (context) => MainScreen(),
                                             ),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: Size(double.infinity, 50),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(30),
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                         ).copyWith(
                                           backgroundColor: MaterialStateProperty
@@ -1014,8 +1021,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                                 (states) {
                                               LinearGradient gradient = LinearGradient(
                                                 colors: [
-                                                  Color(0xFF00897B),
-                                                  Color(0xFF80CBC4),
+                                                  Color(0xFF5CBBE3),
+                                                  Color(0xFF5CBBE3),
                                                 ],
                                               );
                                               return gradient.colors.first;

@@ -4,6 +4,7 @@ import 'verify.dart';
 import '../languages/lang.dart';
 
 class MyPhone extends StatefulWidget {
+
   final Language selectedLanguage;
 
   const MyPhone({Key? key, required this.selectedLanguage}) : super(key: key);
@@ -59,12 +60,12 @@ class _MyPhoneState extends State<MyPhone> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/img1.png',
-                width: 150,
-                height: 150,
+                'assets/images/o.jpeg',
+                width: 300,
+                height: 300,
               ),
               SizedBox(
-                height: 25,
+                height: 1,
               ),
               Text(
                 verificationText,
@@ -101,7 +102,7 @@ class _MyPhoneState extends State<MyPhone> {
                   labelText: phoneHintText,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(),
-                    borderRadius: BorderRadius.circular(30), // Rounded corners
+                    borderRadius: BorderRadius.circular(10), // Rounded corners
                   ),
                 ),
                 initialCountryCode: 'IN',
@@ -117,10 +118,10 @@ class _MyPhoneState extends State<MyPhone> {
                 height: 45,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF00897B),
-                    onPrimary: Color(0xFF80CBC4),
+                    primary: Color(0xFF5CBBE3),
+                    onPrimary: Color(0xFF5CBBE3),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   onPressed: () {

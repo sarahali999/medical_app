@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'PhoneNumberInputPage.dart';
 import '../languages/lang.dart';
+import 'package:medicapp/home_page_all/home.dart';
 
 class MyVerify extends StatefulWidget {
   final Language selectedLanguage;
@@ -51,12 +52,12 @@ class _MyVerifyState extends State<MyVerify> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/img1.png',
-                width: 150,
-                height: 150,
+                'assets/images/o.jpeg',
+                width: 300,
+                height: 300,
               ),
               SizedBox(
-                height: 25,
+                height: 1,
               ),
               Text(
                 widget.selectedLanguage == Language.Arabic
@@ -109,16 +110,21 @@ class _MyVerifyState extends State<MyVerify> {
                 height: 45,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF00897B),
-                    onPrimary: Color(0xFF80CBC4),
+                    primary: Color(0xFF5CBBE3),
+                    onPrimary: Color(0xFF5CBBE3),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () { Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainScreen(),
+                    ),
+                  );},
                   child: Text(
                     widget.selectedLanguage == Language.Arabic
-                        ? "التحقق من رقم الهاتف"
+                        ? "دخول"
                         : widget.selectedLanguage == Language.Persian
                         ? "تأیید شماره تلفن"
                         : widget.selectedLanguage == Language.English

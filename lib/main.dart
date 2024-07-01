@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'pagess/splash_screen.dart';
 import 'pagess/introduction_screen.dart';
 import 'languages/lang.dart';
-import 'home_page_all/homee.dart';
+import 'home_page_all/home.dart';
 
-void main() {
+void main () {
   runApp(MyApp());
 }
 
@@ -33,8 +33,9 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(selectedLanguage: _selectedLanguage),
-        '/intro': (context) => IntroScreen(selectedLanguage: _selectedLanguage),
-        '/home': (context) => HomeScreen(selectedLanguage: _selectedLanguage),
+        '/intro': (context) =>
+            IntroScreen(selectedLanguage: _selectedLanguage,),
+        '/home': (context) => MainScreen(),
       },
     );
   }

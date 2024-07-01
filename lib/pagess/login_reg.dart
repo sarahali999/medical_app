@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicapp/phones/PhoneNumberInputPage.dart';
 import 'package:medicapp/forms/personal_info.dart';
-import 'introduction_screen.dart';
 import '../languages/lang.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -44,9 +43,7 @@ class WelcomeScreen extends StatelessWidget {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF00897B), Color(0xFF80CBC4)],
-          ),
+         color:Color(0xFF5CBBE3),
         ),
         child: Column(
           children: [
@@ -81,7 +78,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 53,
                 width: 320,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.white),
                 ),
                 child: Center(
@@ -111,7 +108,7 @@ class WelcomeScreen extends StatelessWidget {
                 width: 320,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.white),
                 ),
                 child: Center(

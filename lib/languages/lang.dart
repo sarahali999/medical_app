@@ -6,10 +6,13 @@ class LanguagePage extends StatefulWidget {
   @override
   _LanguagePageState createState() => _LanguagePageState();
 }
+
 enum Language { Arabic, English, Persian, Kurdish, Turkmen }
 
-class _LanguagePageState extends State<LanguagePage> {
+class _LanguagePageState extends State<LanguagePage>
+    with SingleTickerProviderStateMixin {
   Language? selectedLanguage = Language.Arabic; // Initial language
+  late AnimationController _animationController;
   final Color primaryColor = Color(0xFF00897B);
   final Color cardColor = Color(0xFF80CBC4);
   bool isPersonalInfoLoading = false;
@@ -20,6 +23,19 @@ class _LanguagePageState extends State<LanguagePage> {
       selectedLanguage = language;
     });
     Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -35,17 +51,34 @@ class _LanguagePageState extends State<LanguagePage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF00897B),
         title: Text(
-          selectedLanguage == Language.Arabic ? 'اللغات' : selectedLanguage ==
-              Language.English ? 'Languages' : selectedLanguage ==
-              Language.Persian ? 'زبان‌ها' : selectedLanguage ==
-              Language.Kurdish ? 'زمانەکان' : "", // Sorani for "Languages"
+          selectedLanguage == Language.Arabic
+              ? 'اللغات'
+              : selectedLanguage == Language.English
+              ? 'Languages'
+              : selectedLanguage == Language.Persian
+              ? 'زبان‌ها'
+              : selectedLanguage == Language.Kurdish
+              ? 'زمانەکان'
+              : "", // Sorani for "Languages"
           textDirection: textDirection,
+        ),
+        leading: IconButton(
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_close,
+            progress: _animationController.view,
+          ),
+          onPressed: () {
+            if (_animationController.isDismissed) {
+              _animationController.forward();
+            } else {
+              _animationController.reverse();
+            }
+          },
         ),
       ),
       drawer: Drawer(
-        width: 250,
-        child: CircleAvatar(
-
+        child: Container(
+          color: Color(0xFF00897B),
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
@@ -54,10 +87,15 @@ class _LanguagePageState extends State<LanguagePage> {
                   color: Color(0xFF00897B),
                 ),
                 child: Text(
-                  selectedLanguage == Language.Arabic ? 'اختيار اللغة' :
-                  selectedLanguage == Language.English ? 'Language Selection' :
-                  selectedLanguage == Language.Persian ? 'انتخاب زبان' :
-                  selectedLanguage == Language.Kurdish ? 'هەڵبژاردنی زمان' : "",
+                  selectedLanguage == Language.Arabic
+                      ? 'اختيار اللغة'
+                      : selectedLanguage == Language.English
+                      ? 'Language Selection'
+                      : selectedLanguage == Language.Persian
+                      ? 'انتخاب زبان'
+                      : selectedLanguage == Language.Kurdish
+                      ? 'هەڵبژاردنی زمان'
+                      : "",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Changa-VariableFont_wght',
