@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'news_detail_page.dart';
 import 'news_model.dart';
 import 'map.dart';
+import 'dart:ui';
 
 class Homepage extends StatelessWidget {
   @override
@@ -12,7 +13,8 @@ class Homepage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildUserCard(context),
+            _buildSpecialText(),
+            AnimatedUserCard(),
             _buildExaminationCards(context),
             _buildSectionTitle('اخر الاخبار'),
             _buildClinicNews(),
@@ -22,56 +24,31 @@ class Homepage extends StatelessWidget {
     );
   }
 
-  Widget _buildUserCard(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF5CBBE3),
-            Color(0xFFE9ECEC),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'معلومات المستخدم',
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+  Widget _buildSpecialText() {
+    return Center(
+      child: Container(
+        child: Text(
+          "الحسين (ع)هوالمنطق..الحسين(ع)هوالطريق.. الحسين(ع)هوالانتصار",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+            fontFamily: 'Amiri-BoldItalic',
+            shadows: [
+              Shadow(
+                blurRadius: 2.0,
+                color: Colors.grey,
+                offset: Offset(1.0, 1.0),
               ),
-            ),
-            SizedBox(height: 16.0),
-            _buildInfoRow(Icons.person, 'الاسم ', 'أحمد محمد'),
-            _buildInfoRow(Icons.phone, 'رقم الهاتف', '+1234567890'),
-            _buildInfoRow(Icons.location_on, 'العنوان', 'شارع النصر، مدينة نصر، القاهرة'),
-            _buildInfoRow(Icons.opacity, 'فصيلة الدم', 'O+'),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
   Widget _buildExaminationCards(BuildContext context) {
     return Container(
-
-      height: 100,
-
+      height: 120, // Increased to accommodate the taller cards
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -79,35 +56,34 @@ class Homepage extends StatelessWidget {
             context,
             'العلاج المستمر',
             'الفحوصات والادوية التي تلقاها الزائر',
-            Color(0xffdff19e),
-                () => _navigateToExaminationDetails(context, 'أزمة ارتفاع ضغط الدم'),
+            Color(0xFF6C80E5), // Green
+                () => _navigateToExaminationDetails(context, 'cart1'),
           ),
           _buildExaminationCard(
             context,
             'الحالة المرضية الكاملة',
             'تقريره الطبي',
-            Color(0xfff5d8b7),
-                () => _navigateToExaminationDetails(context, 'هشاشة العظام'),
+            Color(0xFFE0D7B5), // Blue
+                () => _navigateToExaminationDetails(context, 'cart2'),
           ),
           _buildExaminationCard(
             context,
             'دليلك الى المفارز الطبية',
             'الخريطة',
-            Color(0xFFa3d0c6),
-                () => _navigateToExaminationDetails(context, 'الخريطة'),
+            Color(0xFF427C3C), // Red
+                () => _navigateToExaminationDetails(context, 'map'),
           ),
           _buildExaminationCard(
             context,
             '21 يوليو, 2023',
             'أزمة ارتفاع ضغط الدم',
-            Colors.green.shade100,
-                () => _navigateToExaminationDetails(context, 'أزمة ارتفاع ضغط الدم'),
+            Color(0xFFEEE0B9), // Amber
+                () => _navigateToExaminationDetails(context, 'cart4'),
           ),
         ],
       ),
     );
   }
-
   Widget _buildExaminationCard(
       BuildContext context,
       String date,
@@ -117,66 +93,80 @@ class Homepage extends StatelessWidget {
       ) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: 100,
-        width: 250,
-        margin: EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Changa-VariableFont_wght',
+        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Container(
+          height: 120,
+          width: 250,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [color.withOpacity(0.7), color],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              Text(
-                date,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                  fontFamily: 'Changa-VariableFont_wght',
+                Text(
+                  date,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                    fontFamily: 'Changa-VariableFont_wght',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+  void _navigateToExaminationDetails(BuildContext context, String page) {
+    Widget pageToNavigate;
+    switch (page) {
+      case 'cart1':
+        pageToNavigate = cart1();
+        break;
+      case 'cart2':
+        pageToNavigate = cart2();
+        break;
+      case 'map':
+        pageToNavigate = MyApp();
+        break;
+      case 'cart4':
+        pageToNavigate = cart4();
+        break;
+      default:
+        pageToNavigate = Homepage();
+    }
 
-  void _navigateToExaminationDetails(BuildContext context, String examinationType) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MyApp(), // Update this to the actual page you want to navigate to
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Padding(
-
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.black, size: 20),
-          SizedBox(width: 8),
-          Text(
-            '$label: ',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
-          Text(value, style: TextStyle(fontSize: 16.0, fontFamily: 'Changa-VariableFont_wght')),
-        ],
+        builder: (context) => pageToNavigate,
       ),
     );
   }
@@ -262,6 +252,12 @@ class Homepage extends StatelessWidget {
                             Image.network(
                               article.imageUrl,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[300],
+                                  child: Icon(Icons.error, color: Colors.red),
+                                );
+                              },
                             ),
                             Positioned(
                               bottom: 0,
@@ -299,6 +295,216 @@ class Homepage extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+class AnimatedUserCard extends StatefulWidget {
+  @override
+  _AnimatedUserCardState createState() => _AnimatedUserCardState();
+}
+
+class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggleCard() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _toggleCard,
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateX(_isExpanded ? _animation.value * -0.5 : 0),
+            child: _buildUserCard(context),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildUserCard(BuildContext context) {
+    String userName = 'يوسف علي';
+    String userNumber = '1234567890';
+    String bloodType = 'A+';
+    String address = 'بغداد ';
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF5CBBE3),
+              Color(0xFF04384F)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'الزائر العزيز',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'Changa-VariableFont_wght',
+                ),
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                'الاسم: $userName',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                  fontFamily: 'Changa-VariableFont_wght',
+                ),
+              ),
+              Text(
+                'الرقم: $userNumber',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                  fontFamily: 'Changa-VariableFont_wght',
+                ),
+              ),
+              Text(
+                'فصيلة الدم: $bloodType',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                  fontFamily: 'Changa-VariableFont_wght',
+                ),
+              ),
+              Text(
+                'العنوان: $address',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                  fontFamily: 'Changa-VariableFont_wght',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class cart1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('العلاج المستمر'),
+      ),
+      body: Center(
+        child: Text(
+          'محتوى صفحة العلاج المستمر',
+          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
+        ),
+      ),
+    );
+  }
+}
+
+class cart2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('الحالة المرضية الكاملة'),
+      ),
+      body: Center(
+        child: Text(
+          'محتوى صفحة الحالة المرضية الكاملة',
+          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
+        ),
+      ),
+    );
+  }
+}
+
+class MapPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('الخريطة'),
+      ),
+      body: Center(
+        child: Text(
+          'محتوى صفحة الخريطة',
+          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
+        ),
+      ),
+    );
+  }
+}
+
+class cart4 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('أزمة ارتفاع ضغط الدم'),
+      ),
+      body: Center(
+        child: Text(
+          'محتوى صفحة أزمة ارتفاع ضغط الدم',
+          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
+        ),
+      ),
     );
   }
 }

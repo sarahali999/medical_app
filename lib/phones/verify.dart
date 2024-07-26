@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import '../home_page_all/home.dart';
 import 'PhoneNumberInputPage.dart';
 import '../languages/lang.dart';
-import 'package:medicapp/home_page_all/home.dart';
-
 class MyVerify extends StatefulWidget {
   final Language selectedLanguage;
   const MyVerify({Key? key, required this.selectedLanguage}) : super(key: key);
@@ -120,6 +119,7 @@ class _MyVerifyState extends State<MyVerify> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => MainScreen(),
+
                     ),
                   );},
                   child: Text(

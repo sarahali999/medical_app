@@ -64,3 +64,9 @@ flutter:
     - family: Darine-Regular
       fonts:
         - asset: fonts/Darine.ttf
+    - family: PlaywriteCZ-VariableFont_wght
+      fonts:
+        - asset: fonts/sp.ttf
+    - family: Amiri-BoldItalic
+      fonts:
+        - asset: fonts/Amiri-BoldItalic.ttf
