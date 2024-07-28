@@ -52,6 +52,7 @@ class _MyPhoneState extends State<MyPhone> {
     }
 
     return Scaffold(
+
       body: Container(
         margin: EdgeInsets.only(left: 25, right: 25),
         alignment: Alignment.center,

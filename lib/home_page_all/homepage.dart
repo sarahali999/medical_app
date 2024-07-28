@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'cart1.dart';
+import 'cart2.dart';
+import 'cart4.dart';
 import 'news_detail_page.dart';
 import 'news_model.dart';
 import 'map.dart';
@@ -9,6 +12,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFEFF1EE),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,7 +366,8 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
     String userName = 'يوسف علي';
     String userNumber = '1234567890';
     String bloodType = 'A+';
-    String address = 'بغداد ';
+    String address = 'بغداد';
+    String age = '30 years'; // Example additional info
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
@@ -371,8 +376,7 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
         margin: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF5CBBE3),
-              Color(0xFF04384F)],
+            colors: [Color(0xFF5CBBE3), Color(0xFF04384F)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -401,108 +405,75 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
                 ),
               ),
               SizedBox(height: 8.0),
-              Text(
-                'الاسم: $userName',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontFamily: 'Changa-VariableFont_wght',
-                ),
-              ),
-              Text(
-                'الرقم: $userNumber',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontFamily: 'Changa-VariableFont_wght',
-                ),
-              ),
-              Text(
-                'فصيلة الدم: $bloodType',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontFamily: 'Changa-VariableFont_wght',
-                ),
-              ),
-              Text(
-                'العنوان: $address',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontFamily: 'Changa-VariableFont_wght',
-                ),
+              _isExpanded
+                  ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'الاسم: $userName',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                  Text(
+                    'الرقم: $userNumber',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                  Text(
+                    'فصيلة الدم: $bloodType',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                  Text(
+                    'العنوان: $address',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                  Text(
+                    'العمر: $age', // Additional info
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                ],
+              )
+                  : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'الاسم: $userName',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                  Text(
+                    'الرقم: $userNumber',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class cart1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('العلاج المستمر'),
-      ),
-      body: Center(
-        child: Text(
-          'محتوى صفحة العلاج المستمر',
-          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
-        ),
-      ),
-    );
-  }
-}
-
-class cart2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('الحالة المرضية الكاملة'),
-      ),
-      body: Center(
-        child: Text(
-          'محتوى صفحة الحالة المرضية الكاملة',
-          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
-        ),
-      ),
-    );
-  }
-}
-
-class MapPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('الخريطة'),
-      ),
-      body: Center(
-        child: Text(
-          'محتوى صفحة الخريطة',
-          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
-        ),
-      ),
-    );
-  }
-}
-
-class cart4 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('أزمة ارتفاع ضغط الدم'),
-      ),
-      body: Center(
-        child: Text(
-          'محتوى صفحة أزمة ارتفاع ضغط الدم',
-          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
         ),
       ),
     );

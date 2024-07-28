@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'Notifications-Page.dart';
 import 'homepage.dart';
 import 'page1.dart';
 import 'page2.dart';
@@ -46,6 +47,7 @@ class MainScreenState extends State<MainScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        backgroundColor: Color(0xFFEFF1EE),
         body: Column(
           children: [
             _buildAppBar(),
@@ -102,32 +104,38 @@ class MainScreenState extends State<MainScreen> {
             ),
             Spacer(),
             CircleAvatar(
-              radius: 20, // ضبط نصف قطر الدائرة
+              radius: 20, // نصف قطر الدائرة
               backgroundColor: Colors.transparent,
-              child: Container(
-                width: 100,  // العرض
-                height: 40,  // الطول
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF5CBBE3), Color(0xFF04384F)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationsPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 100,  // العرض
+                  height: 40,  // الطول
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF5CBBE3), Color(0xFF04384F)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    shape: BoxShape.circle,
                   ),
-                  shape: BoxShape.circle,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    // Handle notification button press
-                  },
                   child: SvgPicture.asset(
                     'assets/icons/ic0.svg',
                     color: Colors.black,
-                    width: 30.0,
-                    height: 30.0,
+                    width: 20.0,
+                    height: 20.0,
                   ),
                 ),
               ),
             ),
+
           ],
         ),
       ),

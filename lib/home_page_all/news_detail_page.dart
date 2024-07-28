@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'news_model.dart';
 
@@ -43,4 +42,3 @@ class NewsDetailPage extends StatelessWidget {
     );
   }
 }
-

@@ -39,6 +39,8 @@ class WelcomeScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Color(0xFFEFF1EE),
+
       body: Container(
         height: double.infinity,
         width: double.infinity,

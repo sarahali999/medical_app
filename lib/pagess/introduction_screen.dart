@@ -4,6 +4,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 import '../languages/lang.dart';
 import 'login_reg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class IntroScreen extends StatefulWidget {
   final Language selectedLanguage;
@@ -84,6 +85,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   Widget _buildMainScreen(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Tooltip(
@@ -99,7 +101,12 @@ class _IntroScreenState extends State<IntroScreen> {
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              icon: Icon(Icons.translate, color: Colors.white),
+              icon: SvgPicture.asset(
+                'assets/icons/tr1.svg',
+                color: Colors.white,
+                width: 20.0,
+                height: 20.0,
+              ),
               onPressed: () {
                 _zoomDrawerController.toggle!();
               },
