@@ -103,34 +103,47 @@ class MainScreenState extends State<MainScreen> {
               ],
             ),
             Spacer(),
-            CircleAvatar(
-              radius: 20, // نصف قطر الدائرة
-              backgroundColor: Colors.transparent,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationsPage(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 100,  // العرض
-                  height: 40,  // الطول
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF5CBBE3), Color(0xFF04384F)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    shape: BoxShape.circle,
+            Transform.scale(
+              scale: 1.2,
+              child: Container(
+                width: 45,  // Increased width
+                height: 60, // Increased height
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF5CBBE3), Color(0xFF04384F)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic0.svg',
-                    color: Colors.black,
-                    width: 20.0,
-                    height: 20.0,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    customBorder: CircleBorder(),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationsPage(),
+                        ),
+                      );
+                    },
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/ic0.svg',
+                        color: Colors.white,  // Changed to white for better contrast
+                        width: 30.0,  // Increased size
+                        height: 30.0, // Increased size
+                      ),
+                    ),
                   ),
                 ),
               ),

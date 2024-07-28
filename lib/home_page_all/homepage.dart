@@ -53,6 +53,7 @@ class Homepage extends StatelessWidget {
   Widget _buildExaminationCards(BuildContext context) {
     return Container(
       height: 120, // Increased to accommodate the taller cards
+
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -67,7 +68,7 @@ class Homepage extends StatelessWidget {
             context,
             'الحالة المرضية الكاملة',
             'تقريره الطبي',
-            Color(0xFFE0D7B5), // Blue
+            Color(0xFFABA672), // Blue
                 () => _navigateToExaminationDetails(context, 'cart2'),
           ),
           _buildExaminationCard(
@@ -79,9 +80,9 @@ class Homepage extends StatelessWidget {
           ),
           _buildExaminationCard(
             context,
-            '21 يوليو, 2023',
-            'أزمة ارتفاع ضغط الدم',
-            Color(0xFFEEE0B9), // Amber
+            'تقارير المريض العامة',
+            'تقرير عام',
+            Color(0xFFBFD9A8), // Amber
                 () => _navigateToExaminationDetails(context, 'cart4'),
           ),
         ],
@@ -98,14 +99,14 @@ class Homepage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        elevation: 5,
+        elevation: 0, // Set to 0 as we will use BoxShadow for custom elevation
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
         margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Container(
           height: 120,
-          width: 250,
+          width: 300,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [color.withOpacity(0.7), color],
@@ -113,6 +114,14 @@ class Homepage extends StatelessWidget {
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: Offset(0, 0), // changes position of shadow
+              ),
+            ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
@@ -148,6 +157,7 @@ class Homepage extends StatelessWidget {
       ),
     );
   }
+
   void _navigateToExaminationDetails(BuildContext context, String page) {
     Widget pageToNavigate;
     switch (page) {
@@ -376,7 +386,8 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
         margin: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF5CBBE3), Color(0xFF04384F)],
+            colors: [Color(0xFF5CBBE3),
+              Color(0xFF04384F)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
