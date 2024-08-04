@@ -5,12 +5,14 @@ class cart4 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+
         title: Text('أزمة ارتفاع ضغط الدم'),
       ),
       body: Center(
         child: Text(
           'محتوى صفحة أزمة ارتفاع ضغط الدم',
-          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
+          style: TextStyle(),
         ),
       ),
     );

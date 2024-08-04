@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -30,7 +29,7 @@ class _MyAppState extends State<MyApp> {
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(32.6076326, 44.093935),
+        point: LatLng(33.3112827,44.4241059),
         child: Container(
           child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
         ),
@@ -180,4 +179,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

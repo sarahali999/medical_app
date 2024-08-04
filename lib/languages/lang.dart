@@ -47,7 +47,6 @@ class _LanguagePageState extends State<LanguagePage>
         : TextDirection.ltr;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Color(0xFF00897B),
         title: Text(

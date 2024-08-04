@@ -61,19 +61,18 @@ class _MyPhoneState extends State<MyPhone> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/o.jpeg',
-                width: 300,
-                height: 300,
+                'assets/images/img1.png',
+                width: 200,
+                height: 200,
               ),
               SizedBox(
-                height: 1,
+                height: 20,
               ),
               Text(
                 verificationText,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Changa-VariableFont_wght',
                 ),
               ),
               SizedBox(
@@ -91,7 +90,6 @@ class _MyPhoneState extends State<MyPhone> {
                     : "",
                 style: TextStyle(
                   fontSize: 16,
-                  fontFamily: 'Changa-VariableFont_wght',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -145,7 +143,6 @@ class _MyPhoneState extends State<MyPhone> {
                         : "",
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Changa-VariableFont_wght',
                     ),
                   ),
                 ),

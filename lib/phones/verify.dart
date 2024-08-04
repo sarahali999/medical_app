@@ -3,6 +3,7 @@ import 'package:pinput/pinput.dart';
 import '../home_page_all/home.dart';
 import 'PhoneNumberInputPage.dart';
 import '../languages/lang.dart';
+
 class MyVerify extends StatefulWidget {
   final Language selectedLanguage;
   const MyVerify({Key? key, required this.selectedLanguage}) : super(key: key);
@@ -19,15 +20,12 @@ class _MyVerifyState extends State<MyVerify> {
         fontSize: 20,
         color: Color.fromRGBO(30, 60, 87, 1),
         fontWeight: FontWeight.w600,
-        fontFamily: 'Changa-VariableFont_wght',
       ),
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
         borderRadius: BorderRadius.circular(20),
       ),
     );
-
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -51,12 +49,12 @@ class _MyVerifyState extends State<MyVerify> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/o.jpeg',
-                width: 300,
-                height: 300,
+                'assets/images/img1.png',
+                width: 200,
+                height: 200,
               ),
               SizedBox(
-                height: 1,
+                height: 20,
               ),
               Text(
                 widget.selectedLanguage == Language.Arabic
@@ -71,7 +69,6 @@ class _MyVerifyState extends State<MyVerify> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Changa-VariableFont_wght',
                 ),
               ),
               SizedBox(
@@ -89,7 +86,6 @@ class _MyVerifyState extends State<MyVerify> {
                     : "Unsupported Language",
                 style: TextStyle(
                   fontSize: 16,
-                  fontFamily: 'Changa-VariableFont_wght',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -118,7 +114,7 @@ class _MyVerifyState extends State<MyVerify> {
                   onPressed: () { Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainScreen(),
+                      builder: (context) => MainScreen(selectedLanguage:widget.selectedLanguage ,),
 
                     ),
                   );},
@@ -134,7 +130,6 @@ class _MyVerifyState extends State<MyVerify> {
                         : "Unsupported Language",
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Changa-VariableFont_wght',
                     ),
                   ),
                 ),
@@ -162,7 +157,6 @@ class _MyVerifyState extends State<MyVerify> {
                           : "Unsupported Language",
                       style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Changa-VariableFont_wght',
                       ),
                     ),
                   ),

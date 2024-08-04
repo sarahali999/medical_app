@@ -5,12 +5,14 @@ class cart2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+
         title: Text('الحالة المرضية الكاملة'),
       ),
       body: Center(
         child: Text(
           'محتوى صفحة الحالة المرضية الكاملة',
-          style: TextStyle(fontFamily: 'Changa-VariableFont_wght'),
+          style: TextStyle(),
         ),
       ),
     );

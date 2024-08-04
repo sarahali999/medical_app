@@ -35,10 +35,11 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   TextDirection getTextDirection() {
-    return selectedLanguage == Language.Arabic ||
-        selectedLanguage == Language.Persian ||
-        selectedLanguage == Language.Kurdish
-        ? TextDirection.rtl
+    return   widget.selectedLanguage ==
+    Language.Arabic ||
+    widget.selectedLanguage == Language.Persian ||
+    widget.selectedLanguage == Language.Kurdish
+    ? TextDirection.rtl
         : TextDirection.ltr;
   }
 
@@ -87,7 +88,7 @@ class _IntroScreenState extends State<IntroScreen> {
     return Scaffold(
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: Tooltip(
           message: 'Translate',
           child: Container(
@@ -225,10 +226,14 @@ class _IntroScreenState extends State<IntroScreen> {
             alignment: Alignment.topRight,
             child: Text(
               body,
-              textDirection: selectedLanguage == Language.English ? TextDirection.ltr : TextDirection.rtl,
+              textDirection: widget.selectedLanguage ==
+                  Language.Arabic ||
+                  widget.selectedLanguage == Language.Persian ||
+                  widget.selectedLanguage == Language.Kurdish
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: 'Changa-VariableFont_wght',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 shadows: [
@@ -250,7 +255,6 @@ class _IntroScreenState extends State<IntroScreen> {
           textDirection: getTextDirection(),
           style: TextStyle(
             color: Colors.black,
-            fontFamily: 'Changa-VariableFont_wght',
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -282,7 +286,6 @@ class _IntroScreenState extends State<IntroScreen> {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Changa-VariableFont_wght',
               fontSize: 12,
             ),
           ),
@@ -352,7 +355,6 @@ class SidebarMenu extends StatelessWidget {
                 ),
                 style: TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Changa-VariableFont_wght',
                   fontSize: 24,
                 ),
               ),
@@ -391,7 +393,6 @@ class SidebarMenu extends StatelessWidget {
             style: TextStyle(
               color: Colors.white,
               fontWeight: language == selectedLanguage ? FontWeight.bold : FontWeight.normal,
-              fontFamily: 'Changa-VariableFont_wght',
             ),
           ),
         ),

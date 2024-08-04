@@ -6,11 +6,13 @@ class BottomNavBar extends StatelessWidget {
   final List<String> iconPaths;
   final Function(int) onItemTapped;
 
-  BottomNavBar({
+  BottomNavBar(
+      {
     required this.selectedIndex,
     required this.iconPaths,
     required this.onItemTapped,
-  });
+      }
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +23,12 @@ class BottomNavBar extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               Color(0xFF5CBBE3),
-              Color(0xFF02384F),
+              Color(0xFF0794D2),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(10), // Correct place for borderRadius
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -39,8 +39,6 @@ class WelcomeScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Color(0xFFEFF1EE),
-
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -62,7 +60,6 @@ class WelcomeScreen extends StatelessWidget {
               selectedLanguage == Language.Kurdish ? 'خواردنی سەردان' :
               selectedLanguage == Language.Turkmen ? 'Çişmäniň girişi' : '',
               style: const TextStyle(
-                fontFamily: 'Changa-VariableFont_wght',
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -87,7 +84,6 @@ class WelcomeScreen extends StatelessWidget {
                   child: Text(
                     loginText,
                     style: const TextStyle(
-                      fontFamily: 'Changa-VariableFont_wght',
                       fontSize: 24,
                       color: Colors.white,
                     ),
@@ -117,7 +113,6 @@ class WelcomeScreen extends StatelessWidget {
                   child: Text(
                     registerText,
                     style: const TextStyle(
-                      fontFamily: 'Changa-VariableFont_wght',
                       fontSize: 24,
                       color: Colors.black,
                     ),

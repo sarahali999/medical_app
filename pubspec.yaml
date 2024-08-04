@@ -61,9 +61,7 @@ flutter:
     - family: Changa-VariableFont_wght
       fonts:
         - asset: fonts/Changa.ttf
-    - family: Darine-Regular
-      fonts:
-        - asset: fonts/Darine.ttf
+
     - family: PlaywriteCZ-VariableFont_wght
       fonts:
         - asset: fonts/sp.ttf
