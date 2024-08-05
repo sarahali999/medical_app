@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicapp/phones/PhoneNumberInputPage.dart';
-import 'package:medicapp/forms/personal_info.dart';
+import '../forms/personal_info.dart';
+import '../forms/personal_information.dart';
 import '../languages/lang.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -97,7 +98,7 @@ class WelcomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PersonalInfoPage(selectedLanguage: selectedLanguage),
+                    builder: (context) => PersonalInformationPage(selectedLanguage: selectedLanguage,),
                   ),
                 );
               },

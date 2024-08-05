@@ -88,7 +88,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ),
     );
   }
-
   Widget _buildNameFields() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -601,7 +600,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               ? 'پارێزگا'
               : 'Province',
           emergencyContactaddress2,
-      ),
+        ),
         SizedBox(height: 8),
         CustomTextField(
           widget.selectedLanguage == Language.Arabic
@@ -629,7 +628,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               : widget.selectedLanguage == Language.Persian ? 'خانه'
               : widget.selectedLanguage == Language.Kurdish ? 'خانوو' : 'House',
           emergencyContactadress5,
-       ),
+        ),
         SizedBox(height: 8),
         _buildPhoneNumbersSection(),
         SizedBox(height: 8),
@@ -640,7 +639,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFEFF1EE),
-
       body: Column(
         children: [
           Expanded(
@@ -654,7 +652,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF5CBBE3), Color(0xFF3A8ED0)],
+                      colors: [Color(0xFF5CBBE3),
+                        Color(0xFF3A8ED0)],
                     ),
                   ),
                   child: Padding(
@@ -682,7 +681,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 70),
+                  padding: const EdgeInsets.only(top: 100),
                   child: SizedBox(
                       height: 900,
                       child: ClipRRect(
@@ -761,7 +760,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                     allergiesController,
                                     textStyle: TextStyle(
                                     ),
-                                   ),
+                                  ),
                                   SizedBox(height: 16),
                                   _buildSectionTitle(
                                     widget.selectedLanguage == Language.Arabic ? 'معلومات شخص مقرب'
@@ -783,7 +782,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       fontSize: 22,
                                       color: Colors.black,
                                     ),
-                                   ),
+                                  ),
                                   SizedBox(height: 20),
                                   _buildEmergencyContactAddressTitle(),
                                   _buildEmergencyContactAddressFields(),
@@ -799,7 +798,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       fontSize: 22,
                                       color: Colors.black,
                                     ),
-                                   ),
+                                  ),
                                   SizedBox(height: 16),
                                   ElevatedButton(
                                     onPressed: () {
