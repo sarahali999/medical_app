@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:medicapp/forms/language_service.dart';
 class LanguagePage extends StatefulWidget {
   const LanguagePage({Key? key}) : super(key: key);
 
@@ -7,8 +7,13 @@ class LanguagePage extends StatefulWidget {
   _LanguagePageState createState() => _LanguagePageState();
 }
 
-enum Language { Arabic, English, Persian, Kurdish, Turkmen }
-
+enum Language {
+  Arabic,
+  English,
+  Persian,
+  Kurdish,
+  Turkmen,
+}
 class _LanguagePageState extends State<LanguagePage>
     with SingleTickerProviderStateMixin {
   Language? selectedLanguage = Language.Arabic; // Initial language

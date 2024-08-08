@@ -1,20 +1,20 @@
+import '../languages/lang.dart'; // Keep this if `Language` is defined here
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
-import '../languages/lang.dart';
 import 'login_reg.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class IntroScreen extends StatefulWidget {
   final Language selectedLanguage;
   const IntroScreen({Key? key, required this.selectedLanguage}) : super(key: key);
+
   @override
   _IntroScreenState createState() => _IntroScreenState();
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-
   late Language selectedLanguage;
   final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
 
@@ -35,11 +35,10 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   TextDirection getTextDirection() {
-    return   widget.selectedLanguage ==
-    Language.Arabic ||
-    widget.selectedLanguage == Language.Persian ||
-    widget.selectedLanguage == Language.Kurdish
-    ? TextDirection.rtl
+    return selectedLanguage == Language.Arabic ||
+        selectedLanguage == Language.Persian ||
+        selectedLanguage == Language.Kurdish
+        ? TextDirection.rtl
         : TextDirection.ltr;
   }
 
@@ -62,31 +61,33 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFFd9d9d9),
-      child: ZoomDrawer(
-        controller: _zoomDrawerController,
-        menuScreen: SidebarMenu(onLanguageChange: _handleLanguageChange, selectedLanguage: selectedLanguage),
-        mainScreen: _buildMainScreen(context),
-        borderRadius: 24.0,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFF5CBBE3),
-            blurRadius: 10,
-            spreadRadius: 2,
-            offset: Offset(0, 3),
-          ),
-        ],
-        showShadow: true,
-        angle: -12.0,
-        slideWidth: MediaQuery.of(context).size.width * 0.65,
+    return Directionality(
+      textDirection: getTextDirection(),
+      child: Container(
+        color: Color(0xFFd9d9d9),
+        child: ZoomDrawer(
+          controller: _zoomDrawerController,
+          menuScreen: SidebarMenu(onLanguageChange: _handleLanguageChange, selectedLanguage: selectedLanguage),
+          mainScreen: _buildMainScreen(context),
+          borderRadius: 24.0,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF5CBBE3),
+              blurRadius: 10,
+              spreadRadius: 2,
+              offset: Offset(0, 3),
+            ),
+          ],
+          showShadow: true,
+          angle: -12.0,
+          slideWidth: MediaQuery.of(context).size.width * 0.65,
+        ),
       ),
     );
   }
 
   Widget _buildMainScreen(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Tooltip(
@@ -153,7 +154,6 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
           _buildPageViewModel(
             lottieAsset: 'assets/lottie/5.json',
-
             title: getLocalizedText(
               "برنامجك الطبي الاول",
               "نخستین برنامه پزشکی شما",
@@ -193,12 +193,12 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
         ),
         skip: _buildButton(context, getLocalizedText("تخطي", "تخطي", "Skip", "تخطي", "تخطي"), () {
-          // Directly navigate to the page at index 2 (assuming 'assets/lottie/5.json' is the third page)
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage)),
           );
-        }),        next: _buildIconButton(context, Icons.navigate_next),
+        }),
+        next: _buildIconButton(context, Icons.navigate_next),
         done: _buildButton(context, getLocalizedText("تم", "تم", "Done", "تم", "تم"), () {
           Navigator.push(
             context,
@@ -208,9 +208,6 @@ class _IntroScreenState extends State<IntroScreen> {
       ),
     );
   }
-
-
-
   PageViewModel _buildPageViewModel({required String lottieAsset, required String title, required String body}) {
     return PageViewModel(
       bodyWidget: Column(
@@ -226,12 +223,7 @@ class _IntroScreenState extends State<IntroScreen> {
             alignment: Alignment.topRight,
             child: Text(
               body,
-              textDirection: widget.selectedLanguage ==
-                  Language.Arabic ||
-                  widget.selectedLanguage == Language.Persian ||
-                  widget.selectedLanguage == Language.Kurdish
-                  ? TextDirection.rtl
-                  : TextDirection.ltr,
+              textDirection: getTextDirection(),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -240,7 +232,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   Shadow(
                     color: Colors.grey.withOpacity(0.5),
                     blurRadius: 5,
-                    offset: Offset(1, 1),
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),
@@ -248,67 +240,53 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
         ],
       ),
-      titleWidget: Align(
-        alignment: Alignment.topRight,
-        child: Text(
-          title,
-          textDirection: getTextDirection(),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton(BuildContext context, String text, Function()? onPressed) {
-    return Container(
-      height: 60,
-      width: 60,
-      decoration: BoxDecoration(
-       color:Color(0xFF5CBBE3),
-        borderRadius: BorderRadius.circular(40),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white,
-            blurRadius: 40,
-            offset: Offset(4, 4),
-          ),
-        ],
-      ),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Center(
+      titleWidget: Container(
+        margin: EdgeInsets.only(bottom: 50),
+        child: Align(
+          alignment: Alignment.topRight,
           child: Text(
-            text,
+            title,
+            textDirection: getTextDirection(),
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
-              fontSize: 12,
+              shadows: [
+                Shadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
   }
-
-  Widget _buildIconButton(BuildContext context, IconData icon) {
-    return Container(
-      height: 60,
-      width: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
-       color:Color(0xFF5CBBE3),
-      ),
-      child: Center(
-        child: Icon(
-          icon,
-          size: 30,
-          color: Colors.white,
+  Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: CircleAvatar(
+        radius: 30,
+        backgroundColor: Color(0xFF5CBBE3), // اللون الخلفي لـ CircleAvatar
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white, // لون النص
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
         ),
       ),
+    );
+  }
+
+  Widget _buildIconButton(BuildContext context, IconData icon) {
+    return IconButton(
+      icon: Icon(icon, color: Color(0xFF5CBBE3)),
+      onPressed: () {},
     );
   }
 }
@@ -334,6 +312,7 @@ class SidebarMenu extends StatelessWidget {
         return english;
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

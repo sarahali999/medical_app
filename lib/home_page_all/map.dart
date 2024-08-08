@@ -37,6 +37,14 @@ class _MyAppState extends State<MyApp> {
       Marker(
         width: 80.0,
         height: 80.0,
+        point: LatLng(33.3101565,44.4276196),
+        child: Container(
+          child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+        ),
+      ),
+      Marker(
+        width: 80.0,
+        height: 80.0,
         point: LatLng(32.6185146, 44.0812222),
         child: Container(
           child: Icon(Icons.location_on, size: 50.0, color: Colors.red),

@@ -64,11 +64,17 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      initialRoute: '/',
+      home: Directionality(
+        textDirection: _selectedLanguage == Language.Arabic ||
+            _selectedLanguage == Language.Persian ||
+            _selectedLanguage == Language.Kurdish
+            ? TextDirection.rtl
+            : TextDirection.ltr,
+        child: SplashScreen(selectedLanguage: _selectedLanguage),
+      ),
       routes: {
-        '/': (context) => SplashScreen(selectedLanguage: _selectedLanguage),
         '/intro': (context) => IntroScreen(selectedLanguage: _selectedLanguage),
-        '/home': (context) => MainScreen(selectedLanguage:_selectedLanguage ,),
+        '/home': (context) => MainScreen(selectedLanguage: _selectedLanguage),
       },
     );
   }
