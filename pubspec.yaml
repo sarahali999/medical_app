@@ -5,7 +5,6 @@ description: "A new Flutter project."
 publish_to: 'none'
 
 version: 1.0.0+1
-
 environment:
   sdk: '>=2.16.0 <3.0.0'
 
@@ -52,20 +51,6 @@ flutter:
     - assets/lottie/
     - assets/icons/
 fonts:
-  - family: Dancing Script
-    fonts:
-      - asset: assets/fonts/Danc.ttf
-
-  - family: Caveat
-    fonts:
-      - asset: assets/fonts/Caveat.ttf
-
-  - family: Changa-VariableFont_wght
-    fonts:
-      - asset: assets/fonts/Changa.ttf
-  - family: PlaywriteCZ-VariableFont_wght
-    fonts:
-      - asset: assets/fonts/sp.ttf
   - family: Amiri
     fonts:
       - asset: assets/fonts/Amiri-BoldItalic.ttf

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_svg/svg.dart';
 import '../languages/lang.dart';
 import 'NewsDetailPage.dart';
 import 'cart1.dart';
@@ -536,7 +537,6 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
     );
   }
 }
-
 class AnimatedUserCard extends StatefulWidget {
   final Language selectedLanguage;
 
@@ -644,7 +644,10 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
       },
     };
 
-    String languageKey = widget.selectedLanguage.toString().split('.').last;
+    String languageKey = widget.selectedLanguage
+        .toString()
+        .split('.')
+        .last;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
@@ -744,8 +747,25 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
                     ),
                   ],
                 ),
-                crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                crossFadeState: _isExpanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
                 duration: Duration(milliseconds: 300),
+              ),
+              SizedBox(height: 8.0),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: _toggleCard,
+                  child: SvgPicture.asset(
+                    _isExpanded
+                        ? 'assets/icons/less.svg'
+                        : 'assets/icons/more.svg',
+                    color: Colors.white,
+                    height: 30.0, // Set the size of the icon
+                    width: 30.0,
+                  ),
+                ),
               ),
             ],
           ),
