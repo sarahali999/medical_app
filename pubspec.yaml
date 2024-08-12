@@ -8,6 +8,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
+
 dependencies:
   flutter:
     sdk: flutter
@@ -29,9 +30,9 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   animated_background: ^2.0.0
   flutter_animated_button: ^2.0.3
+  flutter_animate: ^4.5.0
   get: ^4.6.6
   animate_do: ^3.3.4
-
   swipable_stack: ^2.0.0
   overlapped_carousel: ^1.0.2
   flutter_zoom_drawer: ^3.0.0+1
@@ -50,24 +51,26 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/icons/
+fonts:
+  - family: Dancing Script
+    fonts:
+      - asset: assets/fonts/Danc.ttf
 
-  fonts:
-    - family: Cairo
-      fonts:
-        - asset: fonts/Cairo.ttf
-    - family: Dancing Script
-      fonts:
-        - asset: fonts/Danc.ttf
-    - family: Caveat
-      fonts:
-        - asset: fonts/Caveat.ttf
-    - family: Changa-VariableFont_wght
-      fonts:
-        - asset: fonts/Changa.ttf
+  - family: Caveat
+    fonts:
+      - asset: assets/fonts/Caveat.ttf
 
-    - family: PlaywriteCZ-VariableFont_wght
-      fonts:
-        - asset: fonts/sp.ttf
-    - family: Amiri-BoldItalic
-      fonts:
-        - asset: fonts/Amiri-BoldItalic.ttf
+  - family: Changa-VariableFont_wght
+    fonts:
+      - asset: assets/fonts/Changa.ttf
+  - family: PlaywriteCZ-VariableFont_wght
+    fonts:
+      - asset: assets/fonts/sp.ttf
+  - family: Amiri
+    fonts:
+      - asset: assets/fonts/Amiri-BoldItalic.ttf
+        weight: 700
+        style: italic
+  - family: Zain
+    fonts:
+      - asset: assets/fonts/Zain-Regular.ttf

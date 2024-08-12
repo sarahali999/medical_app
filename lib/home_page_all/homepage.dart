@@ -101,22 +101,23 @@ class _AnimatedSpecialTextState extends State<AnimatedSpecialText> with SingleTi
           padding: const EdgeInsets.all(8.0),
           child: Center(
             child: Container(
-              child: Text(
-                "الحسين(ع)هو المنطق.. الحسين(ع)هو الطريق..الحسين(ع)هو الانتصار",
+              child:Text(
+                "الحسين(ع) هو المنطق.. الحسين(ع) هو الطريق.. الحسين(ع) هو الانتصار",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontFamily: 'Amiri-BoldItalic',
+                  fontFamily: 'Amiri',
+                  fontStyle: FontStyle.italic,
                   shadows: [
                     Shadow(
-                      blurRadius: 2.0,
+                      blurRadius: 8.0,
                       color: Colors.grey,
                       offset: Offset(1.0, 1.0),
                     ),
                   ],
                 ),
-              ),
+              )
             ),
           ),
         ),
@@ -325,7 +326,7 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
                   spreadRadius: 2,
-                  blurRadius: 10,
+                  blurRadius: 5,
                   offset: Offset(0, 0),
                 ),
               ],
@@ -438,7 +439,9 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 1, end: 0.95).animate(_controller);
+    _animation = Tween<double>(begin: 1, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -464,60 +467,68 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showNewsDetail(context),
-      child: ScaleTransition(
-        scale: _animation,
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12.0),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.network(
-                  widget.article.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.white,
-                      child: Icon(Icons.error, color: Colors.black),
-                    );
-                  },
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                    ),
-                    child: Text(
-                      widget.article.title,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+    return MouseRegion(
+      onEnter: (_) => _controller.forward(),
+      onExit: (_) => _controller.reverse(),
+      child: GestureDetector(
+        onTap: () => _showNewsDetail(context),
+        child: ScaleTransition(
+          scale: _animation,
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(0, 2),
                 ),
               ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    widget.article.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.white,
+                        child: Icon(Icons.error, color: Colors.black),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [Colors.black.withOpacity(0.8), Colors.transparent],
+                        ),
+                      ),
+                      child: Text(
+                        widget.article.title,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -652,10 +663,10 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3),
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -673,58 +684,69 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
                 ),
               ),
               SizedBox(height: 8.0),
-              if (_isExpanded) ...[
-                Text(
-                  userDetails[languageKey]!['name']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
+              AnimatedCrossFade(
+                firstChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userDetails[languageKey]!['name']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      userDetails[languageKey]!['number']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  userDetails[languageKey]!['number']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
+                secondChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userDetails[languageKey]!['name']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      userDetails[languageKey]!['number']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      userDetails[languageKey]!['bloodType']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      userDetails[languageKey]!['address']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      userDetails[languageKey]!['age']!,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  userDetails[languageKey]!['bloodType']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  userDetails[languageKey]!['address']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  userDetails[languageKey]!['age']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ] else ...[
-                Text(
-                  userDetails[languageKey]!['name']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  userDetails[languageKey]!['number']!,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+                crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                duration: Duration(milliseconds: 300),
+              ),
             ],
           ),
         ),

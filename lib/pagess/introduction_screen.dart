@@ -1,10 +1,11 @@
-import '../languages/lang.dart'; // Keep this if `Language` is defined here
+import '../languages/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'login_reg.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class IntroScreen extends StatefulWidget {
   final Language selectedLanguage;
@@ -17,6 +18,7 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   late Language selectedLanguage;
   final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
+  final GlobalKey _translationIconKey = GlobalKey(); // Define the key here
 
   @override
   void initState() {
@@ -65,22 +67,27 @@ class _IntroScreenState extends State<IntroScreen> {
       textDirection: getTextDirection(),
       child: Container(
         color: Color(0xFFd9d9d9),
-        child: ZoomDrawer(
-          controller: _zoomDrawerController,
-          menuScreen: SidebarMenu(onLanguageChange: _handleLanguageChange, selectedLanguage: selectedLanguage),
-          mainScreen: _buildMainScreen(context),
-          borderRadius: 24.0,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF5CBBE3),
-              blurRadius: 10,
-              spreadRadius: 2,
-              offset: Offset(0, 3),
+        child: ShowCaseWidget(
+          builder: (context) => ZoomDrawer(
+            controller: _zoomDrawerController,
+            menuScreen: SidebarMenu(
+              onLanguageChange: _handleLanguageChange,
+              selectedLanguage: selectedLanguage,
             ),
-          ],
-          showShadow: true,
-          angle: -12.0,
-          slideWidth: MediaQuery.of(context).size.width * 0.65,
+            mainScreen: _buildMainScreen(context),
+            borderRadius: 24.0,
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF5CBBE3),
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: Offset(0, 3),
+              ),
+            ],
+            showShadow: true,
+            angle: -12.0,
+            slideWidth: MediaQuery.of(context).size.width * 0.65,
+          ),
         ),
       ),
     );
@@ -90,28 +97,41 @@ class _IntroScreenState extends State<IntroScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        elevation: 0, // Remove default shadow
         title: Tooltip(
           message: 'Translate',
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF5CBBE3),
-                  Color(0xFF5CBBE3),
+          child: Showcase(
+            key: _translationIconKey,
+            description: 'Tap here to change the language',
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF5CBBE3),
+                    Color(0xFF5CBBE3),
+                  ],
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    blurRadius: 2,
+                    spreadRadius: 1,
+                    offset: Offset(0, 2), // Change offset for floating effect
+                  ),
                 ],
               ),
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              icon: SvgPicture.asset(
-                'assets/icons/tr1.svg',
-                color: Colors.white,
-                width: 20.0,
-                height: 20.0,
+              child: IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icons/tr1.svg',
+                  color: Colors.white,
+                  width: 20.0,
+                  height: 20.0,
+                ),
+                onPressed: () {
+                  _zoomDrawerController.toggle!();
+                },
               ),
-              onPressed: () {
-                _zoomDrawerController.toggle!();
-              },
             ),
           ),
         ),
@@ -208,6 +228,7 @@ class _IntroScreenState extends State<IntroScreen> {
       ),
     );
   }
+
   PageViewModel _buildPageViewModel({required String lottieAsset, required String title, required String body}) {
     return PageViewModel(
       bodyWidget: Column(
@@ -218,7 +239,7 @@ class _IntroScreenState extends State<IntroScreen> {
             height: MediaQuery.of(context).size.height * 0.4,
             fit: BoxFit.fill,
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 20),
           Align(
             alignment: Alignment.topRight,
             child: Text(
@@ -264,16 +285,17 @@ class _IntroScreenState extends State<IntroScreen> {
       ),
     );
   }
+
   Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
     return GestureDetector(
       onTap: onPressed,
       child: CircleAvatar(
         radius: 30,
-        backgroundColor: Color(0xFF5CBBE3), // اللون الخلفي لـ CircleAvatar
+        backgroundColor: Color(0xFF5CBBE3), // Background color of CircleAvatar
         child: Text(
           text,
           style: TextStyle(
-            color: Colors.white, // لون النص
+            color: Colors.white, // Text color
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -290,6 +312,7 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 }
+
 class SidebarMenu extends StatelessWidget {
   final Function(Language) onLanguageChange;
   final Language selectedLanguage;
@@ -312,7 +335,6 @@ class SidebarMenu extends StatelessWidget {
         return english;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -337,8 +359,8 @@ class SidebarMenu extends StatelessWidget {
                   fontSize: 24,
                 ),
               ),
-              Divider(height: 40, thickness: 2, color: Colors.white),
-              SizedBox(height: 60),
+              Divider(height: 1, thickness: 2, color: Colors.white),
+              SizedBox(height: 5),
               _buildLanguageTile(context, 'العربية', Language.Arabic),
               _buildLanguageTile(context, 'فارسی', Language.Persian),
               _buildLanguageTile(context, 'English', Language.English),

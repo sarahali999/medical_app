@@ -4,7 +4,6 @@ import 'verify.dart';
 import '../languages/lang.dart';
 
 class MyPhone extends StatefulWidget {
-
   final Language selectedLanguage;
 
   const MyPhone({Key? key, required this.selectedLanguage}) : super(key: key);
@@ -23,6 +22,7 @@ class _MyPhoneState extends State<MyPhone> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     String verificationText = '';
     String phoneHintText = '';
