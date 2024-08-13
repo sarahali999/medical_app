@@ -63,7 +63,6 @@ class AnimatedSpecialText extends StatefulWidget {
   @override
   _AnimatedSpecialTextState createState() => _AnimatedSpecialTextState();
 }
-
 class _AnimatedSpecialTextState extends State<AnimatedSpecialText> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
