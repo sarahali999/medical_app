@@ -10,9 +10,7 @@ import '../languages/lang.dart';
 
 class MainScreen extends StatefulWidget {
   final Language selectedLanguage;
-
   MainScreen({required this.selectedLanguage});
-
   @override
   MainScreenState createState() => MainScreenState();
 }
@@ -29,7 +27,6 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize screens inside the build method
     final List<Widget> screens = [
       Homepage(selectedLanguage: widget.selectedLanguage),
       DailyContent(),
@@ -51,7 +48,6 @@ class MainScreenState extends State<MainScreen> {
       );
     }
 
-    // Use Directionality based on selectedLanguage
     return Directionality(
       textDirection: widget.selectedLanguage == Language.Arabic ||
           widget.selectedLanguage == Language.Persian ||

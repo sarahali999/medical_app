@@ -5,13 +5,18 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import '../languages/lang.dart';
 
-class MyApp extends StatefulWidget {
+class MapPage extends StatefulWidget {
+  final Language selectedLanguage;
+  MapPage({required this.selectedLanguage});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  _MapPageState createState() => _MapPageState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MapPageState extends State<MapPage> {
   final MapController _mapController = MapController();
   LatLng currentLocation = LatLng(0, 0);
   TextEditingController searchController = TextEditingController();
@@ -29,7 +34,7 @@ class _MyAppState extends State<MyApp> {
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(33.3112827,44.4241059),
+        point: LatLng(33.3112827, 44.4241059),
         child: Container(
           child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
         ),
@@ -37,7 +42,7 @@ class _MyAppState extends State<MyApp> {
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(33.3101565,44.4276196),
+        point: LatLng(33.3101565, 44.4276196),
         child: Container(
           child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
         ),
@@ -53,29 +58,9 @@ class _MyAppState extends State<MyApp> {
     ];
   }
 
-  _updateUserLocationMarker() {
-    Marker userLocationMarker = Marker(
-      key: ValueKey("userLocation"),
-      width: 80.0,
-      height: 80.0,
-      point: currentLocation,
-      child: Container(
-        child: Icon(Icons.my_location, size: 50.0, color: Colors.blue),
-      ),
-    );
-
-    if (markers.any((marker) => marker.key == ValueKey("userLocation"))) {
-      int index = markers.indexWhere((marker) => marker.key == ValueKey("userLocation"));
-      markers[index] = userLocationMarker;
-    } else {
-      markers.add(userLocationMarker);
-    }
-  }
-
   _locateUser() async {
     var location = Location();
     var userLocation = await location.getLocation();
-    print(userLocation.toString());
     setState(() {
       currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
     });
@@ -103,86 +88,114 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  String getTitle() {
+    switch (widget.selectedLanguage) {
+      case Language.Arabic:
+        return 'خريطة المواقع الطبية';
+      case Language.Persian:
+        return 'نقشه مکان‌های پزشکی';
+      case Language.Kurdish:
+        return 'نەخشەی شوێنە پزیشکییەکان';
+      case Language.Turkmen:
+        return 'Lukmançylyk ýerleriniň kartasy';
+      default:
+        return 'Medical Locations Map';
+    }
+  }
+
+  String getSearchHint() {
+    switch (widget.selectedLanguage) {
+      case Language.Arabic:
+        return 'ابحث عن موقع...';
+      case Language.Persian:
+        return 'جستجوی مکان...';
+      case Language.Kurdish:
+        return 'گەڕان بۆ شوێنێک...';
+      case Language.Turkmen:
+        return 'Ýer gözle...';
+      default:
+        return 'Search for a location...';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF5CBBE3),
-                  Color(0xFFE9ECEC),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          title: TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search for a location...',
-              suffixIcon: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: _searchAndNavigate,
-              ),
-            ),
-            onSubmitted: (value) => _searchAndNavigate(),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          getTitle(),
+          style: TextStyle(color: Color(0xFF32817D), fontWeight: FontWeight.bold),
         ),
-        body: FlutterMap(
-          mapController: _mapController,
-          options: MapOptions(
-            center: currentLocation,
-            zoom: 3.0,
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c'],
+        iconTheme: IconThemeData(color: Color(0xFF32817D)),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: getSearchHint(),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: _searchAndNavigate,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onSubmitted: (value) => _searchAndNavigate(),
             ),
-            CurrentLocationLayer(),
-            // Add markers layer if needed
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            var location = Location();
-
-            bool serviceEnabled = await location.serviceEnabled();
+          ),
+          Expanded(
+            child: FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                center: currentLocation,
+                zoom: 3.0,
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c'],
+                ),
+                CurrentLocationLayer(),
+                MarkerLayer(markers: markers),
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var location = Location();
+          bool serviceEnabled = await location.serviceEnabled();
+          if (!serviceEnabled) {
+            serviceEnabled = await location.requestService();
             if (!serviceEnabled) {
-              serviceEnabled = await location.requestService();
-              if (!serviceEnabled) {
-                return;
-              }
+              return;
             }
+          }
 
-            PermissionStatus permissionGranted = await location.hasPermission();
-            if (permissionGranted == PermissionStatus.denied) {
-              permissionGranted = await location.requestPermission();
-              if (permissionGranted != PermissionStatus.granted) {
-                return;
-              }
+          PermissionStatus permissionGranted = await location.hasPermission();
+          if (permissionGranted == PermissionStatus.denied) {
+            permissionGranted = await location.requestPermission();
+            if (permissionGranted != PermissionStatus.granted) {
+              return;
             }
+          }
 
-            var userLocation = await location.getLocation();
-            setState(() {
-              currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
-              _mapController.move(currentLocation, 15.0);
-            });
-          },
-          tooltip: 'Locate Me',
-          backgroundColor: Color(0xFF5CBBE3), // Use a single color
-          child: Icon(Icons.my_location),
-        ),
+          var userLocation = await location.getLocation();
+          setState(() {
+            currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
+            _mapController.move(currentLocation, 15.0);
+          });
+        },
+        tooltip: 'Locate Me',
+        backgroundColor: Color(0xFF32817D),
+        child: Icon(Icons.my_location),
       ),
     );
   }
