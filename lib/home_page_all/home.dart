@@ -87,7 +87,6 @@ class MainScreenState extends State<MainScreen> {
               child: IconButton(
                 icon: Icon(Icons.person, color: Colors.white),
                 onPressed: () {
-                  // Handle icon button press
                 },
               ),
             ),

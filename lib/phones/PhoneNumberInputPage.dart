@@ -17,7 +17,7 @@ class _MyPhoneState extends State<MyPhone> {
 
   @override
   void initState() {
-    countryController.text = "+91";
+    countryController.text = "+964";
     super.initState();
   }
 
@@ -27,7 +27,6 @@ class _MyPhoneState extends State<MyPhone> {
     String verificationText = '';
     String phoneHintText = '';
 
-    // Access selectedLanguage from the widget object
     switch (widget.selectedLanguage) {
       case Language.Arabic:
         verificationText = 'التحقق من رقم الهاتف';
@@ -101,7 +100,7 @@ class _MyPhoneState extends State<MyPhone> {
                   labelText: phoneHintText,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(),
-                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 initialCountryCode: 'IN',

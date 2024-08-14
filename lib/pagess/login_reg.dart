@@ -15,7 +15,6 @@ class WelcomeScreen extends StatelessWidget {
     String loginText = '';
     String registerText = '';
 
-    // Define text for each language
     switch (selectedLanguage) {
       case Language.Arabic:
         loginText = 'تسجيل دخول';
@@ -48,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const SizedBox(height: 200), // Adjusted from Padding to SizedBox
+            const SizedBox(height: 200),
             Text(
               selectedLanguage == Language.Arabic ? 'تسجيل الزائر' :
               selectedLanguage == Language.English ? 'Visitor Registration' :
@@ -134,7 +133,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const Spacer(), // Ensures space is distributed at the bottom
+            const Spacer(),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 final ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: Color(0xFFEFF1EE),
-  fontFamily: 'Zain', // Set the default font to Zain-Regular
+  fontFamily: 'Zain',
   textTheme: TextTheme(
     headline1: _textStyle,
     headline2: _textStyle,
@@ -21,5 +21,5 @@ final ThemeData appTheme = ThemeData(
 );
 
 const TextStyle _textStyle = TextStyle(
-  fontFamily: 'Zain', // Use Zain-Regular font style
+  fontFamily: 'Zain',
 );

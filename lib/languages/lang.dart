@@ -15,7 +15,7 @@ enum Language {
 }
 class _LanguagePageState extends State<LanguagePage>
     with SingleTickerProviderStateMixin {
-  Language? selectedLanguage = Language.Arabic; // Initial language
+  Language? selectedLanguage = Language.Arabic;
   late AnimationController _animationController;
   final Color primaryColor = Color(0xFF00897B);
   final Color cardColor = Color(0xFF80CBC4);
@@ -62,7 +62,7 @@ class _LanguagePageState extends State<LanguagePage>
               ? 'زبان‌ها'
               : selectedLanguage == Language.Kurdish
               ? 'زمانەکان'
-              : "", // Sorani for "Languages"
+              : "",
           textDirection: textDirection,
         ),
         leading: IconButton(

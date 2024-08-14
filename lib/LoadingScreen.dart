@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class LoadingScreen extends StatelessWidget {
-  final VoidCallback onLoaded; // Add this line
+  final VoidCallback onLoaded;
 
   LoadingScreen({Key? key, required this.onLoaded}) : super(key: key);
 

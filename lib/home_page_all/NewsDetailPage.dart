@@ -28,7 +28,7 @@ class NewsDetailModal extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.network(
                   article.imageUrl,
-                  height: 300,  // Adjust height as needed
+                  height: 300,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),

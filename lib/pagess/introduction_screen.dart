@@ -19,8 +19,8 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   late Language selectedLanguage;
   final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
-  final GlobalKey _translationIconKey = GlobalKey(); // Define the key here
-  final PageController _pageController = PageController(); // Add this line
+  final GlobalKey _translationIconKey = GlobalKey();
+  final PageController _pageController = PageController();
 
   @override
   void initState() {
@@ -99,7 +99,7 @@ class _IntroScreenState extends State<IntroScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0, // Remove default shadow
+        elevation: 0,
         title: Tooltip(
           message: 'Translate',
           child: Showcase(
@@ -119,7 +119,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     blurRadius: 2,
                     spreadRadius: 1,
-                    offset: Offset(0, 2), // Change offset for floating effect
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -233,17 +233,17 @@ class _IntroScreenState extends State<IntroScreen> {
         next: _buildIconButton(context, Icons.navigate_next),
         done: _buildButton(context, getLocalizedText("تم", "تم", "Done", "تم", "تم"), () {
           Navigator.push(
-            context,
-              MaterialPageRoute(
-              builder: (context) => LoadingScreen(onLoaded: () {
-            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
-              ),
-            );
-          }),
-          )
+                builder: (context) => LoadingScreen(onLoaded: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
+                    ),
+                  );
+                }),
+              )
           );
         }),
       ),
@@ -312,11 +312,11 @@ class _IntroScreenState extends State<IntroScreen> {
       onTap: onPressed,
       child: CircleAvatar(
         radius: 30,
-        backgroundColor: Color(0xFF5CBBE3), // Background color of CircleAvatar
+        backgroundColor: Color(0xFF5CBBE3),
         child: Text(
           text,
           style: TextStyle(
-            color: Colors.white, // Text color
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),

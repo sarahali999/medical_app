@@ -119,7 +119,6 @@ class AnimatedExaminationCards extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) =>
             LoadingScreen(onLoaded: () {
-              // Callback is now used for the actual page navigation
               _navigateToPage(context, page);
             }),
       ),
