@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import '../LoadingScreen.dart';
 import '../home_page_all/home.dart';
 import 'PhoneNumberInputPage.dart';
 import '../languages/lang.dart';
@@ -111,13 +112,24 @@ class _MyVerifyState extends State<MyVerify> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () { Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainScreen(selectedLanguage:widget.selectedLanguage ,),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoadingScreen(
+                          onLoaded: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainScreen(selectedLanguage: widget.selectedLanguage),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
 
-                    ),
-                  );},
                   child: Text(
                     widget.selectedLanguage == Language.Arabic
                         ? "دخول"

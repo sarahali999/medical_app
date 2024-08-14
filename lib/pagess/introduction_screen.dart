@@ -1,3 +1,4 @@
+import '../LoadingScreen.dart';
 import '../languages/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -19,6 +20,7 @@ class _IntroScreenState extends State<IntroScreen> {
   late Language selectedLanguage;
   final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
   final GlobalKey _translationIconKey = GlobalKey(); // Define the key here
+  final PageController _pageController = PageController(); // Add this line
 
   @override
   void initState() {
@@ -215,14 +217,33 @@ class _IntroScreenState extends State<IntroScreen> {
         skip: _buildButton(context, getLocalizedText("تخطي", "تخطي", "Skip", "تخطي", "تخطي"), () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage)),
-          );
+            MaterialPageRoute(
+              builder: (context) => LoadingScreen(
+                onLoaded: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
+                    ),
+                  );
+                },
+              ),
+            ),          );
         }),
         next: _buildIconButton(context, Icons.navigate_next),
         done: _buildButton(context, getLocalizedText("تم", "تم", "Done", "تم", "تم"), () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage)),
+              MaterialPageRoute(
+              builder: (context) => LoadingScreen(onLoaded: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
+              ),
+            );
+          }),
+          )
           );
         }),
       ),
@@ -308,17 +329,23 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget _buildIconButton(BuildContext context, IconData icon) {
     return IconButton(
       icon: Icon(icon, color: Color(0xFF5CBBE3)),
-      onPressed: () {},
+      onPressed: () {
+        if (_pageController.page! < 2) {
+          _pageController.nextPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      },
     );
   }
+
 }
 
 class SidebarMenu extends StatelessWidget {
   final Function(Language) onLanguageChange;
   final Language selectedLanguage;
-
   SidebarMenu({required this.onLanguageChange, required this.selectedLanguage});
-
   String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
     switch (selectedLanguage) {
       case Language.Arabic:

@@ -5,7 +5,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../languages/lang.dart';
 
 class MapPage extends StatefulWidget {
@@ -36,7 +35,7 @@ class _MapPageState extends State<MapPage> {
         height: 80.0,
         point: LatLng(33.3112827, 44.4241059),
         child: Container(
-          child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+          child: Icon(Icons.location_on_outlined, size: 50.0, color: Colors.red),
         ),
       ),
       Marker(
@@ -44,7 +43,7 @@ class _MapPageState extends State<MapPage> {
         height: 80.0,
         point: LatLng(33.3101565, 44.4276196),
         child: Container(
-          child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+          child: Icon(Icons.location_on_outlined, size: 50.0, color: Colors.red),
         ),
       ),
       Marker(
@@ -52,7 +51,7 @@ class _MapPageState extends State<MapPage> {
         height: 80.0,
         point: LatLng(32.6185146, 44.0812222),
         child: Container(
-          child: Icon(Icons.location_on, size: 50.0, color: Colors.red),
+          child: Icon(Icons.location_on_outlined, size: 50.0, color: Colors.red),
         ),
       ),
     ];

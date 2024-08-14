@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicapp/phones/PhoneNumberInputPage.dart';
+import '../LoadingScreen.dart';
 import '../forms/Introductionpers.dart';
 import '../languages/lang.dart';
 
@@ -65,7 +66,16 @@ class WelcomeScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyPhone(selectedLanguage: selectedLanguage)),
+                  MaterialPageRoute(
+                    builder: (context) => LoadingScreen(
+                      onLoaded: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyPhone(selectedLanguage: selectedLanguage)),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
               child: Container(
@@ -92,7 +102,16 @@ class WelcomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PatientInfoIntroScreen(selectedLanguage: selectedLanguage),
+                    builder: (context) => LoadingScreen(
+                      onLoaded: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PatientInfoIntroScreen(selectedLanguage: selectedLanguage),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 );
               },

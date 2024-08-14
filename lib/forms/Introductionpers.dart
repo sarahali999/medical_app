@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import '../LoadingScreen.dart';
 import '../languages/lang.dart';
 import 'personal_info_page.dart';
 import 'medical_info_page.dart';
@@ -126,9 +127,20 @@ class _PatientInfoIntroScreenState extends State<PatientInfoIntroScreen> with Ti
                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
                 ),
                 onDone: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MainScreen(selectedLanguage: widget.selectedLanguage)),
+                    MaterialPageRoute(
+                      builder: (context) => LoadingScreen(
+                        onLoaded: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainScreen(selectedLanguage: widget.selectedLanguage),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   );
                 },
                 next: Text(

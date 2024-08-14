@@ -299,7 +299,7 @@ class PersonalInfoPage extends StatelessWidget {
               fillColor: Colors.grey[50],
               contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             ),
-            initialCountryCode: 'US',
+            initialCountryCode: 'IQ',
             onChanged: (phone) {
               print(phone.completeNumber);
             },

@@ -5,12 +5,13 @@ import 'cart2.dart';
 import 'cart4.dart';
 import 'homepage.dart';
 import 'map.dart';
-
+import 'package:medicapp/LoadingScreen.dart';
 class AnimatedExaminationCards extends StatelessWidget {
   final BuildContext parentContext;
   final Language selectedLanguage;
 
-  AnimatedExaminationCards({required this.parentContext, required this.selectedLanguage});
+  AnimatedExaminationCards(
+      {required this.parentContext, required this.selectedLanguage});
 
   @override
   Widget build(BuildContext context) {
@@ -105,39 +106,57 @@ class AnimatedExaminationCards extends StatelessWidget {
       },
     };
 
-    String languageKey = selectedLanguage.toString().split('.').last;
+    String languageKey = selectedLanguage
+        .toString()
+        .split('.')
+        .last;
     return cardTexts[cardType]?[textType]?[languageKey] ?? 'Text not found';
   }
 
   void _navigateToExaminationDetails(BuildContext context, String page) {
-    Widget pageToNavigate;
-    switch (page) {
-      case 'cart1':
-        pageToNavigate = cart1();
-        break;
-      case 'cart2':
-        pageToNavigate = cart2();
-        break;
-      case 'map':
-        pageToNavigate = MapPage(selectedLanguage: selectedLanguage,);
-        break;
-      case 'cart4':
-        pageToNavigate = cart4();
-        break;
-      default:
-        pageToNavigate = Homepage(selectedLanguage: Language.Arabic);
-    }
-
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => pageToNavigate,
+        builder: (context) =>
+            LoadingScreen(onLoaded: () {
+              // Callback is now used for the actual page navigation
+              _navigateToPage(context, page);
+            }),
       ),
     );
   }
+
+  void _navigateToPage(BuildContext context, String page) {
+    Future.delayed(Duration(seconds: 2), () {
+      Widget pageToNavigate;
+      switch (page) {
+        case 'cart1':
+          pageToNavigate = cart1();
+          break;
+        case 'cart2':
+          pageToNavigate = cart2();
+          break;
+        case 'map':
+          pageToNavigate = MapPage(selectedLanguage: selectedLanguage);
+          break;
+        case 'cart4':
+          pageToNavigate = cart4();
+          break;
+        default:
+          pageToNavigate = Homepage(selectedLanguage: Language.Arabic);
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => pageToNavigate,
+        ),
+      );
+    });
+  }
 }
 
-class AnimatedExaminationCard extends StatefulWidget {
+  class AnimatedExaminationCard extends StatefulWidget {
   final String date;
   final String title;
   final Color color;
