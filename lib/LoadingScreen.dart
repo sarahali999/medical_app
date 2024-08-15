@@ -16,7 +16,7 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body:  Center(
-        child: Lottie.asset('assets/lottie/1.json'),
+        child: Lottie.asset('assets/lottie/im.json'),
       ),
     );
   }
