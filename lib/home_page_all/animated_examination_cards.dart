@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../languages/lang.dart';
 import 'cart1.dart';
 import 'cart2.dart';
@@ -11,13 +12,15 @@ class AnimatedExaminationCards extends StatelessWidget {
   final BuildContext parentContext;
   final Language selectedLanguage;
 
-  AnimatedExaminationCards(
-      {required this.parentContext, required this.selectedLanguage});
+  AnimatedExaminationCards({
+    required this.parentContext,
+    required this.selectedLanguage
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 110,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -31,12 +34,29 @@ class AnimatedExaminationCards extends StatelessWidget {
   }
 
   Widget _buildCard(String cardType, Color color) {
+    String iconPath = _getCardIcon(cardType);
     return AnimatedExaminationCard(
       date: _getCardText(cardType, 'title'),
       title: _getCardText(cardType, 'date'),
       color: color,
+      iconPath: iconPath,
       onTap: () => _navigateToExaminationDetails(parentContext, cardType),
     );
+  }
+
+  String _getCardIcon(String cardType) {
+    switch (cardType) {
+      case 'cart1':
+        return 'assets/icons/health.svg';
+      case 'cart2':
+        return 'assets/icons/rep.svg';
+      case 'map':
+        return 'assets/icons/map.svg';
+      case 'cart4':
+        return 'assets/icons/info.svg';
+      default:
+        return 'assets/icons/info.svg';
+    }
   }
 
   String _getCardText(String cardType, String textType) {
@@ -50,7 +70,7 @@ class AnimatedExaminationCards extends StatelessWidget {
           'English': 'Continuous Treatment',
         },
         'title': {
-          'Arabic': 'الفحوصات والادوية التي تلقاها الزائر',
+          'Arabic': 'الفحوصات والادوية التي تلقاها الزائر ',
           'Persian': 'آزمون‌ها و داروهایی که بازدیدکننده دریافت کرده',
           'Kurdish': 'Test û dermanên ku serdana kiryar hatibû',
           'Turkmen': 'Gözden geçirilen we dermanlar',
@@ -91,26 +111,24 @@ class AnimatedExaminationCards extends StatelessWidget {
       },
       'cart4': {
         'date': {
-          'Arabic': 'تقارير المريض العامة',
-          'Persian': 'گزارش‌های عمومی بیمار',
-          'Kurdish': 'ڕاپۆرتە گشتییەکان',
-          'Turkmen': 'Hususy hasabatlar',
-          'English': 'General Patient Reports',
+          'Arabic': 'الجانب الديني',
+          'Persian': 'جنبه مذهبی',
+          'Kurdish': 'لایەنی ئایینی',
+          'Turkmen': 'Dini tarap',
+          'English': 'Religious Aspect',
         },
         'title': {
-          'Arabic': 'تقريره العام',
-          'Persian': 'گزارش کلی',
-          'Kurdish': 'Raporê giştî',
-          'Turkmen': 'Umumy hasabat',
-          'English': 'General Report',
+          'Arabic': 'الأدعية والتسبيحات خلال المشي',
+          'Persian': 'دعاها و تسبیحات هنگام راه رفتن',
+          'Kurdish': 'نوێژ و ستایشەکان لە کاتی ڕۆیشتندا',
+          'Turkmen': 'Ýöremek wagtynda dogalar we öwgüler',
+          'English': 'Prayers and glorifications during walking',
+
         },
       },
     };
 
-    String languageKey = selectedLanguage
-        .toString()
-        .split('.')
-        .last;
+    String languageKey = selectedLanguage.toString().split('.').last;
     return cardTexts[cardType]?[textType]?[languageKey] ?? 'Text not found';
   }
 
@@ -118,10 +136,9 @@ class AnimatedExaminationCards extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            LoadingScreen(onLoaded: () {
-              _navigateToPage(context, page);
-            }),
+        builder: (context) => LoadingScreen(onLoaded: () {
+          _navigateToPage(context, page);
+        }),
       ),
     );
   }
@@ -140,7 +157,7 @@ class AnimatedExaminationCards extends StatelessWidget {
           pageToNavigate = MapPage(selectedLanguage: selectedLanguage);
           break;
         case 'cart4':
-          pageToNavigate = cart4();
+          pageToNavigate = Cart4(selectedLanguage: selectedLanguage,);
           break;
         default:
           pageToNavigate = Homepage(selectedLanguage: Language.Arabic);
@@ -160,12 +177,14 @@ class AnimatedExaminationCard extends StatefulWidget {
   final String date;
   final String title;
   final Color color;
+  final String iconPath;
   final VoidCallback onTap;
 
   AnimatedExaminationCard({
     required this.date,
     required this.title,
     required this.color,
+    required this.iconPath,
     required this.onTap,
   });
 
@@ -211,8 +230,8 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
           ),
           margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Container(
-            height: 120,
-            width: 300,
+            height: 100,
+            width: 250,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [widget.color.withOpacity(0.7), widget.color],
@@ -231,29 +250,48 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
             ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.date,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    width: 20,
+                    height: 20,
+                    child: SvgPicture.asset(
+                      widget.iconPath,
                       color: Colors.white,
-                      fontFamily: 'Changa-VariableFont_wght',
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.8),
-                      fontFamily: 'Changa-VariableFont_wght',
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.date,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'Changa-VariableFont_wght',
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Expanded(
+                          child: Text(
+                            widget.title,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white.withOpacity(0.8),
+                              fontFamily: 'Changa-VariableFont_wght',
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

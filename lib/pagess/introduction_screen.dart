@@ -341,11 +341,12 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
 }
-
 class SidebarMenu extends StatelessWidget {
   final Function(Language) onLanguageChange;
   final Language selectedLanguage;
+
   SidebarMenu({required this.onLanguageChange, required this.selectedLanguage});
+
   String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
     switch (selectedLanguage) {
       case Language.Arabic:
@@ -369,9 +370,9 @@ class SidebarMenu extends StatelessWidget {
       backgroundColor: Color(0xFF5CBBE3),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 getLocalizedText(
@@ -379,20 +380,28 @@ class SidebarMenu extends StatelessWidget {
                   'انتخاب زبان',
                   'Language Selection',
                   'هەڵبژاردنی زمان',
-                  '',
+                  'Dil seçimi',
                 ),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(height: 10),
               Divider(height: 1, thickness: 2, color: Colors.white),
-              SizedBox(height: 5),
-              _buildLanguageTile(context, 'العربية', Language.Arabic),
-              _buildLanguageTile(context, 'فارسی', Language.Persian),
-              _buildLanguageTile(context, 'English', Language.English),
-              _buildLanguageTile(context, 'کوردی', Language.Kurdish),
-              _buildLanguageTile(context, 'Türkmençe', Language.Turkmen),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildLanguageTile(context, 'العربية', Language.Arabic),
+                    _buildLanguageTile(context, 'فارسی', Language.Persian),
+                    _buildLanguageTile(context, 'English', Language.English),
+                    _buildLanguageTile(context, 'کوردی', Language.Kurdish),
+                    _buildLanguageTile(context, 'Türkmençe', Language.Turkmen),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -401,31 +410,29 @@ class SidebarMenu extends StatelessWidget {
   }
 
   Widget _buildLanguageTile(BuildContext context, String title, Language language) {
-    Color? tileColor;
+    bool isSelected = language == selectedLanguage;
 
-    if (language == selectedLanguage) {
-      tileColor = Color(0xFF5CBBE3);
-    }
-
-    return ListTile(
-      title: Container(
-        height: 56,
-        width: 500,
-        decoration: BoxDecoration(
-          color: tileColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: language == selectedLanguage ? FontWeight.bold : FontWeight.normal,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Material(
+        color: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+        borderRadius: BorderRadius.circular(15),
+        child: InkWell(
+          onTap: () => onLanguageChange(language),
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                fontSize: 18,
+              ),
             ),
           ),
         ),
       ),
-      onTap: () => onLanguageChange(language),
     );
   }
 }

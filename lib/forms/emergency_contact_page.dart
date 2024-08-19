@@ -3,19 +3,26 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'section_title.dart';
 import '../languages/lang.dart';
 import 'cusstom.dart';
+
 class EmergencyContactPage extends StatelessWidget {
   final Language selectedLanguage;
   final TextEditingController emergencyContactNameController;
   final TextEditingController emergencyContactAddressController;
-  final TextEditingController emergencyContactRelationshipController;
   final TextEditingController emergencyContactPhoneController;
+
+  final List<String> _connectionOptions = [
+    'Father',
+    'Mother',
+    'Brother',
+    'Sister',
+    'Other',
+  ];
 
   EmergencyContactPage({
     required this.selectedLanguage,
     required this.emergencyContactNameController,
     required this.emergencyContactAddressController,
-    required this.emergencyContactRelationshipController,
-    required this.emergencyContactPhoneController,
+    required this.emergencyContactPhoneController, required TextEditingController emergencyContactRelationshipController,
   });
 
   @override
@@ -23,9 +30,23 @@ class EmergencyContactPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: getLocalizedText('جهة الاتصال الطارئة', 'پەیوەندیدەری بەرەوپێش', 'Emergency Contact', 'پەیوەندیدەری بەرەوپێش', '')),
+        SectionTitle(
+          title: getLocalizedText(
+            'جهة الاتصال الطارئة',
+            'پەیوەندیدەری بەرەوپێش',
+            'Emergency Contact',
+            'پەیوەندیدەری بەرەوپێش',
+            'Ýaňyşlygyň aragatnaşygy',
+          ),
+        ),
         CustomTextField(
-          getLocalizedText('اسم جهة الاتصال الطارئة', 'نام فرد اضطراری', 'Emergency Contact Name', 'ناوی پەیوەندیدەری بەرەوپێش', ''),
+          getLocalizedText(
+            'اسم جهة الاتصال الطارئة',
+            'نام فرد اضطراری',
+            'Emergency Contact Name',
+            'ناوی پەیوەندیدەری بەرەوپێش',
+            'Ýaňyşlygyň aragatnaşygyň ady',
+          ),
           emergencyContactNameController,
           textStyle: TextStyle(
             fontSize: 14,
@@ -34,21 +55,20 @@ class EmergencyContactPage extends StatelessWidget {
         ),
         _buildEmergencyPhoneNumberField(),
         CustomTextField(
-          getLocalizedText('العنوان', 'آدرس', 'Address', 'ناونیشان', ''),
+          getLocalizedText(
+            'العنوان',
+            'آدرس',
+            'Address',
+            'ناونیشان',
+            'Salgysy',
+          ),
           emergencyContactAddressController,
           textStyle: TextStyle(
             fontSize: 14,
             color: Colors.black,
           ),
         ),
-        CustomTextField(
-          getLocalizedText('العلاقة', 'نسبت', 'Relationship', 'پەیوەندی', ''),
-          emergencyContactRelationshipController,
-          textStyle: TextStyle(
-            fontSize: 14,
-            color: Colors.black,
-          ),
-        ),
+        _buildConnectionDropdown(),
       ],
     );
   }
@@ -60,7 +80,13 @@ class EmergencyContactPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            getLocalizedText('رقم الهاتف', 'شماره تيلفۆن', 'Phone Number', 'ژمارەی تەلەفۆن', ''),
+            getLocalizedText(
+              'رقم الهاتف',
+              'شماره تيلفۆن',
+              'Phone Number',
+              'ژمارەی تەلەفۆن',
+              'Telefon belgisi',
+            ),
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -70,7 +96,13 @@ class EmergencyContactPage extends StatelessWidget {
           SizedBox(height: 8),
           IntlPhoneField(
             decoration: InputDecoration(
-              labelText: getLocalizedText('رقم الهاتف', 'شماره تيلفۆن', 'Phone Number', 'ژمارەی تەلەفۆن', ''),
+              labelText: getLocalizedText(
+                'رقم الهاتف',
+                'شماره تيلفۆن',
+                'Phone Number',
+                'ژمارەی تەلەفۆن',
+                'Telefon belgisi',
+              ),
               labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -90,7 +122,94 @@ class EmergencyContactPage extends StatelessWidget {
     );
   }
 
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String defaultText) {
+  Widget _buildConnectionDropdown() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            getLocalizedText(
+              'صلة القرابة',
+              'نسبت',
+              'Connection',
+              'پەیوەندی',
+              'Baglanyşyk',
+            ),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 8),
+          DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[50],
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            ),
+            items: _connectionOptions.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  getLocalizedText(
+                    value == 'Father'
+                        ? 'أب'
+                        : value == 'Mother'
+                        ? 'أم'
+                        : value == 'Brother'
+                        ? 'أخ'
+                        : value == 'Sister'
+                        ? 'أخت'
+                        : 'أخرى',
+                    value == 'Father'
+                        ? 'پدر'
+                        : value == 'Mother'
+                        ? 'مادر'
+                        : value == 'Brother'
+                        ? 'برادر'
+                        : value == 'Sister'
+                        ? 'خواهر'
+                        : 'دیگر',
+                    value,
+                    value == 'Father'
+                        ? 'باوک'
+                        : value == 'Mother'
+                        ? 'دایک'
+                        : value == 'Brother'
+                        ? 'برا'
+                        : value == 'Sister'
+                        ? 'خوشک'
+                        : 'تر',
+                    value == 'Father'
+                        ? 'Ata'
+                        : value == 'Mother'
+                        ? 'Ene'
+                        : value == 'Brother'
+                        ? 'Doganyňyz'
+                        : value == 'Sister'
+                        ? 'Uýadyňyz'
+                        : 'Beýlekiler',
+                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.black),
+                ),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              print('Selected Connection: $newValue');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
     switch (selectedLanguage) {
       case Language.Arabic:
         return arabic;
@@ -98,6 +217,8 @@ class EmergencyContactPage extends StatelessWidget {
         return persian;
       case Language.Kurdish:
         return kurdish;
+      case Language.Turkmen:
+        return turkmen;
       default:
         return english;
     }

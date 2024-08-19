@@ -73,7 +73,7 @@ class _PatientInfoIntroScreenState extends State<PatientInfoIntroScreen> with Ti
         ),
         body: Column(
           children: [
-            StepIndicator(currentStep: currentStep, totalSteps: 3),
+            StepIndicator(currentStep: currentStep, totalSteps: 3, selectedLanguage: widget.selectedLanguage,),
             Expanded(
               child: IntroductionScreen(
                 onChange: (index) {

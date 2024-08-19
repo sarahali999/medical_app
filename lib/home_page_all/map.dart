@@ -95,7 +95,6 @@ class _MapPageState extends State<MapPage> {
     final query = searchController.text;
     final apiKey = '48b0594741134ba7a54846c836ba8935';
     final url = Uri.parse('https://api.opencagedata.com/geocode/v1/json?q=$query&key=$apiKey');
-
     try {
       final response = await http.get(url);
       final data = json.decode(response.body);
@@ -194,7 +193,7 @@ class _MapPageState extends State<MapPage> {
             ),
             children: [
               TileLayer(
-                urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                urlTemplate: "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
                 subdomains: ['a', 'b', 'c', 'd'],
               ),
               PolylineLayer(polylines: polylines),

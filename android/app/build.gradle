@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 android {
     namespace "com.example.medicapp"
     compileSdkVersion 34
-    ndkVersion "25.1.8937393"
+    ndkVersion "25.1.8937393" // Use the version that matches your installed NDK
 
 
     compileOptions {

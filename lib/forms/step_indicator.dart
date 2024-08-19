@@ -1,39 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../languages/lang.dart';  // Make sure to import your language file
 
 class StepIndicator extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
+  final Language selectedLanguage;
 
-  StepIndicator({required this.currentStep, required this.totalSteps});
+  StepIndicator({
+    required this.currentStep,
+    required this.totalSteps,
+    required this.selectedLanguage
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(totalSteps, (index) {
-              bool isActive = index <= currentStep;
-              bool isCurrent = index == currentStep;
-              return _buildStep(context, index, isActive, isCurrent);
-            }),
-          ),
-          SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: (currentStep + 1) / totalSteps,
-              backgroundColor: Colors.grey[200],
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5CBBE3)),
-              minHeight: 6,
+    bool isRightToLeft = selectedLanguage == Language.Arabic ||
+        selectedLanguage == Language.Persian ||
+        selectedLanguage == Language.Kurdish;
+
+    return Directionality(
+      textDirection: isRightToLeft ? TextDirection.rtl : TextDirection.ltr,
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(totalSteps, (index) {
+                bool isActive = index <= currentStep;
+                bool isCurrent = index == currentStep;
+                return _buildStep(context, index, isActive, isCurrent);
+              }),
             ),
-          ),
-        ],
+            SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: (currentStep + 1) / totalSteps,
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5CBBE3)),
+                minHeight: 6,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -53,9 +66,7 @@ class StepIndicator extends StatelessWidget {
               color: isActive ? Color(0xFF5CBBE3) : Colors.grey[300]!,
               width: 2,
             ),
-            boxShadow: isCurrent
-                ? [BoxShadow(color: Color(0xFF5CBBE3).withOpacity(0.3), blurRadius: 8, spreadRadius: 2)]
-                : [],
+            boxShadow: isCurrent ? [BoxShadow(color: Color(0xFF5CBBE3).withOpacity(0.3), blurRadius: 8, spreadRadius: 2)] : [],
           ),
           child: Center(
             child: SvgPicture.asset(
@@ -81,7 +92,7 @@ class StepIndicator extends StatelessWidget {
         ),
         SizedBox(height: 8),
         Text(
-          _getStepTitle(index),
+          _getLocalizedStepTitle(index),
           style: TextStyle(
             color: isActive ? Color(0xFF5CBBE3) : Colors.grey[600],
             fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
@@ -94,27 +105,38 @@ class StepIndicator extends StatelessWidget {
 
   String _getIconPath(int index) {
     switch (index) {
-      case 0:
-        return 'assets/icons/person.svg';
-      case 1:
-        return 'assets/icons/medh.svg';
-      case 2:
-        return 'assets/icons/close.svg';
-      default:
-        return 'assets/icons/close.svg';
+      case 0: return 'assets/icons/person.svg';
+      case 1: return 'assets/icons/medh.svg';
+      case 2: return 'assets/icons/close.svg';
+      default: return 'assets/icons/close.svg';
     }
   }
 
-  String _getStepTitle(int index) {
+  String _getLocalizedStepTitle(int index) {
     switch (index) {
       case 0:
-        return 'Personal';
+        return _getLocalizedText('شخصي', 'شخصی', 'Personal', 'کەسی', '');
       case 1:
-        return 'Medical';
+        return _getLocalizedText('طبي', 'پزشکی', 'Medical', 'پزیشکی', '');
       case 2:
-        return 'Emergency';
+        return _getLocalizedText('طوارئ', 'اورژانسی', 'Emergency', 'کتوپڕ', '');
       default:
         return '';
+    }
+  }
+
+  String _getLocalizedText(String arabic, String persian, String english, String kurdish, String defaultText) {
+    switch (selectedLanguage) {
+      case Language.Arabic:
+        return arabic;
+      case Language.Persian:
+        return persian;
+      case Language.English:
+        return english;
+      case Language.Kurdish:
+        return kurdish;
+      default:
+        return defaultText;
     }
   }
 }
