@@ -15,7 +15,7 @@ class Homepage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AnimatedSpecialText(),
+          //  AnimatedSpecialText(),
             AnimatedUserCard(selectedLanguage: selectedLanguage),
             AnimatedExaminationCards(
               parentContext: context,
@@ -58,64 +58,64 @@ class Homepage extends StatelessWidget {
     );
   }
 }
-
-class AnimatedSpecialText extends StatefulWidget {
-  @override
-  _AnimatedSpecialTextState createState() => _AnimatedSpecialTextState();
-}
-class _AnimatedSpecialTextState extends State<AnimatedSpecialText> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 1, end: 1.1).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _controller.forward().then((_) => _controller.reverse());
-      },
-      child: ScaleTransition(
-        scale: _animation,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Container(
-                child:Text(
-                  "الحسين(ع) هو المنطق.. الحسين(ع) هو الطريق.. الحسين(ع) هو الانتصار",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontFamily: 'Amiri',
-                    fontStyle: FontStyle.italic,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 8.0,
-                        color: Colors.grey,
-                        offset: Offset(1.0, 1.0),
-                      ),
-                    ],
-                  ),
-                )
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//
+// class AnimatedSpecialText extends StatefulWidget {
+//   @override
+//   _AnimatedSpecialTextState createState() => _AnimatedSpecialTextState();
+// }
+// class _AnimatedSpecialTextState extends State<AnimatedSpecialText> with SingleTickerProviderStateMixin {
+//   late AnimationController _controller;
+//   late Animation<double> _animation;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = AnimationController(
+//       duration: const Duration(milliseconds: 300),
+//       vsync: this,
+//     );
+//     _animation = Tween<double>(begin: 1, end: 1.1).animate(_controller);
+//   }
+//
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         _controller.forward().then((_) => _controller.reverse());
+//       },
+//       child: ScaleTransition(
+//         scale: _animation,
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Center(
+//             child: Container(
+//                 child:Text(
+//                   "الحسين(ع) هو المنطق.. الحسين(ع) هو الطريق.. الحسين(ع) هو الانتصار",
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(
+//                     fontSize: 20,
+//                     color: Colors.black,
+//                     fontFamily: 'Amiri',
+//                     fontStyle: FontStyle.italic,
+//                     shadows: [
+//                       Shadow(
+//                         blurRadius: 8.0,
+//                         color: Colors.grey,
+//                         offset: Offset(1.0, 1.0),
+//                       ),
+//                     ],
+//                   ),
+//                 )
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

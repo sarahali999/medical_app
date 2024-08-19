@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart' as flutter_map;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:lottie/lottie.dart';
 import '../languages/lang.dart';
 
 class MarkerInfo {
   final LatLng point;
   final String name;
   double distance = 0;
-
   MarkerInfo({required this.point, required this.name});
 }
 
@@ -25,13 +26,14 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final MapController _mapController = MapController();
+  final flutter_map.MapController _mapController = flutter_map.MapController();
   LatLng currentLocation = LatLng(0, 0);
   TextEditingController searchController = TextEditingController();
-  List<Marker> markers = [];
+  List<flutter_map.Marker> markers = [];
   List<MarkerInfo> markerInfos = [];
-  List<Polyline> polylines = [];
+  List<flutter_map.Polyline> polylines = [];
   bool isMarkerListVisible = false;
+  MarkerInfo? selectedMarker;
 
   @override
   void initState() {
@@ -45,18 +47,27 @@ class _MapPageState extends State<MapPage> {
       MarkerInfo(point: LatLng(33.3112827, 44.4241059), name: "Location 1"),
       MarkerInfo(point: LatLng(33.3101565, 44.4276196), name: "Location 2"),
       MarkerInfo(point: LatLng(32.6185146, 44.0812222), name: "Location 3"),
+      MarkerInfo(point: LatLng(32.6010381, 44.0259766), name: "Location 4"),
     ];
 
-    markers = markerInfos.map((info) => Marker(
-      width: 80.0,
-      height: 80.0,
+    markers = markerInfos.map((info) => flutter_map.Marker(
+      width: 50.0,
+      height: 50.0,
       point: info.point,
-      child: Container(
-        child: Icon(Icons.location_on_outlined, size: 50.0, color: Colors.red),
+      child: GestureDetector(
+        onTap: () => _selectMarker(info),
+        child: Lottie.asset('assets/lottie/mark.json'),
       ),
     )).toList();
 
     _updatePolylines();
+  }
+  void _selectMarker(MarkerInfo info) {
+    setState(() {
+      selectedMarker = info;
+      _updatePolylines();
+      isMarkerListVisible = false; // Hide the marker list when a marker is selected
+    });
   }
 
   void _calculateDistances() {
@@ -68,10 +79,10 @@ class _MapPageState extends State<MapPage> {
 
   void _updatePolylines() {
     polylines.clear();
-    for (var info in markerInfos) {
+    if (selectedMarker != null) {
       polylines.add(
-        Polyline(
-          points: [currentLocation, info.point],
+        flutter_map.Polyline(
+          points: [currentLocation, selectedMarker!.point],
           color: Colors.blue.withOpacity(0.7),
           strokeWidth: 3.0,
         ),
@@ -133,9 +144,26 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  String _getFormattedDistance() {
+    if (selectedMarker == null) return '';
+    double distance = const Distance().as(LengthUnit.Kilometer, currentLocation, selectedMarker!.point);
+    return '${distance.toStringAsFixed(2)} km';
+  }
+
+  void _clearSelection() {
+    setState(() {
+      selectedMarker = null;
+      _updatePolylines();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Directionality(
+    textDirection: _isRtlLanguage(widget.selectedLanguage)
+        ? TextDirection.rtl
+        : TextDirection.ltr,
+    child: Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.8),
@@ -166,8 +194,8 @@ class _MapPageState extends State<MapPage> {
             ),
             children: [
               TileLayer(
-                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
+                urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c', 'd'],
               ),
               PolylineLayer(polylines: polylines),
               CurrentLocationLayer(),
@@ -180,7 +208,7 @@ class _MapPageState extends State<MapPage> {
             right: 16,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.white.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -207,11 +235,36 @@ class _MapPageState extends State<MapPage> {
             ),
           ),
           if (isMarkerListVisible) _buildFloatingMarkerList(),
+          if (selectedMarker != null)
+            Positioned(
+              bottom: 16,
+              left: 16,
+              right: 16,
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '${selectedMarker!.name}: ${_getFormattedDistance()}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
         ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          if (selectedMarker != null)
+            FloatingActionButton(
+              onPressed: _clearSelection,
+              heroTag: 'clearSelection',
+              child: Icon(Icons.clear, color: Color(0xFF32817D)),
+              backgroundColor: Colors.white.withOpacity(0.8),
+            ),
+          SizedBox(height: 16),
           FloatingActionButton(
             onPressed: () {
               setState(() {
@@ -219,18 +272,19 @@ class _MapPageState extends State<MapPage> {
               });
             },
             heroTag: 'toggleList',
-            child: Icon(isMarkerListVisible ? Icons.list_alt : Icons.list),
-            backgroundColor: Color(0xFF32817D),
+            child: Icon(isMarkerListVisible ? Icons.list_alt : Icons.list, color: Color(0xFF32817D)),
+            backgroundColor: Colors.white.withOpacity(0.8),
           ),
           SizedBox(height: 16),
           FloatingActionButton(
             onPressed: _locateUser,
             heroTag: 'locateMe',
-            child: Icon(Icons.my_location),
-            backgroundColor: Color(0xFF32817D),
+            child: Icon(Icons.my_location, color: Color(0xFF32817D)),
+            backgroundColor: Colors.white.withOpacity(0.8),
           ),
         ],
       ),
+    )
     );
   }
 
@@ -284,6 +338,7 @@ class _MapPageState extends State<MapPage> {
                     leading: Icon(Icons.location_on, color: Color(0xFF32817D)),
                     onTap: () {
                       _mapController.move(info.point, 15.0);
+                      _selectMarker(info);
                     },
                   );
                 },
@@ -296,29 +351,41 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _locateUser() async {
-    var location = Location();
-    bool serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
+    try {
+      var location = Location();
+      bool serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
-        return;
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          print("Location services are disabled.");
+          return;
+        }
       }
-    }
 
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
+      PermissionStatus permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          print("Location permission not granted.");
+          return;
+        }
       }
-    }
 
-    var userLocation = await location.getLocation();
-    setState(() {
-      currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
-      _mapController.move(currentLocation, 15.0);
-      _calculateDistances();
-      _updatePolylines();
-    });
+      var userLocation = await location.getLocation();
+      print("User location: ${userLocation.latitude}, ${userLocation.longitude}");
+
+      setState(() {
+        currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
+        _mapController.move(currentLocation, 15.0);
+        _calculateDistances();
+        _updatePolylines();
+      });
+
+      print("Map moved to: ${currentLocation.latitude}, ${currentLocation.longitude}");
+    } catch (e) {
+      print("Error in _locateUser: $e");
+    }
   }
+}bool _isRtlLanguage(Language language) {
+  return language == Language.Arabic || language == Language.Persian || language == Language.Kurdish;
 }

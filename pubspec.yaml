@@ -16,6 +16,7 @@ dependencies:
   intl_phone_field: ^3.2.0
   flutter_map: ^6.1.0
   location: ^5.0.0
+  rive_common: ^0.4.7  # or the latest version available
   flutter_spinkit: ^5.2.0
   http: ^1.2.0
   flutter_map_location_marker: ^8.0.8
@@ -39,6 +40,10 @@ dependencies:
   provider: ^6.1.2
   showcaseview: ^3.0.0
   fluttertoast: ^8.0.9
+  shared_preferences: ^2.0.8
+  flutter_polyline_points: ^2.0.0
+
+
 
 dev_dependencies:
   flutter_test:

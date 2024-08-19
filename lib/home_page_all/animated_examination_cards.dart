@@ -6,6 +6,7 @@ import 'cart4.dart';
 import 'homepage.dart';
 import 'map.dart';
 import 'package:medicapp/LoadingScreen.dart';
+
 class AnimatedExaminationCards extends StatelessWidget {
   final BuildContext parentContext;
   final Language selectedLanguage;
@@ -155,7 +156,7 @@ class AnimatedExaminationCards extends StatelessWidget {
   }
 }
 
-  class AnimatedExaminationCard extends StatefulWidget {
+class AnimatedExaminationCard extends StatefulWidget {
   final String date;
   final String title;
   final Color color;
@@ -195,71 +196,71 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-      _controller.forward().then((_) {
-        _controller.reverse();
-        widget.onTap();
-      });
-    },
-    child: ScaleTransition(
-    scale: _animation,
-    child: Card(
-    elevation: 0,
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(15),
-    ),
-    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    child: Container(
-    height: 120,
-    width: 300,
-    decoration: BoxDecoration(
-    gradient: LinearGradient(
-    colors: [widget.color.withOpacity(0.7), widget.color],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    ),
-    borderRadius: BorderRadius.circular(15),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.2),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: Offset(0, 0),
-        ),
-      ],
-    ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.date,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'Changa-VariableFont_wght',
+      onTap: () {
+        _controller.forward().then((_) {
+          _controller.reverse();
+          widget.onTap();
+        });
+      },
+      child: ScaleTransition(
+        scale: _animation,
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Container(
+            height: 120,
+            width: 300,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [widget.color.withOpacity(0.7), widget.color],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.date,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.8),
+                      fontFamily: 'Changa-VariableFont_wght',
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 8),
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withOpacity(0.8),
-                fontFamily: 'Changa-VariableFont_wght',
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+          ),
         ),
       ),
-    ),
-    ),
-    ),
     );
   }
 }

@@ -7,6 +7,27 @@ import 'page2.dart';
 import 'page3.dart';
 import 'bottom_nav_bar.dart';
 import '../languages/lang.dart';
+class ScaleRoute extends PageRouteBuilder {
+  final Widget page;
+  ScaleRoute({required this.page})
+      : super(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = 0.0;
+      var end = 1.0;
+      var curve = Curves.easeInOut;
+
+      var tween = Tween(begin: begin, end: end).chain(
+        CurveTween(curve: curve),
+      );
+
+      return ScaleTransition(
+        scale: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
 
 class MainScreen extends StatefulWidget {
   final Language selectedLanguage;
@@ -119,10 +140,10 @@ class MainScreenState extends State<MainScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
@@ -133,9 +154,7 @@ class MainScreenState extends State<MainScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => NotificationsPage(),
-                        ),
+                        ScaleRoute(page: NotificationsPage()),
                       );
                     },
                     child: Center(
@@ -149,7 +168,7 @@ class MainScreenState extends State<MainScreen> {
                   ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
