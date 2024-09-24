@@ -2,9 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'NewsDetailPage.dart';
 import 'news_model.dart';
+import '../languages/lang.dart';
+
 class AnimatedClinicNews extends StatelessWidget {
+  final Language selectedLanguage;
+
+  AnimatedClinicNews({required this.selectedLanguage});
+
+  TextDirection getTextDirection() {
+    return selectedLanguage == Language.Arabic ||
+        selectedLanguage == Language.Persian ||
+        selectedLanguage == Language.Kurdish
+        ? TextDirection.rtl
+        : TextDirection.ltr;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return FutureBuilder<List<Article>>(
       future: NewsService().fetchArticles(),
       builder: (context, snapshot) {
@@ -15,23 +30,25 @@ class AnimatedClinicNews extends StatelessWidget {
             ),
           );
         } else if (snapshot.hasError) {
+          print('Error: ${snapshot.error}');
           return Center(
             child: Text(
               'فشل في تحميل الأخبار',
-              style: TextStyle(color: Colors.black,),
+              style: TextStyle(color: Colors.black),
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(
             child: Text(
               'لا توجد أخبار متاحة',
-              style: TextStyle(color: Colors.black, ),
+              style: TextStyle(color: Colors.black),
             ),
           );
         } else {
+          print('Loaded articles: ${snapshot.data}');
           return CarouselSlider(
             options: CarouselOptions(
-              height: 250,
+              height: screenHeight * 0.3,
               autoPlay: true,
               enlargeCenterPage: true,
               viewportFraction: 0.9,
@@ -40,7 +57,8 @@ class AnimatedClinicNews extends StatelessWidget {
             items: snapshot.data!.map((article) {
               return Builder(
                 builder: (BuildContext context) {
-                  return AnimatedNewsCard(article: article);
+                  // Pass selectedLanguage to AnimatedNewsCard
+                  return AnimatedNewsCard(article: article, selectedLanguage: selectedLanguage);
                 },
               );
             }).toList(),
@@ -53,8 +71,9 @@ class AnimatedClinicNews extends StatelessWidget {
 
 class AnimatedNewsCard extends StatefulWidget {
   final Article article;
+  final Language selectedLanguage;
 
-  AnimatedNewsCard({required this.article});
+  AnimatedNewsCard({required this.article, required this.selectedLanguage});
 
   @override
   _AnimatedNewsCardState createState() => _AnimatedNewsCardState();
@@ -91,7 +110,11 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
         backgroundColor: Colors.transparent,
         builder: (context) => DraggableScrollableSheet(
           expand: false,
-          builder: (context, scrollController) => NewsDetailModal(article: widget.article, controller: scrollController),
+          builder: (context, scrollController) => NewsDetailModal(
+            article: widget.article,
+            controller: scrollController,
+            selectedLanguage: widget.selectedLanguage, // Pass the selectedLanguage here
+          ),
         ),
       );
     });
@@ -99,6 +122,8 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return MouseRegion(
       onEnter: (_) => _controller.forward(),
       onExit: (_) => _controller.reverse(),
@@ -107,9 +132,9 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
         child: ScaleTransition(
           scale: _animation,
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0),
+            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(screenWidth * 0.03),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -120,17 +145,17 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(screenWidth * 0.03),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   Image.network(
-                    widget.article.imageUrl,
+                    widget.article.imageFullUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.white,
-                        child: Icon(Icons.error, color: Colors.black),
+                      return Image.asset(
+                        'assets/images/placeholder.png',
+                        fit: BoxFit.cover,
                       );
                     },
                   ),
@@ -139,7 +164,7 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
                     left: 0,
                     right: 0,
                     child: Container(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(screenWidth * 0.02),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -148,9 +173,9 @@ class _AnimatedNewsCardState extends State<AnimatedNewsCard> with SingleTickerPr
                         ),
                       ),
                       child: Text(
-                        widget.article.title,
+                        widget.article.titleNews,
                         style: TextStyle(
-                          fontSize: 18.0,
+                          fontSize: screenWidth * 0.045,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

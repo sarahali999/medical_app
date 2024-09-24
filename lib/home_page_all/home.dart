@@ -7,27 +7,6 @@ import 'page2.dart';
 import 'page3.dart';
 import 'bottom_nav_bar.dart';
 import '../languages/lang.dart';
-class ScaleRoute extends PageRouteBuilder {
-  final Widget page;
-  ScaleRoute({required this.page})
-      : super(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = 0.0;
-      var end = 1.0;
-      var curve = Curves.easeInOut;
-
-      var tween = Tween(begin: begin, end: end).chain(
-        CurveTween(curve: curve),
-      );
-
-      return ScaleTransition(
-        scale: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
 
 class ScaleRoute extends PageRouteBuilder {
   final Widget page;
@@ -72,11 +51,10 @@ class MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       Homepage(selectedLanguage: widget.selectedLanguage),
-      DailyContent(),
-      MonthlyContent(),
-      YearlyContent(),
+      QrCode(),
+      Quicksupportnumbers(),
+      UserProfile(),
     ];
-
     void onPageChanged(int index) {
       setState(() {
         selectedIndex = index;
@@ -100,7 +78,7 @@ class MainScreenState extends State<MainScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            _buildAppBar(),
+            _buildAppBar(context),
             Expanded(
               child: PageView(
                 controller: pageController,
@@ -119,21 +97,26 @@ class MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
+    // Get the screen width and height
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04), // 4% of screen width
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: Color(0xFF5CBBE3),
+              backgroundColor: Color(0xFF5BB9AE),
+              radius: screenWidth * 0.06, // 6% of screen width
               child: IconButton(
                 icon: Icon(Icons.person, color: Colors.white),
-                onPressed: () {
-                },
+                iconSize: screenWidth * 0.05, // 5% of screen width
+                onPressed: () {},
               ),
             ),
-            SizedBox(width: 10),
+            SizedBox(width: screenWidth * 0.03), // 3% of screen width
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -141,13 +124,16 @@ class MainScreenState extends State<MainScreen> {
                   _getGreeting(),
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: screenWidth * 0.04, // 4% of screen width
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   _getWelcomeMessage(),
-                  style: TextStyle(color: Colors.black, fontSize: 12),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: screenWidth * 0.03, // 3% of screen width
+                  ),
                 ),
               ],
             ),
@@ -155,17 +141,17 @@ class MainScreenState extends State<MainScreen> {
             Transform.scale(
               scale: 1.2,
               child: Container(
-                width: 45,
-                height: 60,
+                width: screenWidth * 0.12, // 12% of screen width
+                height: screenWidth * 0.12, // 12% of screen width
                 decoration: BoxDecoration(
-                  color: Color(0xFF5CBBE3),
+                  color: Color(0xFF5BB9AE),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
+                      spreadRadius: screenWidth * 0.01, // 1% of screen width
+                      blurRadius: screenWidth * 0.02, // 2% of screen width
+                      offset: Offset(0, screenHeight * 0.005), // 0.5% of screen height
                     ),
                   ],
                 ),
@@ -176,15 +162,15 @@ class MainScreenState extends State<MainScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        ScaleRoute(page: NotificationsPage()),
+                        ScaleRoute(page: Publicnotices()),
                       );
                     },
                     child: Center(
                       child: SvgPicture.asset(
                         'assets/icons/ic0.svg',
                         color: Colors.white,
-                        width: 30.0,
-                        height: 30.0,
+                        width: screenWidth * 0.08, // 8% of screen width
+                        height: screenWidth * 0.08, // 8% of screen width
                       ),
                     ),
                   ),

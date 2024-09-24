@@ -68,7 +68,7 @@ class _IntroScreenState extends State<IntroScreen> {
     return Directionality(
       textDirection: getTextDirection(),
       child: Container(
-        color: Color(0xFFd9d9d9),
+        color: Colors.white,
         child: ShowCaseWidget(
           builder: (context) => ZoomDrawer(
             controller: _zoomDrawerController,
@@ -80,7 +80,7 @@ class _IntroScreenState extends State<IntroScreen> {
             borderRadius: 24.0,
             boxShadow: [
               BoxShadow(
-                color: Color(0xFF5CBBE3),
+                color: Color(0xFF5BB9AE),
                 blurRadius: 10,
                 spreadRadius: 2,
                 offset: Offset(0, 3),
@@ -97,6 +97,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   Widget _buildMainScreen(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -109,8 +110,8 @@ class _IntroScreenState extends State<IntroScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xFF5CBBE3),
-                    Color(0xFF5CBBE3),
+                    Color(0xFF5BB9AE),
+                    Color(0xFF5BB9AE),
                   ],
                 ),
                 shape: BoxShape.circle,
@@ -138,60 +139,66 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
         ),
       ),
-      body: IntroductionScreen(
-        pages: [
-          _buildPageViewModel(
-            lottieAsset: 'assets/lottie/5.json',
-            title: getLocalizedText(
-              "برنامجك الطبي الاول",
-              "نخستین برنامه پزشکی شما",
-              "Your First Medical Program",
-              "یەکەم برنامەی پزیشکیت",
-              "",
-            ),
-            body: getLocalizedText(
-              "دليلك الطبي\nلكل احتياجاتك خلال الرحلة",
-              "راهنمای پزشکی شما\nبرای تمام نیازهای شما در طول سفر",
-              "Your Medical Guide\nFor all your needs during the journey",
-              "رێنمای پزیشكیتان\nبۆ هەمو خواستنەکانتان لە کاتی گەشت",
-              "",
-            ),
-          ),
-          _buildPageViewModel(
-            lottieAsset: 'assets/lottie/3.json',
-            title: getLocalizedText(
-              "برنامجك الطبي الاول",
-              "نخستین برنامه پزشکی شما",
-              "Your First Medical Program",
-              "یەکەم برنامەی پزیشکیت",
-              "",
-            ),
-            body: getLocalizedText(
-              "دليلك الطبي\nلكل احتياجاتك خلال الرحلة",
-              "راهنمای پزشکی شما\nبرای تمام نیازهای شما در طول سفر",
-              "Your Medical Guide\nFor all your needs during the journey",
-              "رێنمای پزیشكیتان\nبۆ هەمو خواستنەکانتان لە کاتی گەشت",
-              "",
-            ),
-          ),
-          _buildPageViewModel(
-            lottieAsset: 'assets/lottie/5.json',
-            title: getLocalizedText(
-              "برنامجك الطبي الاول",
-              "نخستین برنامه پزشکی شما",
-              "Your First Medical Program",
-              "یەکەم برنامەی پزیشکیت",
-              "",
-            ),
-            body: getLocalizedText(
-              "دليلك الطبي\nلكل احتياجاتك خلال الرحلة",
-              "راهنمای پزشکی شما\nبرای تمام نیازهای شما در طول سفر",
-              "Your Medical Guide\nFor all your needs during the journey",
-              "رێنمای پزیشكیتان\nبۆ هەمو خواستنەکانتان لە کاتی گەشت",
-              "",
-            ),
-          ),
-        ],
+        body: Center(
+          child: IntroductionScreen(
+            globalBackgroundColor: Colors.white, // استدعاء لون الخلفية هنا
+            pages: [
+              _buildPageViewModel(
+                svgAsset: 'assets/icons/nlogg.svg',
+                title: getLocalizedText(
+                  "سجل وادخل بسهولة",
+                  "ثبت نام و ورود آسان",
+                  "Easy Registration and Login",
+                  "تۆمارکردن و چوونەژوورەوەی ئاسان",
+                  "Aňsat Hasaba Alyş we Giriş",
+                ),
+                body: getLocalizedText(
+                  "سجل معلوماتك الكاملة بسهولة\nوادخل للاستفادة من خدماتنا",
+                  "به راحتی اطلاعات کامل خود را ثبت کنید\nو وارد شوید تا از خدمات ما بهره مند شوید",
+                  "Easily register your complete information\nand log in to benefit from our services",
+                  "بە ئاسانی زانیاریە تەواوەکانت تۆمار بکە\nو بچۆ ژوورەوە بۆ سوود وەرگرتن لە خزمەتگوزاریەکانمان",
+                  "Doly maglumatlaryňyzy aňsat hasaba alyň\nwe hyzmatlarymyzdan peýdalanmak üçin",
+                ),
+
+              ),
+              _buildPageViewModel(
+                svgAsset: 'assets/icons/nmap.svg',
+                title: getLocalizedText(
+                  "خدمات الخرائط",
+                  "خدمات نقشه",
+                  "Map Services",
+                  "خزمەتگوزاریەکانی نەخشە",
+                  "Karta Hyzmatlary",
+                ),
+                body: getLocalizedText(
+                  "استكشف المواقع الطبية القريبة\nواحصل على الاتجاهات بسهولة",
+                  "مکان های پزشکی نزدیک را کشف کنید\nو به راحتی مسیریابی کنید",
+                  "Discover nearby medical locations\nand get directions easily",
+                  "شوێنە پزیشکیە نزیکەکان بدۆزەرەوە\nو بە ئاسانی ئاراستەکان وەربگرە",
+                  "Golaýdaky lukmançylyk ýerlerini açyň\nwe aňsat görkezme alyň",
+                ),
+              ),
+              _buildPageViewModel(
+                svgAsset: 'assets/icons/nserv.svg',
+                title: getLocalizedText(
+                  "خدمات التطبيق العامة",
+                  "خدمات عمومی برنامه",
+                  "General App Services",
+                  "خزمەتگوزاریە گشتیەکانی بەرنامە",
+                  "Umumy Programmanyň Hyzmatlary",
+                ),
+                body: getLocalizedText(
+                  "احصل على تقارير طبية وإرشادات\nلتحسين رحلتك الصحية",
+                  "گزارش های پزشکی و راهنمایی دریافت کنید\nبرای بهبود سفر سلامتی شما",
+                  "Get medical reports and guidance\nto improve your health journey",
+                  "راپۆرت و رێنمایی پزیشکی وەربگرە\nبۆ باشترکردنی گەشتی تەندروستیت",
+                  "Lukmançylyk hasabatlaryny we görkezmelerini alyň\nsaglygyňyzy gowulandyrmak üçin",
+                ),
+
+              ),
+
+            ],
+
         onDone: () {
           Navigator.push(
             context,
@@ -202,16 +209,17 @@ class _IntroScreenState extends State<IntroScreen> {
         showNextButton: true,
         nextFlex: 1,
         dotsFlex: 2,
-        skipFlex: 1,
+        skipOrBackFlex: 1,
         animationDuration: 1000,
         curve: Curves.fastOutSlowIn,
         dotsDecorator: DotsDecorator(
           spacing: EdgeInsets.all(5),
-          activeColor: Color(0xFF5CBBE3),
+          activeColor: Color(0xFF5BB9AE),
           activeSize: Size(20, 10),
           size: Size.square(10),
           activeShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
+
           ),
         ),
         skip: _buildButton(context, getLocalizedText("تخطي", "تخطي", "Skip", "تخطي", "تخطي"), () {
@@ -247,25 +255,34 @@ class _IntroScreenState extends State<IntroScreen> {
           );
         }),
       ),
+        ),
     );
-  }
-
-  PageViewModel _buildPageViewModel({required String lottieAsset, required String title, required String body}) {
+  }PageViewModel _buildPageViewModel({
+    required String svgAsset,
+    required String title,
+    required String body,
+  }) {
     return PageViewModel(
+      decoration: PageDecoration(
+        pageColor: Colors.white, // Background color
+      ),
       bodyWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // Center the content vertically
+
         children: [
-          Lottie.asset(
-            lottieAsset,
+          SvgPicture.asset(
+            svgAsset,
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.4,
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 40),
           Align(
-            alignment: Alignment.topRight,
+            alignment: Alignment.center, // Center the text
             child: Text(
               body,
               textDirection: getTextDirection(),
+              textAlign: TextAlign.center, // Center the text
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -283,12 +300,14 @@ class _IntroScreenState extends State<IntroScreen> {
         ],
       ),
       titleWidget: Container(
+        color: Colors.white,
         margin: EdgeInsets.only(bottom: 50),
         child: Align(
-          alignment: Alignment.topRight,
+          alignment: Alignment.center, // Center the title
           child: Text(
             title,
             textDirection: getTextDirection(),
+            textAlign: TextAlign.center, // Center the title text
             style: TextStyle(
               color: Colors.black,
               fontSize: 30,
@@ -307,12 +326,13 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 
+
   Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
     return GestureDetector(
       onTap: onPressed,
       child: CircleAvatar(
         radius: 30,
-        backgroundColor: Color(0xFF5CBBE3),
+        backgroundColor: Color(0xFF5BB9AE),
         child: Text(
           text,
           style: TextStyle(
@@ -328,9 +348,10 @@ class _IntroScreenState extends State<IntroScreen> {
 
   Widget _buildIconButton(BuildContext context, IconData icon) {
     return IconButton(
-      icon: Icon(icon, color: Color(0xFF5CBBE3)),
+      icon: Icon(icon, color: Color(0xFF5BB9AE)),
       onPressed: () {
-        if (_pageController.page! < 2) {
+        // تحقق من أن pageController يمكن الوصول إليه
+        if (_pageController.hasClients && _pageController.page! < 2) {
           _pageController.nextPage(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -339,6 +360,7 @@ class _IntroScreenState extends State<IntroScreen> {
       },
     );
   }
+
 
 }
 class SidebarMenu extends StatelessWidget {
@@ -367,7 +389,7 @@ class SidebarMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF5CBBE3),
+      backgroundColor: Color(0xFF5BB9AE),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -410,29 +432,31 @@ class SidebarMenu extends StatelessWidget {
   }
 
   Widget _buildLanguageTile(BuildContext context, String title, Language language) {
-    bool isSelected = language == selectedLanguage;
+    Color? tileColor;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Material(
-        color: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
-        borderRadius: BorderRadius.circular(15),
-        child: InkWell(
-          onTap: () => onLanguageChange(language),
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 18,
-              ),
+    if (language == selectedLanguage) {
+      tileColor = Color(0xFFABC5AB);
+    }
+
+    return ListTile(
+      title: Container(
+        height: 56,
+        width: 500,
+        decoration: BoxDecoration(
+          color: tileColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: language == selectedLanguage ? FontWeight.bold : FontWeight.normal,
             ),
           ),
         ),
       ),
+      onTap: () => onLanguageChange(language),
     );
   }
 }

@@ -1,25 +1,25 @@
-import 'package:flutter/material.dart';
-
-final ThemeData appTheme = ThemeData(
-  scaffoldBackgroundColor: Color(0xFFEFF1EE),
-  fontFamily: 'Zain',
-  textTheme: TextTheme(
-    headline1: _textStyle,
-    headline2: _textStyle,
-    headline3: _textStyle,
-    headline4: _textStyle,
-    headline5: _textStyle,
-    headline6: _textStyle,
-    subtitle1: _textStyle,
-    subtitle2: _textStyle,
-    bodyText1: _textStyle,
-    bodyText2: _textStyle,
-    caption: _textStyle,
-    button: _textStyle,
-    overline: _textStyle,
-  ),
-);
-
-const TextStyle _textStyle = TextStyle(
-  fontFamily: 'Zain',
-);
+// import 'package:flutter/material.dart';
+//
+// final ThemeData appTheme = ThemeData(
+//   scaffoldBackgroundColor: Colors.white,
+//   fontFamily: 'Zain',
+//   textTheme: TextTheme(
+//     displayLarge: _textStyle,
+//     displayMedium: _textStyle,
+//     displaySmall: _textStyle,
+//     headlineMedium: _textStyle,
+//     headlineSmall: _textStyle,
+//     titleLarge: _textStyle,
+//     titleMedium: _textStyle,
+//     titleSmall: _textStyle,
+//     bodyLarge: _textStyle,
+//     bodyMedium: _textStyle,
+//     bodySmall: _textStyle,
+//     labelLarge: _textStyle,
+//     labelSmall: _textStyle,
+//   ),
+// );
+//
+// const TextStyle _textStyle = TextStyle(
+//   fontFamily: 'Zain',
+// );

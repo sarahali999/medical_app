@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../languages/lang.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/UserDetails.dart';
 
 class AnimatedUserCard extends StatefulWidget {
   final Language selectedLanguage;
@@ -15,6 +19,8 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _isExpanded = false;
+  UserDetails? userInfoDetails;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -23,10 +29,59 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _animation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+    fetchPatientDetails();
+  }
+
+  final String apiUrl = 'https://medicalpoint-api.tatwer.tech/api/Mobile/GetPatientDetails';
+
+  String bloodType(int type) {
+    switch (type) {
+      case 1: return "A+";
+      case 2: return "A-";
+      case 3: return "O-";
+      case 4: return "O+";
+      case 5: return "AB+";
+      case 6: return "AB-";
+      case 7: return "B-";
+      default: return "Unknown";
+    }
+  }
+
+  Future<void> fetchPatientDetails() async {
+    setState(() => isLoading = true);
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? jwtToken = prefs.getString('token');
+
+      if (jwtToken == null) throw Exception('JWT token is missing');
+
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        setState(() {
+          userInfoDetails = UserDetails.fromJson(jsonResponse);
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load patient details');
+      }
+    } catch (e) {
+      print('Error fetching patient details: $e');
+      setState(() => isLoading = false);
+    }
   }
 
   @override
@@ -48,6 +103,8 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: _toggleCard,
       child: AnimatedBuilder(
@@ -58,181 +115,174 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
             transform: Matrix4.identity()
               ..setEntry(3, 2, 0.001)
               ..rotateX(_isExpanded ? _animation.value * -0.5 : 0),
-            child: _buildUserCard(context),
+            child: _buildUserCard(context, screenWidth, screenHeight),
           );
         },
       ),
     );
   }
 
-  Widget _buildUserCard(BuildContext context) {
+  Widget _buildUserCard(BuildContext context, double screenWidth, double screenHeight) {
     Map<String, Map<String, String>> userDetails = {
       'Arabic': {
         'greeting': 'الزائر العزيز',
-        'name': 'الاسم: يوسف علي',
-        'number': 'الرقم: 1234567890',
-        'bloodType': 'فصيلة الدم: A+',
-        'address': 'العنوان: بغداد',
-        'age': 'العمر: 30 years',
+        'name': 'الاسم: ',
+        'number': 'الرقم: ',
+        'bloodType': 'فصيلة الدم: ',
+        'age': 'العمر: ',
       },
       'Persian': {
         'greeting': 'عزیز بازدید کننده',
-        'name': 'نام: یوسف علی',
-        'number': 'شماره: 1234567890',
-        'bloodType': 'گروه خونی: A+',
-        'address': 'بغداد',
-        'age': 'سن: 30 سال',
+        'name': 'نام: ',
+        'number': 'شماره: ',
+        'bloodType': 'گروه خونی: ',
+        'age': 'سن: ',
       },
       'Kurdish': {
         'greeting': 'میوانی بەخێربێ',
-        'name': 'ناو: یوسف علی',
-        'number': 'ژمارە: 1234567890',
-        'bloodType': 'جۆری خوێن: A+',
-        'address': 'بەغدا',
-        'age': 'تەمەن: 30 ساڵ',
+        'name': 'ناو: ',
+        'number': 'ژمارە: ',
+        'bloodType': 'جۆری خوێن: ',
+        'age': 'تەمەن: ',
       },
       'Turkmen': {
         'greeting': 'Hormatly myhman',
-        'name': 'Ady: يوسف علي',
-        'number': 'Belgisi: 1234567890',
-        'bloodType': 'Ganyň görnüşi: A+',
-        'address': 'Bagdat',
-        'age': 'Ýaşy: 30 ýyl',
+        'name': 'Ady: ',
+        'number': 'Belgisi: ',
+        'bloodType': 'Ganyň görnüşi: ',
+        'age': 'Ýaşy: ',
       },
       'English': {
         'greeting': 'Dear Visitor',
-        'name': 'Name: Yousef Ali',
-        'number': 'Number: 1234567890',
-        'bloodType': 'Blood Type: A+',
-        'address': 'Address: Baghdad',
-        'age': 'Age: 30 years',
+        'name': 'Name: ',
+        'number': 'Number: ',
+        'bloodType': 'Blood Type: ',
+        'age': 'Age: ',
       },
     };
 
     String languageKey = widget.selectedLanguage.toString().split('.').last;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.03,
+        horizontal: screenWidth * 0.05,
+      ),
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color(0xFF5CBBE3),
-              Color(0xFF0794D2),
-            ],
+            colors: [Color(0xFF5BB9AE),
+              Color(0xFF5BB9AE)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: Offset(0, 2),
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: screenWidth * 0.005,
+              blurRadius: screenWidth * 0.02,
+              offset: Offset(0, screenHeight * 0.005),
             ),
           ],
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                userDetails[languageKey]!['greeting']!,
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 8.0),
-              AnimatedCrossFade(
-                firstChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userDetails[languageKey]!['name']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      userDetails[languageKey]!['number']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                secondChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userDetails[languageKey]!['name']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      userDetails[languageKey]!['number']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      userDetails[languageKey]!['bloodType']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      userDetails[languageKey]!['address']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      userDetails[languageKey]!['age']!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                crossFadeState: _isExpanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration: Duration(milliseconds: 300),
-              ),
-              SizedBox(height: 8.0),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: _toggleCard,
-                  child: SvgPicture.asset(
-                    _isExpanded
-                        ? 'assets/icons/less.svg'
-                        : 'assets/icons/more.svg',
-                    color: Colors.white,
-                    height: 30.0,
-                    width: 30.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator(color: Colors.white))
+            : Column(
+          children: [
+            _buildHeader(screenWidth, screenHeight, userDetails[languageKey]!),
+            _buildBody(screenWidth, screenHeight, userDetails[languageKey]!),
+           // _buildFooter(screenWidth, screenHeight),
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildHeader(double screenWidth, double screenHeight, Map<String, String> translations) {
+    return Container(
+      padding: EdgeInsets.all(screenWidth * 0.02),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(screenWidth * 0.03),
+          topRight: Radius.circular(screenWidth * 0.03),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.person, color: Colors.white, size: screenWidth * 0.08),
+          SizedBox(width: screenWidth * 0.02),
+          Text(
+            translations['greeting']!,
+            style: TextStyle(
+              fontSize: screenWidth * 0.05,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody(double screenWidth, double screenHeight, Map<String, String> translations) {
+    return Padding(
+      padding: EdgeInsets.all(screenWidth * 0.04),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoRow(Icons.person, "${translations['name']}${userInfoDetails?.data?.user?.firstName ?? ''} ${userInfoDetails?.data?.user?.secondName ?? ''}", screenWidth),
+          SizedBox(height: screenHeight * 0.01),
+          _buildInfoRow(Icons.phone, "${translations['number']}${userInfoDetails?.data?.user?.phoneNumber ?? ''}", screenWidth),
+          SizedBox(height: screenHeight * 0.01),
+          _buildInfoRow(Icons.opacity, "${translations['bloodType']}${bloodType(userInfoDetails?.data?.bloodType ?? 0)}", screenWidth),
+          SizedBox(height: screenHeight * 0.01),
+          _buildInfoRow(Icons.cake, "${translations['age']}${userInfoDetails?.data?.birthYear ?? ''}", screenWidth),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text, double screenWidth) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.white70, size: screenWidth * 0.05),
+        SizedBox(width: screenWidth * 0.02),
+        Text(
+          text,
+          style: TextStyle(fontSize: screenWidth * 0.04, color: Colors.white),
+        ),
+      ],
+    );
+  }
+  //
+  // Widget _buildFooter(double screenWidth, double screenHeight) {
+  //   return Container(
+  //     padding: EdgeInsets.all(screenWidth * 0.02),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withOpacity(0.1),
+  //       borderRadius: BorderRadius.only(
+  //         bottomLeft: Radius.circular(screenWidth * 0.04),
+  //         bottomRight: Radius.circular(screenWidth * 0.04),
+  //       ),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Text(
+  //           _isExpanded ? "Hide Details" : "Show Details",
+  //           style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.035),
+  //         ),
+  //         SizedBox(width: screenWidth * 0.02),
+  //         Icon(
+  //           _isExpanded ? Icons.expand_less : Icons.expand_more,
+  //           color: Colors.white,
+  //           size: screenWidth * 0.06,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

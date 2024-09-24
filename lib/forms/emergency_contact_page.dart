@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'cusstom.dart';
 import 'section_title.dart';
 import '../languages/lang.dart';
-import 'cusstom.dart';
 
 class EmergencyContactPage extends StatelessWidget {
   final Language selectedLanguage;
   final TextEditingController emergencyContactNameController;
   final TextEditingController emergencyContactAddressController;
   final TextEditingController emergencyContactPhoneController;
+  final TextEditingController emergencyContactRelationshipController;
+  final TextEditingController emergencyContactCountryController;
+  final TextEditingController emergencyContactProvinceController;
+  final TextEditingController emergencyContactDistrictController;
+  final TextEditingController emergencyContactAlleyController;
+  final TextEditingController emergencyContactHouseController;
 
   final List<String> _connectionOptions = [
     'Father',
@@ -22,7 +28,13 @@ class EmergencyContactPage extends StatelessWidget {
     required this.selectedLanguage,
     required this.emergencyContactNameController,
     required this.emergencyContactAddressController,
-    required this.emergencyContactPhoneController, required TextEditingController emergencyContactRelationshipController,
+    required this.emergencyContactPhoneController,
+    required this.emergencyContactRelationshipController,
+    required this.emergencyContactCountryController,
+    required this.emergencyContactProvinceController,
+    required this.emergencyContactDistrictController,
+    required this.emergencyContactAlleyController,
+    required this.emergencyContactHouseController,
   });
 
   @override
@@ -44,7 +56,7 @@ class EmergencyContactPage extends StatelessWidget {
             'اسم جهة الاتصال الطارئة',
             'نام فرد اضطراری',
             'Emergency Contact Name',
-            'ناوی پەیوەندیدەری بەرەوپێش',
+            'ناوی پەیوندیدەری بەرەوپێش',
             'Ýaňyşlygyň aragatnaşygyň ady',
           ),
           emergencyContactNameController,
@@ -115,6 +127,7 @@ class EmergencyContactPage extends StatelessWidget {
             initialCountryCode: 'IQ',
             onChanged: (phone) {
               print(phone.completeNumber);
+              emergencyContactPhoneController.text = phone.completeNumber; // Save the phone number
             },
           ),
         ],
@@ -158,49 +171,18 @@ class EmergencyContactPage extends StatelessWidget {
                 value: value,
                 child: Text(
                   getLocalizedText(
-                    value == 'Father'
-                        ? 'أب'
-                        : value == 'Mother'
-                        ? 'أم'
-                        : value == 'Brother'
-                        ? 'أخ'
-                        : value == 'Sister'
-                        ? 'أخت'
-                        : 'أخرى',
-                    value == 'Father'
-                        ? 'پدر'
-                        : value == 'Mother'
-                        ? 'مادر'
-                        : value == 'Brother'
-                        ? 'برادر'
-                        : value == 'Sister'
-                        ? 'خواهر'
-                        : 'دیگر',
+                    value == 'Father' ? 'أب' : value == 'Mother' ? 'أم' : value == 'Brother' ? 'أخ' : value == 'Sister' ? 'أخت' : 'أخرى',
+                    value == 'Father' ? 'پدر' : value == 'Mother' ? 'مادر' : value == 'Brother' ? 'برادر' : value == 'Sister' ? 'خواهر' : 'دیگر',
                     value,
-                    value == 'Father'
-                        ? 'باوک'
-                        : value == 'Mother'
-                        ? 'دایک'
-                        : value == 'Brother'
-                        ? 'برا'
-                        : value == 'Sister'
-                        ? 'خوشک'
-                        : 'تر',
-                    value == 'Father'
-                        ? 'Ata'
-                        : value == 'Mother'
-                        ? 'Ene'
-                        : value == 'Brother'
-                        ? 'Doganyňyz'
-                        : value == 'Sister'
-                        ? 'Uýadyňyz'
-                        : 'Beýlekiler',
+                    value == 'Father' ? 'باوک' : value == 'Mother' ? 'دایک' : value == 'Brother' ? 'برا' : value == 'Sister' ? 'خوشک' : 'تر',
+                    value == 'Father' ? 'Ata' : value == 'Mother' ? 'Ene' : value == 'Brother' ? 'Doganyňyz' : value == 'Sister' ? 'Uýadyňyz' : 'Beýlekiler',
                   ),
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
               );
             }).toList(),
             onChanged: (String? newValue) {
+              emergencyContactRelationshipController.text = newValue ?? '';
               print('Selected Connection: $newValue');
             },
           ),

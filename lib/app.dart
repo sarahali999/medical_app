@@ -17,7 +17,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: appTheme,
+      // theme: ThemeData(
+      //   fontFamily: "Zain",
+      // )
+      // ,
+
       home: Directionality(
         textDirection: _isRtlLanguage(_selectedLanguage)
             ? TextDirection.rtl

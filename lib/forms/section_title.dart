@@ -8,13 +8,13 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16, top: 24),
+      margin: EdgeInsets.only(bottom: 8, top: 10),
       child: Text(
         title,
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF5CBBE3),
+          color: Color(0xFF5BB9AE),
         ),
       ).animate()
           .fadeIn(duration: 600.ms, curve: Curves.easeOutQuad)

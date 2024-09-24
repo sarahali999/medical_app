@@ -6,29 +6,34 @@ class BottomNavBar extends StatelessWidget {
   final List<String> iconPaths;
   final Function(int) onItemTapped;
 
-  BottomNavBar(
-      {
+  BottomNavBar({
     required this.selectedIndex,
     required this.iconPaths,
     required this.onItemTapped,
-      }
-  );
+  });
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width and height
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.01, // 1% of screen height
+        horizontal: screenWidth * 0.04, // 4% of screen width
+      ),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFF5CBBE3),
-              Color(0xFF0794D2),
+              Color(0xFF5BB9AE),
+              Color(0xFF5BB9AE),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(screenWidth * 0.025), // 2.5% of screen width
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,16 +42,20 @@ class BottomNavBar extends StatelessWidget {
             return GestureDetector(
               onTap: () => onItemTapped(index),
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                  vertical: screenHeight * 0.012, // 1.2% of screen height
+                  horizontal: screenWidth * 0.04, // 4% of screen width
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected ? Color(0xFF5CBBE3) : Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
+                  color: isSelected ? Color(0xFF81BEB7) :
+                  Colors.transparent,
+                  borderRadius: BorderRadius.circular(screenWidth * 0.025), // 2.5% of screen width
                 ),
                 child: SvgPicture.asset(
                   iconPaths[index],
                   color: isSelected ? Colors.white : Colors.black,
-                  width: 24.0,
-                  height: 24.0,
+                  width: screenWidth * 0.06, // 6% of screen width
+                  height: screenWidth * 0.06, // 6% of screen width
                 ),
               ),
             );

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'section_title.dart';
 import '../languages/lang.dart';
 import 'cusstom.dart';
+
 class PersonalInfoPage extends StatelessWidget {
   final Language selectedLanguage;
-  final TextEditingController fourthNameController;
+  final TextEditingController firstname;
   final TextEditingController lastNameController;
   final TextEditingController middleNameController;
   final TextEditingController alleyController;
@@ -13,18 +13,19 @@ class PersonalInfoPage extends StatelessWidget {
   final TextEditingController governorateController;
   final TextEditingController countryController;
   final TextEditingController houseController;
-  final String selectedGender;
+
+  final int selectedGender;
   final int? selectedDay;
   final String? selectedMonth;
   final String? selectedYear;
-  final Function(String?) onGenderChanged;
+  final Function(int?) onGenderChanged;
   final Function(String?) onDayChanged;
   final Function(String?) onMonthChanged;
   final Function(String?) onYearChanged;
 
   PersonalInfoPage({
     required this.selectedLanguage,
-    required this.fourthNameController,
+    required this.firstname,
     required this.lastNameController,
     required this.middleNameController,
     required this.alleyController,
@@ -40,6 +41,7 @@ class PersonalInfoPage extends StatelessWidget {
     required this.onDayChanged,
     required this.onMonthChanged,
     required this.onYearChanged,
+
   });
 
   @override
@@ -54,7 +56,7 @@ class PersonalInfoPage extends StatelessWidget {
         _buildAddressFields(),
         _buildGenderDropdown(),
         _buildDateOfBirthField(),
-        _buildPhoneNumberField(),
+
       ],
     );
   }
@@ -79,17 +81,12 @@ class PersonalInfoPage extends StatelessWidget {
             Expanded(
               child: CustomTextField(
                 getLocalizedText('الاسم الاول', 'نام اول', 'First Name', 'ناوی یەکەم', ''),
-                fourthNameController,
+                firstname,
                 textStyle: TextStyle(
                   fontSize: 10,
                   color: Colors.black,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return getLocalizedText('يرجى إدخال الاسم الأول', 'لطفاً نام اول را وارد کنید', 'Please enter the first name', 'تکایە ناوی یەکەم داخل بکە', '');
-                  }
-                  return null;
-                },
+
               ),
             ),
             SizedBox(width: 8),
@@ -101,12 +98,7 @@ class PersonalInfoPage extends StatelessWidget {
                   fontSize: 10,
                   color: Colors.black,
                 ),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return getLocalizedText('يرجى إدخال الاسم الثاني', 'لطفاً نام دوم را وارد کنید', 'Please enter the second name', 'تکایە ناوی دووهەم داخل بکە', '');
-                  }
-                  return null;
-                },
+
               ),
             ),
             SizedBox(width: 8),
@@ -174,15 +166,24 @@ class PersonalInfoPage extends StatelessWidget {
   Widget _buildGenderDropdown() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
-      child: DropdownButtonFormField<String>(
-        value: selectedGender.isNotEmpty ? selectedGender : null,
-        items: _getGenderOptions().map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value, style: TextStyle(fontSize: 16, color: Colors.black87)),
+      child: DropdownButtonFormField<int>(
+        value: selectedGender != null && (selectedGender == 1 || selectedGender == 2)
+            ? selectedGender
+            : 1, // Default to 'Male' if null or invalid
+        items: _getGenderOptions().map((option) {
+          return DropdownMenuItem<int>(
+            value: option['key'],
+            child: Text(
+              option['value'],
+              style: TextStyle(fontSize: 16, color: Colors.black87),
+            ),
           );
         }).toList(),
-        onChanged: onGenderChanged,
+        onChanged: (int? newValue) {
+          if (newValue != null) {
+            onGenderChanged(newValue);
+          }
+        },
         decoration: InputDecoration(
           labelText: getLocalizedText('الجنس', 'جنس', 'Gender', 'رەگەز', ''),
           labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
@@ -197,7 +198,6 @@ class PersonalInfoPage extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildDateOfBirthField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
@@ -272,55 +272,19 @@ class PersonalInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPhoneNumberField() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            getLocalizedText('رقم الهاتف', 'شماره تيلفۆن', 'Phone Number', 'ژمارەی تەلەفۆن', ''),
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(height: 8),
-          IntlPhoneField(
-            decoration: InputDecoration(
-              labelText: getLocalizedText('رقم الهاتف', 'شماره تيلفۆن', 'Phone Number', 'ژمارەی تەلەفۆن', ''),
-              labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.grey[50],
-              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            ),
-            initialCountryCode: 'IQ',
-            onChanged: (phone) {
-              print(phone.completeNumber);
-            },
-          ),
-        ],
-      ),
-    );
+  List<Map<String, dynamic>> _getGenderOptions() {
+    return [
+      {
+        "value": getLocalizedText('ذكر', 'نر', 'Male', 'نر', ''),
+        "key": 1
+      },
+      {
+        "value": getLocalizedText('انثى', 'ژنان', 'Female', 'ژن', ''),
+        "key": 2
+      },
+    ];
   }
 
-  List<String> _getGenderOptions() {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return ['ذكر', 'أنثى'];
-      case Language.Persian:
-        return ['مرد', 'زن'];
-      case Language.Kurdish:
-        return ['پیاو', 'ژن'];
-      default:
-        return ['Male', 'Female'];
-    }
-  }
 
   String getLocalizedText(String arabic, String persian, String english, String kurdish, String defaultText) {
     switch (selectedLanguage) {

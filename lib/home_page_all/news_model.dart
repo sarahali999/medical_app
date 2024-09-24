@@ -4,10 +4,15 @@ import 'package:http/http.dart' as http;
 class NewsService {
   Future<List<Article>> fetchArticles() async {
     final response = await http.get(Uri.parse(
-        'https://newsdata.io/api/1/latest?apikey=pub_44521c8236902fa9a9522b31d5af4752f3bcd&q=pegasus&language=en'));
+      'https://medicalpoint-api.tatwer.tech/api/News/GetAllNews?PageNumber=1&PageSize=11',
+    ));
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body);
-      return (parsed['results'] as List)
+      return (parsed['items'] as List)
           .map<Article>((json) => Article.fromJson(json))
           .toList();
     } else {
@@ -16,26 +21,30 @@ class NewsService {
     }
   }
 }
-
 class Article {
-  final String title;
-  final String link;
-  final String description;
+  final String titleNews;
+  final String theContent;
   final String imageUrl;
+  final String imageFullUrl;
+
+  // Base URL for the API
+  static const String baseUrl = 'https://medicalpoint-api.tatwer.tech';
 
   Article({
-    required this.title,
-    required this.link,
-    required this.description,
+    required this.titleNews,
+    required this.theContent,
     required this.imageUrl,
+    required this.imageFullUrl,
   });
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
-      title: json['title'] ?? '',
-      link: json['link'] ?? '',
-      description: json['description'] ?? '',
-      imageUrl: json['image_url'] ?? '',
+      titleNews: json['titleNews'] ?? '',
+      theContent: json['theContent'] ?? '',
+      imageFullUrl: json['imageFullUrl'] ?? '',
+      imageUrl: json['imageUrl'] != null && json['imageUrl'].isNotEmpty
+          ? '$baseUrl${json['imageUrl']}'
+          : '', // Concatenate base URL with the image path
     );
   }
 }

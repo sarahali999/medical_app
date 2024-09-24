@@ -5,7 +5,6 @@ class LanguagePage extends StatefulWidget {
   @override
   _LanguagePageState createState() => _LanguagePageState();
 }
-
 enum Language {
   Arabic,
   English,

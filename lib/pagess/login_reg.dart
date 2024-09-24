@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:medicapp/phones/PhoneNumberInputPage.dart';
 import '../LoadingScreen.dart';
 import '../forms/Introductionpers.dart';
@@ -12,6 +13,15 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen height
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Define button heights as 7% of screen height
+    double buttonHeight = screenHeight * 0.07;
+
+    // Define SizedBox heights as 3% of screen height
+    double sizedBoxHeight = screenHeight * 0.03;
+
     String loginText = '';
     String registerText = '';
 
@@ -43,11 +53,20 @@ class WelcomeScreen extends StatelessWidget {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Color(0xFF5CBBE3),
+          color: Color(0xFF5BB9AE),
         ),
         child: Column(
           children: [
-            const SizedBox(height: 200),
+            // إضافة صورة SVG هنا
+            Padding(
+              padding: const EdgeInsets.only(top: 175.0), // مسافة أعلى الصورة
+              child: SvgPicture.asset(
+                'assets/icons/phone.svg', // مسار الصورة
+                height: 175, // ارتفاع الصورة
+                width: 175, // عرض الصورة
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.1), // تعديل المسافة بعد الصورة
             Text(
               selectedLanguage == Language.Arabic ? 'تسجيل الزائر' :
               selectedLanguage == Language.English ? 'Visitor Registration' :
@@ -60,7 +79,7 @@ class WelcomeScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: sizedBoxHeight),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -78,7 +97,7 @@ class WelcomeScreen extends StatelessWidget {
                 );
               },
               child: Container(
-                height: 53,
+                height: buttonHeight, // 7% of screen height
                 width: 320,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -95,7 +114,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: sizedBoxHeight), // 3% of screen height
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -115,7 +134,7 @@ class WelcomeScreen extends StatelessWidget {
                 );
               },
               child: Container(
-                height: 53,
+                height: buttonHeight, // 7% of screen height
                 width: 320,
                 decoration: BoxDecoration(
                   color: Colors.white,

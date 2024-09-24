@@ -6,7 +6,6 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextStyle textStyle;
   final IconData? prefixIcon;
-  final String? Function(String?)? validator;
   final double? width;
   final double? height;
   final TextInputType keyboardType;
@@ -21,7 +20,6 @@ class CustomTextField extends StatefulWidget {
           fontWeight: FontWeight.w500,
         ),
         this.prefixIcon,
-        this.validator,
         this.width,
         this.height,
         this.keyboardType = TextInputType.text,
@@ -75,7 +73,7 @@ class _CustomTextFieldState extends State<CustomTextField>
                   boxShadow: [
                     BoxShadow(
                       color: _isFocused
-                          ? Color(0xFF5CBBE3).withOpacity(0.3)
+                          ? Color(0xFF5BB9AE).withOpacity(0.3)
                           : Colors.black12,
                       blurRadius: 8,
                       offset: Offset(0, 3),
@@ -88,20 +86,13 @@ class _CustomTextFieldState extends State<CustomTextField>
                   keyboardType: widget.keyboardType,
                   inputFormatters: widget.inputFormatters,
                   decoration: InputDecoration(
-                    labelText: widget.labelText,
-                    labelStyle: TextStyle(
-                      color: _isFocused ? Color(0xFF5CBBE3) : Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                    prefixIcon: widget.prefixIcon != null
-                        ? Icon(
-                      widget.prefixIcon,
-                      color: _isFocused ? Color(0xFF5CBBE3) : Colors.grey[600],
-                    )
-                        : null,
+                    labelText: widget.labelText, // Use widget.labelText here
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Color(0xFF5BB9AE)), // Assuming _primaryColor is Color(0xFF5BB9AE)
                     ),
                     filled: true,
                     fillColor: Colors.grey[50],
@@ -110,7 +101,6 @@ class _CustomTextFieldState extends State<CustomTextField>
                       horizontal: 16,
                     ),
                   ),
-                  validator: widget.validator,
                   onTap: () {
                     setState(() => _isFocused = true);
                     _animationController.forward();
@@ -130,7 +120,7 @@ class _CustomTextFieldState extends State<CustomTextField>
                     scale: _animation.value,
                     child: Container(
                       height: 2,
-                      color: Color(0xFF5CBBE3),
+                      color: Color(0xFF5BB9AE),
                     ),
                   ),
                 ),

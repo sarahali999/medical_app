@@ -5,9 +5,16 @@ import 'AnimatedUserCard.dart';
 import 'animated_examination_cards.dart';
 import 'dart:ui';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   final Language selectedLanguage;
+
   Homepage({required this.selectedLanguage});
+
+  @override
+  _HomepageState createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,14 +22,15 @@ class Homepage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          //  AnimatedSpecialText(),
-            AnimatedUserCard(selectedLanguage: selectedLanguage),
+            // AnimatedSpecialText(),
+            AnimatedUserCard(selectedLanguage: widget.selectedLanguage,),
             AnimatedExaminationCards(
               parentContext: context,
-              selectedLanguage: selectedLanguage,
+              selectedLanguage: widget.selectedLanguage,
             ),
             _buildSectionTitle(sectionTitle),
-            AnimatedClinicNews(),
+            AnimatedClinicNews(selectedLanguage: widget.selectedLanguage,),
+            // Replace AnimatedNewsCard with AnimatedClinicNews
           ],
         ),
       ),
@@ -30,7 +38,7 @@ class Homepage extends StatelessWidget {
   }
 
   String get sectionTitle {
-    switch (selectedLanguage) {
+    switch (widget.selectedLanguage) {
       case Language.Arabic:
         return 'اخر الاخبار';
       case Language.Persian:
@@ -58,7 +66,7 @@ class Homepage extends StatelessWidget {
     );
   }
 }
-//
+// }
 // class AnimatedSpecialText extends StatefulWidget {
 //   @override
 //   _AnimatedSpecialTextState createState() => _AnimatedSpecialTextState();
@@ -101,6 +109,7 @@ class Homepage extends StatelessWidget {
 //                   style: TextStyle(
 //                     fontSize: 20,
 //                     color: Colors.black,
+//                     fontWeight: FontWeight.bold,
 //                     fontFamily: 'Amiri',
 //                     fontStyle: FontStyle.italic,
 //                     shadows: [

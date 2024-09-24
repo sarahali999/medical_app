@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../languages/lang.dart';  // Make sure to import your language file
+import '../languages/lang.dart';
 
 class StepIndicator extends StatelessWidget {
   final int currentStep;
@@ -11,11 +11,19 @@ class StepIndicator extends StatelessWidget {
   StepIndicator({
     required this.currentStep,
     required this.totalSteps,
-    required this.selectedLanguage
+    required this.selectedLanguage,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen height
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Define container heights based on screen height
+    double circleHeight = screenHeight * 0.06;
+    double iconSize = screenHeight * 0.03;
+    double sizedBoxHeight = screenHeight * 0.01;
+
     bool isRightToLeft = selectedLanguage == Language.Arabic ||
         selectedLanguage == Language.Persian ||
         selectedLanguage == Language.Kurdish;
@@ -32,16 +40,16 @@ class StepIndicator extends StatelessWidget {
               children: List.generate(totalSteps, (index) {
                 bool isActive = index <= currentStep;
                 bool isCurrent = index == currentStep;
-                return _buildStep(context, index, isActive, isCurrent);
+                return _buildStep(context, index, isActive, isCurrent, circleHeight, iconSize, sizedBoxHeight);
               }),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: sizedBoxHeight * 2), // Adjusted for visual balance
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
                 value: (currentStep + 1) / totalSteps,
                 backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5CBBE3)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5BB9AE)),
                 minHeight: 6,
               ),
             ),
@@ -51,29 +59,31 @@ class StepIndicator extends StatelessWidget {
     );
   }
 
-  Widget _buildStep(BuildContext context, int index, bool isActive, bool isCurrent) {
+  Widget _buildStep(BuildContext context, int index, bool isActive, bool isCurrent, double circleHeight, double iconSize, double sizedBoxHeight) {
     return Column(
       children: [
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: 60,
-          width: 60,
+          height: circleHeight,
+          width: circleHeight,
           decoration: BoxDecoration(
-            color: isActive ? Color(0xFF5CBBE3) : Colors.white,
+            color: isActive ? Color(0xFF5BB9AE)
+                : Colors.white,
             shape: BoxShape.circle,
             border: Border.all(
-              color: isActive ? Color(0xFF5CBBE3) : Colors.grey[300]!,
+              color: isActive ? Color(0xFF5BB9AE)
+                  : Colors.grey[300]!,
               width: 2,
             ),
-            boxShadow: isCurrent ? [BoxShadow(color: Color(0xFF5CBBE3).withOpacity(0.3), blurRadius: 8, spreadRadius: 2)] : [],
+            boxShadow: isCurrent ? [BoxShadow(color: Color(0xFF5BB9AE).withOpacity(0.3), blurRadius: 8, spreadRadius: 2)] : [],
           ),
           child: Center(
             child: SvgPicture.asset(
               _getIconPath(index),
               color: isActive ? Colors.white : Colors.grey[400],
-              width: 28,
-              height: 28,
+              width: iconSize,
+              height: iconSize,
             ),
           ),
         ).animate()
@@ -90,12 +100,14 @@ class StepIndicator extends StatelessWidget {
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         ),
-        SizedBox(height: 8),
+        SizedBox(height: sizedBoxHeight),
         Text(
           _getLocalizedStepTitle(index),
           style: TextStyle(
-            color: isActive ? Color(0xFF5CBBE3) : Colors.grey[600],
+            color: isActive ? Color(0xFF5BB9AE)
+                : Colors.grey[600],
             fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+            fontFamily: 'Zain',
             fontSize: 12,
           ),
         ),
@@ -106,9 +118,10 @@ class StepIndicator extends StatelessWidget {
   String _getIconPath(int index) {
     switch (index) {
       case 0: return 'assets/icons/person.svg';
-      case 1: return 'assets/icons/medh.svg';
-      case 2: return 'assets/icons/close.svg';
-      default: return 'assets/icons/close.svg';
+      case 1: return 'assets/icons/email.svg'; // New icon for Account step
+      case 2: return 'assets/icons/medh.svg';
+      case 3: return 'assets/icons/close.svg';
+      default: return '';
     }
   }
 
@@ -117,8 +130,10 @@ class StepIndicator extends StatelessWidget {
       case 0:
         return _getLocalizedText('شخصي', 'شخصی', 'Personal', 'کەسی', '');
       case 1:
-        return _getLocalizedText('طبي', 'پزشکی', 'Medical', 'پزیشکی', '');
+        return _getLocalizedText('حساب', 'حساب', 'Account', 'هەژمار', '');
       case 2:
+        return _getLocalizedText('طبي', 'پزشکی', 'Medical', 'پزیشکی', '');
+      case 3:
         return _getLocalizedText('طوارئ', 'اورژانسی', 'Emergency', 'کتوپڕ', '');
       default:
         return '';

@@ -151,7 +151,7 @@ class AnimatedExaminationCards extends StatelessWidget {
           pageToNavigate = cart1();
           break;
         case 'cart2':
-          pageToNavigate = cart2();
+          pageToNavigate = Cart2();
           break;
         case 'map':
           pageToNavigate = MapPage(selectedLanguage: selectedLanguage);
@@ -230,7 +230,7 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
           ),
           margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Container(
-            height: 100,
+            height: 150,
             width: 250,
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -255,8 +255,8 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: 20,
-                    height: 20,
+                    width: 40,
+                    height: 50,
                     child: SvgPicture.asset(
                       widget.iconPath,
                       color: Colors.white,

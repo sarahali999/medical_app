@@ -24,7 +24,6 @@ class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
 }
-
 class _MapPageState extends State<MapPage> {
   final flutter_map.MapController _mapController = flutter_map.MapController();
   LatLng currentLocation = LatLng(0, 0);
@@ -39,29 +38,63 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _locateUser();
-    _addMarkers();
+    _fetchMarkersFromApi();
+  }
+  Future<void> _fetchMarkersFromApi() async {
+    final url = Uri.parse('http://medicalpoint-api.tatwer.tech/api/Mobile/CenterMap');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        markerInfos = data.map((json) {
+          final lat = json['lot'];
+          final lng = json['lag'];
+          final name = json['centerName'];
+          return MarkerInfo(
+            point: LatLng(lat, lng),
+            name: name,
+          );
+        }).toList();
+
+        // Calculate distances
+        _calculateDistances();
+
+        setState(() {
+          markers = markerInfos.map((info) => flutter_map.Marker(
+            width: 50.0,
+            height: 50.0,
+            point: info.point,
+            child: GestureDetector(
+              onTap: () => _selectMarker(info),
+              child: Stack(
+                children: [
+                  Lottie.asset('assets/lottie/mark.json'),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      color: Colors.white.withOpacity(0.7),
+                      child: Text(
+                        '${info.distance.toStringAsFixed(2)} km',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )).toList();
+          _updatePolylines();
+        });
+      } else {
+        print("Failed to load markers. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching markers: $e");
+    }
   }
 
-  _addMarkers() {
-    markerInfos = [
-      MarkerInfo(point: LatLng(33.3112827, 44.4241059), name: "Location 1"),
-      MarkerInfo(point: LatLng(33.3101565, 44.4276196), name: "Location 2"),
-      MarkerInfo(point: LatLng(32.6185146, 44.0812222), name: "Location 3"),
-      MarkerInfo(point: LatLng(32.6010381, 44.0259766), name: "Location 4"),
-    ];
-
-    markers = markerInfos.map((info) => flutter_map.Marker(
-      width: 50.0,
-      height: 50.0,
-      point: info.point,
-      child: GestureDetector(
-        onTap: () => _selectMarker(info),
-        child: Lottie.asset('assets/lottie/mark.json'),
-      ),
-    )).toList();
-
-    _updatePolylines();
-  }
   void _selectMarker(MarkerInfo info) {
     setState(() {
       selectedMarker = info;
@@ -69,7 +102,6 @@ class _MapPageState extends State<MapPage> {
       isMarkerListVisible = false; // Hide the marker list when a marker is selected
     });
   }
-
   void _calculateDistances() {
     for (var info in markerInfos) {
       info.distance = const Distance().as(LengthUnit.Kilometer, currentLocation, info.point);
@@ -90,11 +122,13 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+
   Future<void> _searchAndNavigate() async {
     if (searchController.text.isEmpty) return;
     final query = searchController.text;
     final apiKey = '48b0594741134ba7a54846c836ba8935';
     final url = Uri.parse('https://api.opencagedata.com/geocode/v1/json?q=$query&key=$apiKey');
+
     try {
       final response = await http.get(url);
       final data = json.decode(response.body);
@@ -159,131 +193,131 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-    textDirection: _isRtlLanguage(widget.selectedLanguage)
-        ? TextDirection.rtl
-        : TextDirection.ltr,
-    child: Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.8),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ),
-        title: Text(
-          getTitle(),
-          style: TextStyle(color: Color(0xFF32817D), fontWeight: FontWeight.bold),
-        ),
-        iconTheme: IconThemeData(color: Color(0xFF32817D)),
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(color: Colors.transparent),
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          FlutterMap(
-            mapController: _mapController,
-            options: MapOptions(
-              center: currentLocation,
-              zoom: 3.0,
+        textDirection: _isRtlLanguage(widget.selectedLanguage)
+            ? TextDirection.rtl
+            : TextDirection.ltr,
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.white.withOpacity(0.8),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
             ),
-            children: [
-              TileLayer(
-                urlTemplate: "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c', 'd'],
+            title: Text(
+              getTitle(),
+              style: TextStyle(color: Color(0xFF32817D), fontWeight: FontWeight.bold),
+            ),
+            iconTheme: IconThemeData(color: Color(0xFF32817D)),
+            flexibleSpace: ClipRRect(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(color: Colors.transparent),
               ),
-              PolylineLayer(polylines: polylines),
-              CurrentLocationLayer(),
-              MarkerLayer(markers: markers),
-            ],
+            ),
           ),
-          Positioned(
-            top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
-            left: 16,
-            right: 16,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 10,
-                    offset: Offset(0, 3),
+          body: Stack(
+            children: [
+              FlutterMap(
+                mapController: _mapController,
+                options: MapOptions(
+                  initialCenter: currentLocation,  // Corrected
+                  // zoom: 13.0, // Use zoom here
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                    subdomains: ['a', 'b', 'c', 'd'],
                   ),
+                  PolylineLayer(polylines: polylines),
+                  CurrentLocationLayer(),
+                  MarkerLayer(markers: markers),
                 ],
               ),
-              child: TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: getSearchHint(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: _searchAndNavigate,
+              Positioned(
+                top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
+                left: 16,
+                right: 16,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 10,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
                   ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                ),
-                onSubmitted: (value) => _searchAndNavigate(),
-              ),
-            ),
-          ),
-          if (isMarkerListVisible) _buildFloatingMarkerList(),
-          if (selectedMarker != null)
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${selectedMarker!.name}: ${_getFormattedDistance()}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: getSearchHint(),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: _searchAndNavigate,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    ),
+                    onSubmitted: (value) => _searchAndNavigate(),
+                  ),
                 ),
               ),
-            ),
-        ],
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          if (selectedMarker != null)
-            FloatingActionButton(
-              onPressed: _clearSelection,
-              heroTag: 'clearSelection',
-              child: Icon(Icons.clear, color: Color(0xFF32817D)),
-              backgroundColor: Colors.white.withOpacity(0.8),
-            ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                isMarkerListVisible = !isMarkerListVisible;
-              });
-            },
-            heroTag: 'toggleList',
-            child: Icon(isMarkerListVisible ? Icons.list_alt : Icons.list, color: Color(0xFF32817D)),
-            backgroundColor: Colors.white.withOpacity(0.8),
+              if (isMarkerListVisible) _buildFloatingMarkerList(),
+              if (selectedMarker != null)
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${selectedMarker!.name}: ${_getFormattedDistance()}',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+            ],
           ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: _locateUser,
-            heroTag: 'locateMe',
-            child: Icon(Icons.my_location, color: Color(0xFF32817D)),
-            backgroundColor: Colors.white.withOpacity(0.8),
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (selectedMarker != null)
+                FloatingActionButton(
+                  onPressed: _clearSelection,
+                  heroTag: 'clearSelection',
+                  child: Icon(Icons.clear, color: Color(0xFF32817D)),
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                ),
+              SizedBox(height: 16),
+              FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    isMarkerListVisible = !isMarkerListVisible;
+                  });
+                },
+                heroTag: 'toggleList',
+                child: Icon(isMarkerListVisible ? Icons.list_alt : Icons.list, color: Color(0xFF32817D)),
+                backgroundColor: Colors.white.withOpacity(0.8),
+              ),
+              SizedBox(height: 16),
+              FloatingActionButton(
+                onPressed: _locateUser,
+                heroTag: 'locateMe',
+                child: Icon(Icons.my_location, color: Color(0xFF32817D)),
+                backgroundColor: Colors.white.withOpacity(0.8),
+              ),
+            ],
           ),
-        ],
-      ),
-    )
+        )
     );
   }
 
@@ -337,7 +371,7 @@ class _MapPageState extends State<MapPage> {
                     leading: Icon(Icons.location_on, color: Color(0xFF32817D)),
                     onTap: () {
                       _mapController.move(info.point, 15.0);
-                      _selectMarker(info);
+                      //_selectMarker(info);
                     },
                   );
                 },
