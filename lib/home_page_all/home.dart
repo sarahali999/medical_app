@@ -144,16 +144,16 @@ class MainScreenState extends State<MainScreen> {
                 width: screenWidth * 0.12, // 12% of screen width
                 height: screenWidth * 0.12, // 12% of screen width
                 decoration: BoxDecoration(
-                  color: Color(0xFF5BB9AE),
+                  color: Colors.transparent,
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: screenWidth * 0.01, // 1% of screen width
-                      blurRadius: screenWidth * 0.02, // 2% of screen width
-                      offset: Offset(0, screenHeight * 0.005), // 0.5% of screen height
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.3),
+                  //     spreadRadius: screenWidth * 0.01, // 1% of screen width
+                  //     blurRadius: screenWidth * 0.02, // 2% of screen width
+                  //     offset: Offset(0, screenHeight * 0.005), // 0.5% of screen height
+                  //   ),
+                  // ],
                 ),
                 child: Material(
                   color: Colors.transparent,
@@ -168,7 +168,7 @@ class MainScreenState extends State<MainScreen> {
                     child: Center(
                       child: SvgPicture.asset(
                         'assets/icons/ic0.svg',
-                        color: Colors.white,
+                        color: Color(0xFF5BB9AE),
                         width: screenWidth * 0.08, // 8% of screen width
                         height: screenWidth * 0.08, // 8% of screen width
                       ),
