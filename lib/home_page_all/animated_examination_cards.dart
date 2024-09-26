@@ -20,7 +20,7 @@ class AnimatedExaminationCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140, // Increased height for more rectangular shape
+      height: 140,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -231,7 +231,7 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
       case 'cart2':
         return Color(0xFFF1F8E9); // Light Green
       case 'map':
-        return Color(0xFFD7E3D7); // Light Orange
+        return Color(0xFFFFF3E0); // Light Orange
       case 'cart4':
         return Color(0xFFF3E5F5); // Light Purple
       default:
