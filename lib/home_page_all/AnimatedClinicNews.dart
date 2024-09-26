@@ -44,7 +44,8 @@ class AnimatedClinicNews extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
           );
-        } else {
+        }
+        else {
           print('Loaded articles: ${snapshot.data}');
           return CarouselSlider(
             options: CarouselOptions(
@@ -61,7 +62,8 @@ class AnimatedClinicNews extends StatelessWidget {
                   return AnimatedNewsCard(article: article, selectedLanguage: selectedLanguage);
                 },
               );
-            }).toList(),
+            }
+            ).toList(),
           );
         }
       },

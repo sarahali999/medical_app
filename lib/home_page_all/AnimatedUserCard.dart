@@ -42,14 +42,22 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
 
   String bloodType(int type) {
     switch (type) {
-      case 1: return "A+";
-      case 2: return "A-";
-      case 3: return "O-";
-      case 4: return "O+";
-      case 5: return "AB+";
-      case 6: return "AB-";
-      case 7: return "B-";
-      default: return "Unknown";
+      case 1:
+        return "A+";
+      case 2:
+        return "A-";
+      case 3:
+        return "O-";
+      case 4:
+        return "O+";
+      case 5:
+        return "AB+";
+      case 6:
+        return "AB-";
+      case 7:
+        return "B-";
+      default:
+        return "Unknown";
     }
   }
 
@@ -103,8 +111,14 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return GestureDetector(
       onTap: _toggleCard,
       child: AnimatedBuilder(
@@ -122,7 +136,8 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
     );
   }
 
-  Widget _buildUserCard(BuildContext context, double screenWidth, double screenHeight) {
+  Widget _buildUserCard(BuildContext context, double screenWidth,
+      double screenHeight) {
     Map<String, Map<String, String>> userDetails = {
       'Arabic': {
         'greeting': 'الزائر العزيز',
@@ -161,7 +176,10 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
       },
     };
 
-    String languageKey = widget.selectedLanguage.toString().split('.').last;
+    String languageKey = widget.selectedLanguage
+        .toString()
+        .split('.')
+        .last;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -193,14 +211,15 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
           children: [
             _buildHeader(screenWidth, screenHeight, userDetails[languageKey]!),
             _buildBody(screenWidth, screenHeight, userDetails[languageKey]!),
-           // _buildFooter(screenWidth, screenHeight),
+            // _buildFooter(screenWidth, screenHeight),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader(double screenWidth, double screenHeight, Map<String, String> translations) {
+  Widget _buildHeader(double screenWidth, double screenHeight,
+      Map<String, String> translations) {
     return Container(
       padding: EdgeInsets.all(screenWidth * 0.02),
       decoration: BoxDecoration(
@@ -227,19 +246,28 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
     );
   }
 
-  Widget _buildBody(double screenWidth, double screenHeight, Map<String, String> translations) {
+  Widget _buildBody(double screenWidth, double screenHeight,
+      Map<String, String> translations) {
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow(Icons.person, "${translations['name']}${userInfoDetails?.data?.user?.firstName ?? ''} ${userInfoDetails?.data?.user?.secondName ?? ''}", screenWidth),
+          _buildInfoRow(Icons.person,
+              "${translations['name']}${userInfoDetails?.data?.user
+                  ?.firstName ?? ''} ${userInfoDetails?.data?.user
+                  ?.secondName ?? ''}", screenWidth),
           SizedBox(height: screenHeight * 0.01),
-          _buildInfoRow(Icons.phone, "${translations['number']}${userInfoDetails?.data?.user?.phoneNumber ?? ''}", screenWidth),
+          _buildInfoRow(Icons.phone,
+              "${translations['number']}${userInfoDetails?.data?.user
+                  ?.phoneNumber ?? ''}", screenWidth),
           SizedBox(height: screenHeight * 0.01),
-          _buildInfoRow(Icons.opacity, "${translations['bloodType']}${bloodType(userInfoDetails?.data?.bloodType ?? 0)}", screenWidth),
+          _buildInfoRow(Icons.opacity, "${translations['bloodType']}${bloodType(
+              userInfoDetails?.data?.bloodType ?? 0)}", screenWidth),
           SizedBox(height: screenHeight * 0.01),
-          _buildInfoRow(Icons.cake, "${translations['age']}${userInfoDetails?.data?.birthYear ?? ''}", screenWidth),
+          _buildInfoRow(Icons.cake,
+              "${translations['age']}${userInfoDetails?.data?.birthYear ?? ''}",
+              screenWidth),
         ],
       ),
     );
@@ -257,32 +285,4 @@ class _AnimatedUserCardState extends State<AnimatedUserCard> with SingleTickerPr
       ],
     );
   }
-  //
-  // Widget _buildFooter(double screenWidth, double screenHeight) {
-  //   return Container(
-  //     padding: EdgeInsets.all(screenWidth * 0.02),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white.withOpacity(0.1),
-  //       borderRadius: BorderRadius.only(
-  //         bottomLeft: Radius.circular(screenWidth * 0.04),
-  //         bottomRight: Radius.circular(screenWidth * 0.04),
-  //       ),
-  //     ),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Text(
-  //           _isExpanded ? "Hide Details" : "Show Details",
-  //           style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.035),
-  //         ),
-  //         SizedBox(width: screenWidth * 0.02),
-  //         Icon(
-  //           _isExpanded ? Icons.expand_less : Icons.expand_more,
-  //           color: Colors.white,
-  //           size: screenWidth * 0.06,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

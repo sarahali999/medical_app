@@ -88,7 +88,7 @@ class MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavBar(
+        bottomNavigationBar: TopNavBar(
           selectedIndex: selectedIndex,
           iconPaths: iconPaths,
           onItemTapped: onItemTapped,

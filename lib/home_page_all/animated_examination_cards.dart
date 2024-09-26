@@ -20,28 +20,42 @@ class AnimatedExaminationCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110,
+      height: 140, // Increased height for more rectangular shape
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildCard('cart1', Color(0xFF5CBBE3)),
-          _buildCard('cart2', Color(0xFF8E8AEA)),
-          _buildCard('map', Color(0xFF32817D)),
-          _buildCard('cart4', Color(0xFF9E9E9E)),
+          _buildCard('map'),
+          _buildCard('cart1'),
+          _buildCard('cart2'),
+          _buildCard('cart4'),
         ],
       ),
     );
   }
 
-  Widget _buildCard(String cardType, Color color) {
+  Widget _buildCard(String cardType) {
     String iconPath = _getCardIcon(cardType);
     return AnimatedExaminationCard(
       date: _getCardText(cardType, 'title'),
       title: _getCardText(cardType, 'date'),
-      color: color,
       iconPath: iconPath,
       onTap: () => _navigateToExaminationDetails(parentContext, cardType),
+      cardType: cardType,
     );
+  }
+
+  List<Color> _getGradientColors(int index) {
+    final List<List<Color>> colorSets = [
+      [Color(0xFFB5CADA),
+        Color(0xFF519CDB)], // Light Blue
+      [Color(0xFFE0CEE3),
+        Color(0xFF815F87)], // Light Purple
+      [Color(0xFFBBCDBC),
+        Color(0xFF6C806C)], // Light Green
+      [Color(0xFFD8D6BD),
+        Color(0xFFAAA471)], // Light Yellow
+    ];
+    return colorSets[index % colorSets.length];
   }
 
   String _getCardIcon(String cardType) {
@@ -58,7 +72,6 @@ class AnimatedExaminationCards extends StatelessWidget {
         return 'assets/icons/info.svg';
     }
   }
-
   String _getCardText(String cardType, String textType) {
     Map<String, Map<String, Map<String, String>>> cardTexts = {
       'cart1': {
@@ -172,20 +185,19 @@ class AnimatedExaminationCards extends StatelessWidget {
     });
   }
 }
-
 class AnimatedExaminationCard extends StatefulWidget {
   final String date;
   final String title;
-  final Color color;
   final String iconPath;
   final VoidCallback onTap;
+  final String cardType;
 
   AnimatedExaminationCard({
     required this.date,
     required this.title,
-    required this.color,
     required this.iconPath,
     required this.onTap,
+    required this.cardType,
   });
 
   @override
@@ -203,13 +215,28 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 1, end: 0.9).animate(_controller);
+    _animation = Tween<double>(begin: 1, end: 0.98).animate(_controller);
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Color _getCardColor() {
+    switch (widget.cardType) {
+      case 'cart1':
+        return Color(0xFFE1F5FE); // Light Blue
+      case 'cart2':
+        return Color(0xFFF1F8E9); // Light Green
+      case 'map':
+        return Color(0xFFD7E3D7); // Light Orange
+      case 'cart4':
+        return Color(0xFFF3E5F5); // Light Purple
+      default:
+        return Colors.white;
+    }
   }
 
   @override
@@ -224,73 +251,80 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
       child: ScaleTransition(
         scale: _animation,
         child: Card(
-          elevation: 0,
+          elevation: 4,
+          color: _getCardColor(),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(16),
           ),
           margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Container(
-            height: 150,
-            width: 250,
+            width: 300,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [widget.color.withOpacity(0.7), widget.color],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(15),
+              color: _getCardColor(),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 0),
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 40,
-                    height: 50,
-                    child: SvgPicture.asset(
-                      widget.iconPath,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: _getCardColor().darker(10),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset: Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: SvgPicture.asset(
+                          widget.iconPath,
+                          width: 24,
+                          height: 24,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
                           widget.date,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black87,
                             fontFamily: 'Changa-VariableFont_wght',
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Expanded(
-                          child: Text(
-                            widget.title,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.8),
-                              fontFamily: 'Changa-VariableFont_wght',
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                        fontFamily: 'Changa-VariableFont_wght',
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -299,6 +333,20 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
           ),
         ),
       ),
+    );
+  }
+}
+
+// Extension to darken colors
+extension ColorExtension on Color {
+  Color darker(int percent) {
+    assert(1 <= percent && percent <= 100);
+    var f = 1 - percent / 100;
+    return Color.fromARGB(
+      alpha,
+      (red * f).round(),
+      (green * f).round(),
+      (blue * f).round(),
     );
   }
 }

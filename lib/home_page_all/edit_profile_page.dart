@@ -27,6 +27,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _emergencyContactNameController;
   late TextEditingController _emergencyContactPhoneController;
 
+  // Add the missing controllers
+  late TextEditingController _birthYearController;
+  late TextEditingController _countryController;
+  late TextEditingController _provinceController;
+  late TextEditingController _districtController;
+  late TextEditingController _alleyController;
+  late TextEditingController _houseController;
+  late TextEditingController _emergencyContactAddressController;
+  late TextEditingController _emergencyContactCountryController;
+  late TextEditingController _emergencyContactProvinceController;
+  late TextEditingController _emergencyContactDistrictController;
+  late TextEditingController _emergencyContactAlleyController;
+  late TextEditingController _emergencyContactHouseController;
+  late TextEditingController _usernameController;
+
   int? _selectedGender;
   int? _selectedBloodType;
   int? _selectedEmergencyContactRelationship;
@@ -54,6 +69,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _emergencyContactNameController = TextEditingController(text: widget.userData.emergencyContactFullName);
     _emergencyContactPhoneController = TextEditingController(text: widget.userData.emergencyContactPhoneNumber);
 
+    // Initialize the missing controllers
+    _birthYearController = TextEditingController(text: widget.userData.birthYear?.toString());
+    _countryController = TextEditingController(text: widget.userData.country);
+    _provinceController = TextEditingController(text: widget.userData.province);
+    _districtController = TextEditingController(text: widget.userData.district);
+    _alleyController = TextEditingController(text: widget.userData.alley);
+    _houseController = TextEditingController(text: widget.userData.house);
+    _emergencyContactAddressController = TextEditingController(text: widget.userData.emergencyContactAddress);
+    _emergencyContactCountryController = TextEditingController(text: widget.userData.emergencyContactCountry);
+    _emergencyContactProvinceController = TextEditingController(text: widget.userData.emergencyContactProvince);
+    _emergencyContactDistrictController = TextEditingController(text: widget.userData.emergencyContactDistrict);
+    _emergencyContactAlleyController = TextEditingController(text: widget.userData.emergencyContactAlley);
+    _emergencyContactHouseController = TextEditingController(text: widget.userData.emergencyContactHouse);
+    _usernameController = TextEditingController(text: widget.userData.user?.username);
+
     _selectedGender = widget.userData.gender;
     _selectedBloodType = widget.userData.bloodType;
     _selectedEmergencyContactRelationship = widget.userData.emergencyContactRelationship;
@@ -76,7 +106,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _allergiesController.dispose();
     _emergencyContactNameController.dispose();
     _emergencyContactPhoneController.dispose();
+
+    // Dispose the new controllers
+    _birthYearController.dispose();
+    _countryController.dispose();
+    _provinceController.dispose();
+    _districtController.dispose();
+    _alleyController.dispose();
+    _houseController.dispose();
+    _emergencyContactAddressController.dispose();
+    _emergencyContactCountryController.dispose();
+    _emergencyContactProvinceController.dispose();
+    _emergencyContactDistrictController.dispose();
+    _emergencyContactAlleyController.dispose();
+    _emergencyContactHouseController.dispose();
+    _usernameController.dispose();
   }
+
   Future<void> _updateProfile() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
@@ -88,10 +134,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           throw Exception('JWT token is missing');
         }
 
-        print('JWT Token: $jwtToken'); // Log the token for debugging
-
         final Map<String, dynamic> requestBody = _getUpdatedUserData();
-        print('Request Body: ${json.encode(requestBody)}'); // Log the request body
+        print('Request Body: ${json.encode(requestBody)}');
 
         final response = await http.put(
           Uri.parse('https://medicalpoint-api.tatwer.tech/api/Mobile/UpdatePatientDetails'),
@@ -126,37 +170,35 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Map<String, dynamic> _getUpdatedUserData() {
     return {
+      "id": widget.userData.id,
       "firstName": _firstNameController.text,
       "secondName": _secondNameController.text,
       "thirdName": _thirdNameController.text,
       "gender": _selectedGender,
       "address": _addressController.text,
-      "birthYear": widget.userData.birthYear,
-      "country": widget.userData.country,
-      "province": widget.userData.province,
-      "district": widget.userData.district,
-      "alley": widget.userData.alley,
-      "house": widget.userData.house,
+      "birthYear": _birthYearController.text,
+      "country": _countryController.text,
+      "province": _provinceController.text,
+      "district": _districtController.text,
+      "alley": _alleyController.text,
+      "house": _houseController.text,
       "bloodType": _selectedBloodType,
       "email": _emailController.text,
       "chronicDiseases": _chronicDiseasesController.text,
       "allergies": _allergiesController.text,
       "emergencyContactFullName": _emergencyContactNameController.text,
-      "emergencyContactAddress": widget.userData.emergencyContactAddress,
-      "emergencyContactCountry": widget.userData.emergencyContactCountry,
-      "emergencyContactProvince": widget.userData.emergencyContactProvince,
-      "emergencyContactDistrict": widget.userData.emergencyContactDistrict,
-      "emergencyContactAlley": widget.userData.emergencyContactAlley,
-      "emergencyContactHouse": widget.userData.emergencyContactHouse,
+      "emergencyContactAddress": _emergencyContactAddressController.text,
+      "emergencyContactCountry": _emergencyContactCountryController.text,
+      "emergencyContactProvince": _emergencyContactProvinceController.text,
+      "emergencyContactDistrict": _emergencyContactDistrictController.text,
+      "emergencyContactAlley": _emergencyContactAlleyController.text,
+      "emergencyContactHouse": _emergencyContactHouseController.text,
       "emergencyContactPhoneNumber": _emergencyContactPhoneController.text,
       "emergencyContactRelationship": _selectedEmergencyContactRelationship,
       "phoneNumber": _phoneController.text,
-      "username": widget.userData.user?.username,
-      // Add any missing fields
-      "password": widget.userData.user?.password ?? "", // If available
+      "username": _usernameController.text,
     };
   }
-
   @override
   Widget build(BuildContext context) {
     return Material(
