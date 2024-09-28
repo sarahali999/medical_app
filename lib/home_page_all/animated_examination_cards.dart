@@ -24,9 +24,9 @@ class AnimatedExaminationCards extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildCard('map'),
           _buildCard('cart1'),
           _buildCard('cart2'),
+          _buildCard('map'),
           _buildCard('cart4'),
         ],
       ),
@@ -41,21 +41,8 @@ class AnimatedExaminationCards extends StatelessWidget {
       iconPath: iconPath,
       onTap: () => _navigateToExaminationDetails(parentContext, cardType),
       cardType: cardType,
+      selectedLanguage: selectedLanguage,
     );
-  }
-
-  List<Color> _getGradientColors(int index) {
-    final List<List<Color>> colorSets = [
-      [Color(0xFFB5CADA),
-        Color(0xFF519CDB)], // Light Blue
-      [Color(0xFFE0CEE3),
-        Color(0xFF815F87)], // Light Purple
-      [Color(0xFFBBCDBC),
-        Color(0xFF6C806C)], // Light Green
-      [Color(0xFFD8D6BD),
-        Color(0xFFAAA471)], // Light Yellow
-    ];
-    return colorSets[index % colorSets.length];
   }
 
   String _getCardIcon(String cardType) {
@@ -185,12 +172,15 @@ class AnimatedExaminationCards extends StatelessWidget {
     });
   }
 }
+
+
 class AnimatedExaminationCard extends StatefulWidget {
   final String date;
   final String title;
   final String iconPath;
   final VoidCallback onTap;
   final String cardType;
+  final Language selectedLanguage;
 
   AnimatedExaminationCard({
     required this.date,
@@ -198,6 +188,7 @@ class AnimatedExaminationCard extends StatefulWidget {
     required this.iconPath,
     required this.onTap,
     required this.cardType,
+    required this.selectedLanguage,
   });
 
   @override
@@ -223,20 +214,44 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
     _controller.dispose();
     super.dispose();
   }
-
   Color _getCardColor() {
     switch (widget.cardType) {
       case 'cart1':
-        return Color(0xFFE1F5FE); // Light Blue
+        return Color(0xFFF5F4F0);
       case 'cart2':
-        return Color(0xFFF1F8E9); // Light Green
+        return Color(0xFFF5F4F0);
       case 'map':
-        return Color(0xFFFFF3E0); // Light Orange
+        return Color(0xFFF5F4F0);
       case 'cart4':
-        return Color(0xFFF3E5F5); // Light Purple
+        return Color(0xFFF5F4F0);
       default:
-        return Colors.white;
+        return Color(0xFFF5F4F0);
     }
+  }
+
+  Color _getIconColor() {
+    switch (widget.cardType) {
+      case 'cart1':
+        return Color(0xFF5CBBE3);
+      case 'cart2':
+        return Color(0xFFBCACD0);
+      case 'map':
+        return Color(0xFF32817D);
+      case 'cart4':
+        return Color(0xFFDFF19E);
+      default:
+        return Color(0xFFCDE9E0);
+    }
+  }
+
+  Color _getTextColor() {
+    return Colors.black87;
+  }
+
+
+
+  bool _isRtlLanguage(Language language) {
+    return language == Language.Arabic || language == Language.Persian;
   }
 
   @override
@@ -271,64 +286,52 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+            child: Stack(
+              children: [
+                Positioned(
+                  right: _isRtlLanguage(widget.selectedLanguage) ? null : -30,
+                  left: _isRtlLanguage(widget.selectedLanguage) ? -30 : null,
+                  bottom: -30,
+                  child: SvgPicture.asset(
+                    widget.iconPath,
+                    width: 120,
+                    height: 120,
+                    color: _getIconColor(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: _getCardColor().darker(10),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: Offset(0, 1),
-                            ),
-                          ],
-                        ),
-                        child: SvgPicture.asset(
-                          widget.iconPath,
-                          width: 24,
-                          height: 24,
-                          color: Colors.black87,
+                      Text(
+                        widget.date,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: _getTextColor(),
+                          fontFamily: 'Changa-VariableFont_wght',
                         ),
                       ),
-                      SizedBox(width: 12),
+                      SizedBox(height: 16),
                       Expanded(
                         child: Text(
-                          widget.date,
+                          widget.title,
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            fontSize: 14,
+                            color: _getTextColor(),
                             fontFamily: 'Changa-VariableFont_wght',
                           ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          textDirection: _isRtlLanguage(widget.selectedLanguage) ? TextDirection.rtl : TextDirection.ltr,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
-                  Expanded(
-                    child: Text(
-                      widget.title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                        fontFamily: 'Changa-VariableFont_wght',
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -336,8 +339,6 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
     );
   }
 }
-
-// Extension to darken colors
 extension ColorExtension on Color {
   Color darker(int percent) {
     assert(1 <= percent && percent <= 100);
