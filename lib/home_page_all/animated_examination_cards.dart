@@ -7,6 +7,8 @@ import 'cart4.dart';
 import 'homepage.dart';
 import 'map.dart';
 import 'package:medicapp/LoadingScreen.dart';
+import 'package:latlong2/latlong.dart';
+
 
 class AnimatedExaminationCards extends StatelessWidget {
   final BuildContext parentContext;
@@ -154,8 +156,11 @@ class AnimatedExaminationCards extends StatelessWidget {
           pageToNavigate = Cart2();
           break;
         case 'map':
-          pageToNavigate = MapPage(selectedLanguage: selectedLanguage);
-          break;
+          pageToNavigate = MapPage(
+            selectedLanguage: selectedLanguage,
+            initialLocation: LatLng(0, 0),  // Provide a default location
+            locationName: "Default Location",  // Provide a default location name
+          );          break;
         case 'cart4':
           pageToNavigate = Cart4(selectedLanguage: selectedLanguage,);
           break;
@@ -339,6 +344,7 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
     );
   }
 }
+
 extension ColorExtension on Color {
   Color darker(int percent) {
     assert(1 <= percent && percent <= 100);

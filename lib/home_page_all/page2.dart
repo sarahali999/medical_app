@@ -1,8 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_animate/flutter_animate.dart'; // Add this for animations
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'map.dart';
+import '../languages/lang.dart';
+import 'package:latlong2/latlong.dart';
 
 class Quicksupportnumbers extends StatefulWidget {
   Quicksupportnumbers({Key? key}) : super(key: key);
@@ -31,9 +35,11 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
             .map((item) => {
           'name': item['centerName'],
           'number': item['phoneNumCenter'] ?? 'غير متوفر',
+          'lat': item['lot'],
+          'lng': item['lag'],
         })
             .toList()
-            .cast<Map<String, dynamic>>(); // Cast to the correct type
+            .cast<Map<String, dynamic>>();
         isLoading = false;
       });
     } else {
@@ -48,6 +54,19 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
     } else {
       throw 'Could not launch $phoneNumber';
     }
+  }
+
+  void _navigateToMap(BuildContext context, Map<String, dynamic> location) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapPage(
+          selectedLanguage: Language.Arabic,
+          initialLocation: LatLng(location['lat'], location['lng']),
+          locationName: location['name'],
+        ),
+      ),
+    );
   }
 
   @override
@@ -85,7 +104,7 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ListTile(
-                    onTap: () => _makePhoneCall(number['number']!),
+                    onTap: () => _navigateToMap(context, number),
                     title: Text(
                       number['name']!,
                       style: TextStyle(

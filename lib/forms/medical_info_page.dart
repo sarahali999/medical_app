@@ -58,10 +58,14 @@ class MedicalInfoPage extends StatelessWidget {
                 'جۆری خوون',
                 ''
             ),
-            labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
+            labelStyle: const TextStyle(
+             fontSize: 16,
+              color: Colors.black87,
+                fontWeight: FontWeight.w500,
+                      ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+            //  borderSide: BorderSide.none,
             ),
             filled: true,
             fillColor: Colors.grey[50],

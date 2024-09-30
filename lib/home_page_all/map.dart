@@ -19,7 +19,11 @@ class MarkerInfo {
 
 class MapPage extends StatefulWidget {
   final Language selectedLanguage;
-  MapPage({required this.selectedLanguage});
+  final LatLng initialLocation;
+  final String locationName;
+  MapPage({ required this.selectedLanguage,
+    required this.initialLocation,
+    required this.locationName,});
 
   @override
   _MapPageState createState() => _MapPageState();

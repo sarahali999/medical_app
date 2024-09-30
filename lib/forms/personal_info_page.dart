@@ -189,7 +189,7 @@ class PersonalInfoPage extends StatelessWidget {
           labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            // borderSide: BorderSide.none,
           ),
           filled: true,
           fillColor: Colors.grey[50],
@@ -263,7 +263,7 @@ class PersonalInfoPage extends StatelessWidget {
         labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          // borderSide: BorderSide.none,
         ),
         filled: true,
         fillColor: Colors.grey[50],

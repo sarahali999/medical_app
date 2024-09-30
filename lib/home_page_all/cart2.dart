@@ -86,12 +86,12 @@ class _Cart2State extends State<Cart2> {
           ? Center(child: Text('لا توجد معلومات متاحة', style: TextStyle(fontSize: 18)))
           : Padding(
         padding: const EdgeInsets.all(16.0),
-           child: ListView.builder(
+        child: ListView.builder(
           itemCount: receipts.length,
           itemBuilder: (context, index) {
             final receipt = receipts[index];
-            // Ensure the imageUrl is a proper URL
-            final imageUrl = receipt['imageUrl']?.replaceAll(r'C:\Users\Alsaray\Source\Repos\MedicalCenter\wwwroot\', 'https://medicalpoint-api.tatwer.tech/');
+            // Extract the 'notes' field
+            final notes = receipt['notes'] ?? 'لا توجد ملاحظات متاحة';
 
             return Card(
               elevation: 4,
@@ -100,11 +100,8 @@ class _Cart2State extends State<Cart2> {
               ),
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
-                leading: Image.network(imageUrl ?? '', errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.error);
-                }),
                 title: Text(
-                  'إيصال رقم: ${receipt['receiptNumber'] ?? 'غير متوفر'}',
+                  'ملاحظات الحالة المرضية:',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -112,10 +109,9 @@ class _Cart2State extends State<Cart2> {
                   ),
                 ),
                 subtitle: Text(
-                  'تاريخ: ${receipt['date'] ?? 'غير متوفر'}',
+                  notes,
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
               ),
             );
           },
