@@ -160,7 +160,6 @@ class _MyPhoneState extends State<MyPhone> {
     style: TextStyle(
     fontSize: 22,
     color: Colors.black,
-    fontFamily: 'Zain'
     ),
     ),
               SizedBox(height: 1),
@@ -242,7 +241,6 @@ class _MyPhoneState extends State<MyPhone> {
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.white,
-                      fontFamily: 'Zain',
                     ),
                   ),
                 ),

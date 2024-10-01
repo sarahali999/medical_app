@@ -50,17 +50,21 @@ class _MapPageState extends State<MapPage> {
     final url = Uri.parse('http://medicalpoint-api.tatwer.tech/api/Mobile/CenterMap');
     try {
       final response = await http.get(url);
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
+
         markerInfos = data.map((json) {
-          final lat = json['lot'];
-          final lng = json['lag'];
-          final name = json['centerName'];
+
+          final lat = json['lot'] != 0 ? json['lot'] as double? : 0.0; // Changed from 'lat' to 'lot'
+          final lng = json['lag'] != 0 ?  json['lag'] as double? : 0.0; // Changed from 'lng' to 'lag'
+          final name = json['centerName'] as String?;
           return MarkerInfo(
-            point: LatLng(lat, lng),
-            name: name,
+            point: LatLng(lat ?? 0.0  , lng ?? 0.0),
+            name: name ?? "",
           );
-        }).toList();
+        }).whereType<MarkerInfo>().toList(); // Filter out null values
 
         _calculateDistances();
 

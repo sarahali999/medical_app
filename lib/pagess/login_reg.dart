@@ -109,6 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 24,
                       color: Colors.white,
+                      fontFamily: "Zain"
                     ),
                   ),
                 ),

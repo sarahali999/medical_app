@@ -134,6 +134,7 @@ class _PatientInfoIntroScreenState extends State<PatientInfoIntroScreen> with Ti
     return Directionality(
       textDirection: isRightToLeft ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
+
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: IconButton(

@@ -9,7 +9,6 @@ import 'map.dart';
 import 'package:medicapp/LoadingScreen.dart';
 import 'package:latlong2/latlong.dart';
 
-
 class AnimatedExaminationCards extends StatelessWidget {
   final BuildContext parentContext;
   final Language selectedLanguage;
@@ -158,8 +157,8 @@ class AnimatedExaminationCards extends StatelessWidget {
         case 'map':
           pageToNavigate = MapPage(
             selectedLanguage: selectedLanguage,
-            initialLocation: LatLng(0, 0),  // Provide a default location
-            locationName: "Default Location",  // Provide a default location name
+            initialLocation: LatLng(0, 0),
+            locationName: "Default Location",
           );          break;
         case 'cart4':
           pageToNavigate = Cart4(selectedLanguage: selectedLanguage,);
@@ -316,7 +315,6 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: _getTextColor(),
-                          fontFamily: 'Changa-VariableFont_wght',
                         ),
                       ),
                       SizedBox(height: 16),
@@ -326,7 +324,6 @@ class _AnimatedExaminationCardState extends State<AnimatedExaminationCard> with 
                           style: TextStyle(
                             fontSize: 14,
                             color: _getTextColor(),
-                            fontFamily: 'Changa-VariableFont_wght',
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,

@@ -53,17 +53,15 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^4.0.0
 flutter:
+
   uses-material-design: true
+
   assets:
     - assets/images/
     - assets/lottie/
     - assets/icons/
-fonts:
-  - family: Amiri
-    fonts:
-      - asset: assets/fonts/Amiri-BoldItalic.ttf
-        weight: 700
-        style: italic
-  - family: Zain
-    fonts:
-      - asset: assets/fonts/Zain-Regular.ttf
+
+  fonts:
+    - family: Main
+      fonts:
+        - asset: fonts/Zain-Regular.ttf

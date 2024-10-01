@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import '../controllers/user_controller.dart';
 import 'Notifications_Page.dart';
 import 'homepage.dart';
 import 'page1.dart';
@@ -101,6 +103,7 @@ class MainScreenState extends State<MainScreen> {
     // Get the screen width and height
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final UserController controller = Get.put(UserController());
 
     return SafeArea(
       child: Padding(
@@ -120,13 +123,25 @@ class MainScreenState extends State<MainScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _getGreeting(),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenWidth * 0.04, // 4% of screen width
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                         _getGreeting(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: screenWidth * 0.04, // 4% of screen width
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                    controller.userInfoDetails.value?.data?.user!.firstName ?? "",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: screenWidth * 0.04, // 4% of screen width
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
                 Text(
                   _getWelcomeMessage(),
@@ -186,13 +201,13 @@ class MainScreenState extends State<MainScreen> {
   String _getGreeting() {
     switch (widget.selectedLanguage) {
       case Language.Arabic:
-        return 'مرحبا, يوسف';
+        return 'مرحبا, ';
       case Language.Persian:
-        return 'سلام یوسف';
+        return 'سلام ';
       case Language.Kurdish:
-        return 'سڵاو یوسف';
+        return 'سڵاو ';
       default:
-        return 'Hello Yousuf';
+        return 'Hello ';
     }
   }
 

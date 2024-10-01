@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../controllers/user_controller.dart';
 import '../models/UserDetails.dart';
 
 class QrCode extends StatefulWidget {
@@ -14,6 +17,8 @@ class QrCode extends StatefulWidget {
 class _QrCodeState extends State<QrCode> {
   String? qrData;
   bool isLoading = true;
+  final UserController controller = Get.put(UserController());
+
   UserDetails? userDetails;
 
   @override
@@ -125,13 +130,13 @@ class _QrCodeState extends State<QrCode> {
       children: [
         _buildActionButton(
           icon: Icons.refresh,
-          label: 'Refresh',
+          label: 'تحديث',
           onPressed: fetchUserDetails,
         ),
         SizedBox(width: 20),
         _buildActionButton(
           icon: Icons.share,
-          label: 'Share QR code',
+          label: 'تنزيل الرمز',
           onPressed: () {
             // Implement share functionality
           },
