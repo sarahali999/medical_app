@@ -192,7 +192,7 @@ class PersonalInfoPage extends StatelessWidget {
             // borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.grey[50],
+          fillColor: Colors.white,
           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         ),
       ),
@@ -266,7 +266,7 @@ class PersonalInfoPage extends StatelessWidget {
           // borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: Colors.grey[50],
+        fillColor: Colors.white,
         contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       ),
     );

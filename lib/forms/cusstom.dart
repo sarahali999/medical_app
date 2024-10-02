@@ -70,15 +70,15 @@ class _CustomTextFieldState extends State<CustomTextField>
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _isFocused
-                          ? Color(0xFF5BB9AE).withOpacity(0.3)
-                          : Colors.black12,
-                      blurRadius: 8,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: _isFocused
+                  //         ? Color(0xFF5BB9AE).withOpacity(0.3)
+                  //         : Colors.black12,
+                  //     blurRadius: 8,
+                  //     offset: Offset(0, 3),
+                  //   ),
+                  // ],
                 ),
                 child: TextFormField(
                   controller: widget.controller,
@@ -95,7 +95,7 @@ class _CustomTextFieldState extends State<CustomTextField>
                       borderSide: BorderSide(color: Color(0xFF5BB9AE)), // Assuming _primaryColor is Color(0xFF5BB9AE)
                     ),
                     filled: true,
-                    fillColor: Colors.grey[50],
+                    fillColor: Colors.white,
                     contentPadding: EdgeInsets.symmetric(
                       vertical: 16,
                       horizontal: 16,

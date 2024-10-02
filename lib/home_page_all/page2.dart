@@ -19,6 +19,9 @@ class Quicksupportnumbers extends StatefulWidget {
 class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
   List<Map<String, dynamic>> supportNumbers = [];
   bool isLoading = true;
+  String errorMessage = '';
+
+  final String apiUrl = 'https://medicalpoint-api.tatwer.tech/api/Mobile/GetAllCenters';
 
   @override
   void initState() {
@@ -27,24 +30,34 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
   }
 
   Future<void> fetchSupportNumbers() async {
-    final response = await http.get(Uri.parse('https://medicalpoint-api.tatwer.tech/api/Mobile/GetAllCenters'));
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          supportNumbers = (data['items'] as List)
+              .map((item) => {
+            'name': item['centerName'],
+            'number': item['phoneNumCenter'] ?? quickSupportTranslations[widget.selectedLanguage.toString().split('.').last]?['numberUnavailable']!,
+            'lat': item['lot'],
+            'lng': item['lag'],
+          })
+              .toList()
+              .cast<Map<String, dynamic>>();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          errorMessage = 'Failed to load support numbers';
+        });
+      }
+    } catch (e) {
       setState(() {
-        supportNumbers = (data['items'] as List)
-            .map((item) => {
-          'name': item['centerName'],
-          'number': item['phoneNumCenter'] ?? quickSupportTranslations[widget.selectedLanguage.toString().split('.').last]?['numberUnavailable']!,
-          'lat': item['lot'],
-          'lng': item['lag'],
-        })
-            .toList()
-            .cast<Map<String, dynamic>>();
         isLoading = false;
+        errorMessage = 'An error occurred: $e';
       });
-    } else {
-      throw Exception('Failed to load support numbers');
     }
   }
 
@@ -73,7 +86,7 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: _getTextDirection(widget.selectedLanguage),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -90,54 +103,59 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
           automaticallyImplyLeading: false,
         ),
         body: isLoading
-            ? Center(
-          child: Text(
-            quickSupportTranslations[widget.selectedLanguage.toString().split('.').last]!['loading']!,
-            style: const TextStyle(fontSize: 18),
-          ),
-        )
-            : Container(
-          child: SafeArea(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: supportNumbers.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final number = supportNumbers[index];
-                return Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+            ? Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+            ? Center(child: Text(errorMessage, style: const TextStyle(fontSize: 18, color: Colors.red)))
+            : supportNumbers.isEmpty
+            ? Center(child: Text('No support numbers available', style: const TextStyle(fontSize: 18)))
+            : SafeArea(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: supportNumbers.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final number = supportNumbers[index];
+              return Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  onTap: () => _navigateToMap(context, number),
+                  title: Text(
+                    number['name']!,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF5BB9AE),
+                    ),
                   ),
-                  child: ListTile(
-                    onTap: () => _navigateToMap(context, number),
-                    title: Text(
-                      number['name']!,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF5BB9AE),
-                      ),
+                  subtitle: Text(
+                    number['number']!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black45,
                     ),
-                    subtitle: Text(
-                      number['number']!,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black45,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.phone, color: Colors.green),
-                      onPressed: () => _makePhoneCall(number['number']!),
-                    ),
-                  ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.2, curve: Curves.easeInOut),
-                );
-              },
-            ),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.phone, color: Colors.green),
+                    onPressed: () => _makePhoneCall(number['number']!),
+                  ),
+                ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.2, curve: Curves.easeInOut),
+              );
+            },
           ),
         ),
       ),
     );
+  }
+
+  TextDirection _getTextDirection(Language language) {
+    return language == Language.Arabic ||
+        language == Language.Persian ||
+        language == Language.Kurdish
+        ? TextDirection.rtl
+        : TextDirection.ltr;
   }
 }
 

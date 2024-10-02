@@ -2,124 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/user_controller.dart';
-import '../models/UserDetails.dart';
 import '../languages/lang.dart';
 
-class QrCode extends StatefulWidget {
+class QrCode extends StatelessWidget {
   final Language selectedLanguage;
 
-  const QrCode({Key? key, required this.selectedLanguage}) : super(key: key);
-
-  @override
-  _QrCodeState createState() => _QrCodeState();
-}
-
-class _QrCodeState extends State<QrCode> {
-  String? qrData;
-  bool isLoading = true;
-  final UserController controller = Get.put(UserController());
-  UserDetails? userDetails;
-  late Language selectedLanguage;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedLanguage = widget.selectedLanguage;
-    fetchUserDetails();
-  }
-
-  Future<void> fetchUserDetails() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? jwtToken = prefs.getString('token');
-
-    if (jwtToken == null) {
-      throw Exception(getLocalizedText(
-        'رمز JWT مفقود',
-        'توکن JWT موجود نیست',
-        'JWT token is missing',
-        'تۆکێنی JWT بزرە',
-        'JWT belligi ýok',
-      ));
-    }
-
-    try {
-      final response = await http.get(
-        Uri.parse('https://medicalpoint-api.tatwer.tech/api/Mobile/GetPatientDetails'),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        setState(() {
-          userDetails = UserDetails.fromJson(jsonData);
-          qrData = userDetails?.data?.randomCode?.trim();
-        });
-      } else {
-        throw Exception(getLocalizedText(
-          'فشل في تحميل تفاصيل المستخدم',
-          'بارگیری اطلاعات کاربر ناموفق بود',
-          'Failed to load user details',
-          'بارکردنی وردەکارییەکانی بەکارهێنەر سەرکەوتوو نەبوو',
-          'Ulanyjy maglumatlaryny ýükläp bolmady',
-        ));
-      }
-    } catch (e) {
-      print('Error fetching user details: $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.English:
-        return english;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
-      default:
-        return english;
-    }
-  }
-  TextDirection getTextDirection() {
-    return selectedLanguage == Language.Arabic ||
-        selectedLanguage == Language.Persian ||
-        selectedLanguage == Language.Kurdish
-        ? TextDirection.rtl
-        : TextDirection.ltr;
-  }
+   QrCode({Key? key, required this.selectedLanguage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    final UserController controller = Get.put(UserController());
+
     return Directionality(
-      textDirection: getTextDirection(),
+      textDirection: _getTextDirection(selectedLanguage),
       child: Scaffold(
         body: Container(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                isLoading ? CircularProgressIndicator() : _buildQrCodeContainer(),
+                Obx(() {
+                  // Use Obx to reactively rebuild based on loading state
+                  if (controller.isLoading.value) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return _buildQrCodeContainer(context, controller.userInfoDetails.value?.data?.randomCode);
+                  }
+                }),
                 SizedBox(height: 20),
-                _buildActionButtons(),
+                _buildActionButtons(controller),
               ],
             ),
           ),
@@ -128,16 +41,10 @@ class _QrCodeState extends State<QrCode> {
     );
   }
 
-  Widget _buildQrCodeContainer() {
-    if (qrData == null || qrData!.isEmpty) {
+  Widget _buildQrCodeContainer(BuildContext context, String? qrData) {
+    if (qrData == null || qrData.isEmpty) {
       return Text(
-        getLocalizedText(
-          'بيانات رمز الاستجابة السريعة فارغة أو غير صالحة',
-          'داده‌های QR خالی یا نامعتبر است',
-          'QR data is empty or invalid',
-          'داتای QR بەتاڵە یان نادروستە',
-          'QR maglumatlary boş ýa-da nädogry',
-        ),
+        _getLocalizedText('qr_data_empty', selectedLanguage),
       );
     }
 
@@ -158,48 +65,32 @@ class _QrCodeState extends State<QrCode> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: _buildQrCodeContent(),
+        child: QrImageView(
+          data: qrData,
+          version: QrVersions.auto,
+          size: MediaQuery.of(context).size.width * 0.7,
+        ).animate()
+            .scale(duration: 500.ms, curve: Curves.easeInOut)
+            .fadeIn(duration: 700.ms),
       ),
     ).animate()
         .scale(duration: 800.ms, curve: Curves.easeOutBack)
         .fadeIn(duration: 900.ms);
   }
 
-  Widget _buildQrCodeContent() {
-    return QrImageView(
-      data: qrData!,
-      version: QrVersions.auto,
-      size: MediaQuery.of(context).size.width * 0.7,
-    ).animate()
-        .scale(duration: 500.ms, curve: Curves.easeInOut)
-        .fadeIn(duration: 700.ms);
-  }
-
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(UserController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildActionButton(
           icon: Icons.refresh,
-          label: getLocalizedText(
-            'تحديث',
-            'بازخوانی',
-            'Refresh',
-            'نوێکردنەوە',
-            'Täzelemek',
-          ),
-          onPressed: fetchUserDetails,
+          label: _getLocalizedText('refresh', selectedLanguage),
+          onPressed: controller.fetchPatientDetails,
         ),
         SizedBox(width: 20),
         _buildActionButton(
           icon: Icons.share,
-          label: getLocalizedText(
-            'تنزيل الرمز',
-            'دانلود کد',
-            'Download Code',
-            'داگرتنی کۆد',
-            'Kody göçürip almak',
-          ),
+          label: _getLocalizedText('download_code', selectedLanguage),
           onPressed: () {
             // Implement share functionality
           },
@@ -228,4 +119,60 @@ class _QrCodeState extends State<QrCode> {
         .fadeIn(delay: 1000.ms, duration: 500.ms)
         .slide(begin: Offset(0, 0.5), curve: Curves.easeOutQuad);
   }
+
+  TextDirection _getTextDirection(Language language) {
+    return language == Language.Arabic ||
+        language == Language.Persian ||
+        language == Language.Kurdish
+        ? TextDirection.rtl
+        : TextDirection.ltr;
+  }
+
+  String _getLocalizedText(String key, Language language) {
+    switch (language) {
+      case Language.Arabic:
+        return _arabicTranslations[key] ?? key; // Add your Arabic translations
+      case Language.Persian:
+        return _persianTranslations[key] ?? key; // Add your Persian translations
+      case Language.Kurdish:
+        return _kurdishTranslations[key] ?? key; // Add your Kurdish translations
+      case Language.English:
+        return _englishTranslations[key] ?? key; // Add your English translations
+      case Language.Turkmen:
+        return _turkmenTranslations[key] ?? key; // Add your Turkmen translations
+      default:
+        return key;
+    }
+  }
+
+  // Add translation maps for each language
+  final Map<String, String> _arabicTranslations = {
+    'qr_data_empty': 'بيانات QR فارغة أو غير صالحة',
+    'refresh': 'تحديث',
+    'download_code': 'تحميل الرمز',
+  };
+
+  final Map<String, String> _persianTranslations = {
+    'qr_data_empty': 'داده QR خالی یا نامعتبر است',
+    'refresh': 'تازه‌سازی',
+    'download_code': 'دانلود کد',
+  };
+
+  final Map<String, String> _kurdishTranslations = {
+    'qr_data_empty': 'داده QR vala an nayê raye',
+    'refresh': 'Nûvekirin',
+    'download_code': 'Koda danîn',
+  };
+
+  final Map<String, String> _englishTranslations = {
+    'qr_data_empty': 'QR data is empty or invalid',
+    'refresh': 'Refresh',
+    'download_code': 'Download Code',
+  };
+
+  final Map<String, String> _turkmenTranslations = {
+    'qr_data_empty': 'QR maglumat boş ýa-da nädogry',
+    'refresh': 'Täzelemek',
+    'download_code': 'Kody ýüklemek',
+  };
 }
