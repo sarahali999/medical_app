@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,7 +8,9 @@ import '../languages/lang.dart';
 import 'package:latlong2/latlong.dart';
 
 class Quicksupportnumbers extends StatefulWidget {
-  Quicksupportnumbers({Key? key}) : super(key: key);
+  final Language selectedLanguage; // تمرير اللغة المختارة عند بناء الصفحة
+
+  Quicksupportnumbers({Key? key, required this.selectedLanguage}) : super(key: key);
 
   @override
   _QuicksupportnumbersState createState() => _QuicksupportnumbersState();
@@ -34,7 +35,7 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
         supportNumbers = (data['items'] as List)
             .map((item) => {
           'name': item['centerName'],
-          'number': item['phoneNumCenter'] ?? 'غير متوفر',
+          'number': item['phoneNumCenter'] ?? quickSupportTranslations[widget.selectedLanguage.toString().split('.').last]?['numberUnavailable']!,
           'lat': item['lot'],
           'lng': item['lag'],
         })
@@ -61,7 +62,7 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
       context,
       MaterialPageRoute(
         builder: (context) => MapPage(
-          selectedLanguage: Language.Arabic,
+          selectedLanguage: widget.selectedLanguage,
           initialLocation: LatLng(location['lat'], location['lng']),
           locationName: location['name'],
         ),
@@ -75,9 +76,9 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'أرقام الدعم السريع',
-            style: TextStyle(
+          title: Text(
+            quickSupportTranslations[widget.selectedLanguage.toString().split('.').last]!['supportTitle']!,
+            style: const TextStyle(
               color: Color(0xFF5BB9AE),
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -89,7 +90,12 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
           automaticallyImplyLeading: false,
         ),
         body: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+          child: Text(
+            quickSupportTranslations[widget.selectedLanguage.toString().split('.').last]!['loading']!,
+            style: const TextStyle(fontSize: 18),
+          ),
+        )
             : Container(
           child: SafeArea(
             child: ListView.separated(
@@ -107,7 +113,7 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
                     onTap: () => _navigateToMap(context, number),
                     title: Text(
                       number['name']!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF5BB9AE),
@@ -115,13 +121,13 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
                     ),
                     subtitle: Text(
                       number['number']!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black45,
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.phone, color: Colors.green),
+                      icon: const Icon(Icons.phone, color: Colors.green),
                       onPressed: () => _makePhoneCall(number['number']!),
                     ),
                   ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.2, curve: Curves.easeInOut),
@@ -134,3 +140,32 @@ class _QuicksupportnumbersState extends State<Quicksupportnumbers> {
     );
   }
 }
+
+// Translation map for all languages
+Map<String, Map<String, String>> quickSupportTranslations = {
+  'Arabic': {
+    'supportTitle': 'أرقام الدعم السريع',
+    'numberUnavailable': 'غير متوفر',
+    'loading': 'جاري التحميل...',
+  },
+  'English': {
+    'supportTitle': 'Quick Support Numbers',
+    'numberUnavailable': 'Unavailable',
+    'loading': 'Loading...',
+  },
+  'Persian': {
+    'supportTitle': 'شماره‌های پشتیبانی سریع',
+    'numberUnavailable': 'در دسترس نیست',
+    'loading': 'در حال بارگذاری...',
+  },
+  'Kurdish': {
+    'supportTitle': 'ژمارەی پشتیوانی خێرا',
+    'numberUnavailable': 'بەردەست نیە',
+    'loading': 'بارکردنەوە...',
+  },
+  'Turkmen': {
+    'supportTitle': 'Çalt goldaw belgileri',
+    'numberUnavailable': 'Elýeterli däl',
+    'loading': 'Ýüklenýär...',
+  },
+};

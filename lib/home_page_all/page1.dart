@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/user_controller.dart';
 import '../models/UserDetails.dart';
+import '../languages/lang.dart';
 
 class QrCode extends StatefulWidget {
+  final Language selectedLanguage;
+
+  const QrCode({Key? key, required this.selectedLanguage}) : super(key: key);
+
   @override
   _QrCodeState createState() => _QrCodeState();
 }
@@ -18,12 +22,13 @@ class _QrCodeState extends State<QrCode> {
   String? qrData;
   bool isLoading = true;
   final UserController controller = Get.put(UserController());
-
   UserDetails? userDetails;
+  late Language selectedLanguage;
 
   @override
   void initState() {
     super.initState();
+    selectedLanguage = widget.selectedLanguage;
     fetchUserDetails();
   }
 
@@ -36,7 +41,13 @@ class _QrCodeState extends State<QrCode> {
     final String? jwtToken = prefs.getString('token');
 
     if (jwtToken == null) {
-      throw Exception('JWT token is missing');
+      throw Exception(getLocalizedText(
+        'رمز JWT مفقود',
+        'توکن JWT موجود نیست',
+        'JWT token is missing',
+        'تۆکێنی JWT بزرە',
+        'JWT belligi ýok',
+      ));
     }
 
     try {
@@ -53,10 +64,15 @@ class _QrCodeState extends State<QrCode> {
         setState(() {
           userDetails = UserDetails.fromJson(jsonData);
           qrData = userDetails?.data?.randomCode?.trim();
-
         });
       } else {
-        throw Exception('Failed to load user details');
+        throw Exception(getLocalizedText(
+          'فشل في تحميل تفاصيل المستخدم',
+          'بارگیری اطلاعات کاربر ناموفق بود',
+          'Failed to load user details',
+          'بارکردنی وردەکارییەکانی بەکارهێنەر سەرکەوتوو نەبوو',
+          'Ulanyjy maglumatlaryny ýükläp bolmady',
+        ));
       }
     } catch (e) {
       print('Error fetching user details: $e');
@@ -67,18 +83,45 @@ class _QrCodeState extends State<QrCode> {
     }
   }
 
+  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
+    switch (selectedLanguage) {
+      case Language.Arabic:
+        return arabic;
+      case Language.Persian:
+        return persian;
+      case Language.English:
+        return english;
+      case Language.Kurdish:
+        return kurdish;
+      case Language.Turkmen:
+        return turkmen;
+      default:
+        return english;
+    }
+  }
+  TextDirection getTextDirection() {
+    return selectedLanguage == Language.Arabic ||
+        selectedLanguage == Language.Persian ||
+        selectedLanguage == Language.Kurdish
+        ? TextDirection.rtl
+        : TextDirection.ltr;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              isLoading ? CircularProgressIndicator() : _buildQrCodeContainer(),
-              SizedBox(height: 20),
-              _buildActionButtons(),
-            ],
+    return Directionality(
+      textDirection: getTextDirection(),
+      child: Scaffold(
+        body: Container(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                isLoading ? CircularProgressIndicator() : _buildQrCodeContainer(),
+                SizedBox(height: 20),
+                _buildActionButtons(),
+              ],
+            ),
           ),
         ),
       ),
@@ -87,7 +130,15 @@ class _QrCodeState extends State<QrCode> {
 
   Widget _buildQrCodeContainer() {
     if (qrData == null || qrData!.isEmpty) {
-      return Text('QR data is empty or invalid.');
+      return Text(
+        getLocalizedText(
+          'بيانات رمز الاستجابة السريعة فارغة أو غير صالحة',
+          'داده‌های QR خالی یا نامعتبر است',
+          'QR data is empty or invalid',
+          'داتای QR بەتاڵە یان نادروستە',
+          'QR maglumatlary boş ýa-da nädogry',
+        ),
+      );
     }
 
     return Container(
@@ -130,13 +181,25 @@ class _QrCodeState extends State<QrCode> {
       children: [
         _buildActionButton(
           icon: Icons.refresh,
-          label: 'تحديث',
+          label: getLocalizedText(
+            'تحديث',
+            'بازخوانی',
+            'Refresh',
+            'نوێکردنەوە',
+            'Täzelemek',
+          ),
           onPressed: fetchUserDetails,
         ),
         SizedBox(width: 20),
         _buildActionButton(
           icon: Icons.share,
-          label: 'تنزيل الرمز',
+          label: getLocalizedText(
+            'تنزيل الرمز',
+            'دانلود کد',
+            'Download Code',
+            'داگرتنی کۆد',
+            'Kody göçürip almak',
+          ),
           onPressed: () {
             // Implement share functionality
           },

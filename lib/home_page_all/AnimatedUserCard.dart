@@ -40,7 +40,34 @@ class AnimatedUserCard extends StatelessWidget {
         'bloodType': 'فصيلة الدم: ',
         'age': 'العمر: ',
       },
-      // ... (other language mappings remain the same)
+      'English': {
+        'greeting': 'Dear Visitor',
+        'name': 'Name: ',
+        'number': 'Number: ',
+        'bloodType': 'Blood Type: ',
+        'age': 'Age: ',
+      },
+      'Persian': {
+        'greeting': 'بازدیدکننده عزیز',
+        'name': 'نام: ',
+        'number': 'شماره: ',
+        'bloodType': 'گروه خونی: ',
+        'age': 'سن: ',
+      },
+      'Kurdish': {
+        'greeting': 'میوانی خۆشەویست',
+        'name': 'ناو: ',
+        'number': 'ژمارە: ',
+        'bloodType': 'شێوەی خوێن: ',
+        'age': 'تەمەن: ',
+      },
+      'Turkmen': {
+        'greeting': 'Hormatly Myhman',
+        'name': 'Ady: ',
+        'number': 'Belgisi: ',
+        'bloodType': 'Gan Topary: ',
+        'age': 'Ýaşy: ',
+      },
     };
 
     String languageKey = selectedLanguage.toString().split('.').last;
@@ -79,7 +106,6 @@ class AnimatedUserCard extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildBody(double screenWidth, double screenHeight, Map<String, String> translations, UserController controller) {
     return Padding(

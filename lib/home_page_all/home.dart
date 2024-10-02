@@ -53,8 +53,8 @@ class MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       Homepage(selectedLanguage: widget.selectedLanguage),
-      QrCode(),
-      Quicksupportnumbers(),
+      QrCode(selectedLanguage: widget.selectedLanguage,),
+      Quicksupportnumbers(selectedLanguage:widget.selectedLanguage,),
       UserProfile(),
     ];
     void onPageChanged(int index) {
