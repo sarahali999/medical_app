@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:medicapp/languages/lang.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:ui' as ui; // Use as alias to avoid conflict
+import 'dart:ui' as ui;
 
 class MedicationListWidget extends StatefulWidget {
   final Language language;

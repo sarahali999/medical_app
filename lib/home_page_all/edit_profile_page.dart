@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart' as http;
+import 'package:medicapp/languages/lang.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/UserDetails.dart';
@@ -8,7 +9,7 @@ import '../models/UserDetails.dart';
 class EditProfilePage extends StatefulWidget {
   final Data userData;
 
-  const EditProfilePage({Key? key, required this.userData}) : super(key: key);
+  const EditProfilePage({Key? key, required this.userData, required Language selectedLanguage}) : super(key: key);
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();

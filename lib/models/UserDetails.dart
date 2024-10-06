@@ -4,7 +4,6 @@ class UserDetails {
   final bool? error;
 
   UserDetails({this.message, this.data, this.error});
-
   UserDetails.fromJson(Map<String, dynamic> json)
       : message = json['message'],
         data = json['data'] != null ? Data.fromJson(json['data']) : null,

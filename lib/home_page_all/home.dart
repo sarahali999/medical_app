@@ -55,7 +55,7 @@ class MainScreenState extends State<MainScreen> {
       Homepage(selectedLanguage: widget.selectedLanguage),
       QrCode(selectedLanguage: widget.selectedLanguage,),
       Quicksupportnumbers(selectedLanguage:widget.selectedLanguage,),
-      UserProfile(),
+      UserProfile(selectedLanguage: widget.selectedLanguage),
     ];
     void onPageChanged(int index) {
       setState(() {
