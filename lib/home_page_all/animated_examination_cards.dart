@@ -149,10 +149,10 @@ class AnimatedExaminationCards extends StatelessWidget {
       Widget pageToNavigate;
       switch (page) {
         case 'cart1':
-          pageToNavigate = cart1();
+          pageToNavigate = MedicationListWidget(language: selectedLanguage,);
           break;
         case 'cart2':
-          pageToNavigate = Cart2();
+          pageToNavigate = Cart2(language: selectedLanguage,);
           break;
         case 'map':
           pageToNavigate = MapPage(

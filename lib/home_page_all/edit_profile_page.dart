@@ -26,8 +26,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _allergiesController;
   late TextEditingController _emergencyContactNameController;
   late TextEditingController _emergencyContactPhoneController;
-
-  // Add the missing controllers
   late TextEditingController _birthYearController;
   late TextEditingController _countryController;
   late TextEditingController _provinceController;
@@ -41,7 +39,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _emergencyContactAlleyController;
   late TextEditingController _emergencyContactHouseController;
   late TextEditingController _usernameController;
-
   int? _selectedGender;
   int? _selectedBloodType;
   int? _selectedEmergencyContactRelationship;
@@ -68,8 +65,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _allergiesController = TextEditingController(text: widget.userData.allergies);
     _emergencyContactNameController = TextEditingController(text: widget.userData.emergencyContactFullName);
     _emergencyContactPhoneController = TextEditingController(text: widget.userData.emergencyContactPhoneNumber);
-
-    // Initialize the missing controllers
     _birthYearController = TextEditingController(text: widget.userData.birthYear?.toString());
     _countryController = TextEditingController(text: widget.userData.country);
     _provinceController = TextEditingController(text: widget.userData.province);
@@ -106,8 +101,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _allergiesController.dispose();
     _emergencyContactNameController.dispose();
     _emergencyContactPhoneController.dispose();
-
-    // Dispose the new controllers
     _birthYearController.dispose();
     _countryController.dispose();
     _provinceController.dispose();
@@ -134,7 +127,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
           throw Exception('JWT token is missing');
         }
 
-        final Map<String, dynamic> requestBody = _getUpdatedUserData();
+        final Map<String, dynamic> requestBody = {
+          "firstName": _firstNameController.text,
+          "secondName": _secondNameController.text,
+          "thirdName": _thirdNameController.text,
+          "gender": _selectedGender ?? 0,
+          "address": _addressController.text,
+          "birthYear": _birthYearController.text,
+          "country": _countryController.text,
+          "province": _provinceController.text,
+          "district": _districtController.text,
+          "alley": _alleyController.text,
+          "house": _houseController.text,
+          "bloodType": _selectedBloodType ?? 1,
+          "email": _emailController.text,
+          "chronicDiseases": _chronicDiseasesController.text,
+          "allergies": _allergiesController.text,
+          "emergencyContactFullName": _emergencyContactNameController.text,
+          "emergencyContactAddress": _emergencyContactAddressController.text,
+          "emergencyContactCountry": _emergencyContactCountryController.text,
+          "emergencyContactProvince": _emergencyContactProvinceController.text,
+          "emergencyContactDistrict": _emergencyContactDistrictController.text,
+          "emergencyContactAlley": _emergencyContactAlleyController.text,
+          "emergencyContactHouse": _emergencyContactHouseController.text,
+          "emergencyContactPhoneNumber": _emergencyContactPhoneController.text,
+          "emergencyContactRelationship": _selectedEmergencyContactRelationship ?? 0,
+          "phoneNumber": _phoneController.text,
+          "username": _usernameController.text,
+          // Note: Password is not included as it's not part of the edit profile form
+        };
+
         print('Request Body: ${json.encode(requestBody)}');
 
         final response = await http.put(
@@ -176,7 +198,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       "thirdName": _thirdNameController.text,
       "gender": _selectedGender,
       "address": _addressController.text,
-      "birthYear": _birthYearController.text,
+      "birthYear": int.tryParse(_birthYearController.text),
       "country": _countryController.text,
       "province": _provinceController.text,
       "district": _districtController.text,
@@ -199,6 +221,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       "username": _usernameController.text,
     };
   }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -271,8 +294,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               value: _selectedGender,
                               label: 'الجنس',
                               items: [
-                                DropdownMenuItem(child: Text('ذكر'), value: 0),
-                                DropdownMenuItem(child: Text('أنثى'), value: 1),
+                                DropdownMenuItem(child: Text('ذكر'), value: 1),
+                                DropdownMenuItem(child: Text('أنثى'), value: 2),
                               ],
                               onChanged: (value) => setState(() => _selectedGender = value),
                               icon: Icons.wc,
@@ -283,14 +306,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               value: _selectedBloodType,
                               label: 'فصيلة الدم',
                               items: [
-                                DropdownMenuItem(child: Text('A+'), value: 0),
-                                DropdownMenuItem(child: Text('A-'), value: 1),
-                                DropdownMenuItem(child: Text('B+'), value: 2),
-                                DropdownMenuItem(child: Text('B-'), value: 3),
-                                DropdownMenuItem(child: Text('AB+'), value: 4),
-                                DropdownMenuItem(child: Text('AB-'), value: 5),
-                                DropdownMenuItem(child: Text('O+'), value: 6),
-                                DropdownMenuItem(child: Text('O-'), value: 7),
+                                DropdownMenuItem(child: Text('A+'), value: 1),
+                                DropdownMenuItem(child: Text('A-'), value: 2),
+                                DropdownMenuItem(child: Text('B+'), value: 3),
+                                DropdownMenuItem(child: Text('B-'), value: 4),
+                                DropdownMenuItem(child: Text('AB+'), value: 5),
+                                DropdownMenuItem(child: Text('AB-'), value: 6),
+                                DropdownMenuItem(child: Text('O+'), value: 7),
+                                DropdownMenuItem(child: Text('O-'), value: 8),
                               ],
                               onChanged: (value) => setState(() => _selectedBloodType = value),
                               icon: Icons.local_hospital,
@@ -321,13 +344,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               value: _selectedEmergencyContactRelationship,
                               label: 'علاقة جهة الاتصال للطوارئ',
                               items: [
-                                DropdownMenuItem(child: Text('الأب'), value: 0),
-                                DropdownMenuItem(child: Text('الأم'), value: 1),
-                                DropdownMenuItem(child: Text('الأخ'), value: 2),
-                                DropdownMenuItem(child: Text('الأخت'), value: 3),
-                                DropdownMenuItem(child: Text('صديق'), value: 4),
+                                DropdownMenuItem(child: Text('الأب'), value: 1),
+                                DropdownMenuItem(child: Text('الأم'), value: 2),
+                                DropdownMenuItem(child: Text('الأخ'), value: 3),
+                                DropdownMenuItem(child: Text('الأخت'), value: 4),
+                                DropdownMenuItem(child: Text('صديق'), value: 5),
                               ],
-                              onChanged: (value) => setState(() => _selectedEmergencyContactRelationship = value),
+                              onChanged: (value) =>setState(() => _selectedEmergencyContactRelationship = value),
                               icon: Icons.family_restroom,
                             ),
                             SizedBox(height: 20),
@@ -422,10 +445,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     required Function(int?) onChanged,
     required IconData icon,
   }) {
+    final bool isValidValue = value != null && items.any((item) => item.value == value);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField<int>(
-        value: value,
+        value: isValidValue ? value : null, // Use null if the value is invalid
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(icon, color: _primaryColor),
