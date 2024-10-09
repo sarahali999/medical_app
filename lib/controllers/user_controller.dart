@@ -100,7 +100,6 @@ class UserController extends GetxController with GetSingleTickerProviderStateMix
       }
     } catch (e) {
       print('Error fetching patient details: $e');
-      // You might want to update the UI to show an error message here
     } finally {
       isLoading.value = false;
     }

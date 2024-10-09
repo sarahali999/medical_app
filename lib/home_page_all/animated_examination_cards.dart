@@ -28,7 +28,7 @@ class AnimatedExaminationCards extends StatelessWidget {
           _buildCard('cart1'),
           _buildCard('cart2'),
           _buildCard('map'),
-          _buildCard('cart4'),
+          // _buildCard('cart4'),
         ],
       ),
     );
@@ -54,8 +54,8 @@ class AnimatedExaminationCards extends StatelessWidget {
         return 'assets/icons/rep.svg';
       case 'map':
         return 'assets/icons/map.svg';
-      case 'cart4':
-        return 'assets/icons/info.svg';
+      // case 'cart4':
+      //   return 'assets/icons/info.svg';
       default:
         return 'assets/icons/info.svg';
     }
@@ -110,23 +110,23 @@ class AnimatedExaminationCards extends StatelessWidget {
           'English': 'Map',
         },
       },
-      'cart4': {
-        'date': {
-          'Arabic': 'الجانب الديني',
-          'Persian': 'جنبه مذهبی',
-          'Kurdish': 'لایەنی ئایینی',
-          'Turkmen': 'Dini tarap',
-          'English': 'Religious Aspect',
-        },
-        'title': {
-          'Arabic': 'الأدعية والتسبيحات خلال المشي',
-          'Persian': 'دعاها و تسبیحات هنگام راه رفتن',
-          'Kurdish': 'نوێژ و ستایشەکان لە کاتی ڕۆیشتندا',
-          'Turkmen': 'Ýöremek wagtynda dogalar we öwgüler',
-          'English': 'Prayers and glorifications during walking',
-
-        },
-      },
+      // 'cart4': {
+      //   'date': {
+      //     'Arabic': 'الجانب الديني',
+      //     'Persian': 'جنبه مذهبی',
+      //     'Kurdish': 'لایەنی ئایینی',
+      //     'Turkmen': 'Dini tarap',
+      //     'English': 'Religious Aspect',
+      //   },
+      //   'title': {
+      //     'Arabic': 'الأدعية والتسبيحات خلال المشي',
+      //     'Persian': 'دعاها و تسبیحات هنگام راه رفتن',
+      //     'Kurdish': 'نوێژ و ستایشەکان لە کاتی ڕۆیشتندا',
+      //     'Turkmen': 'Ýöremek wagtynda dogalar we öwgüler',
+      //     'English': 'Prayers and glorifications during walking',
+      //
+      //   },
+      // },
     };
 
     String languageKey = selectedLanguage.toString().split('.').last;
@@ -160,9 +160,9 @@ class AnimatedExaminationCards extends StatelessWidget {
             initialLocation: LatLng(0, 0),
             locationName: "Default Location",
           );          break;
-        case 'cart4':
-          pageToNavigate = Cart4(selectedLanguage: selectedLanguage,);
-          break;
+        // case 'cart4':
+        //   pageToNavigate = Cart4(selectedLanguage: selectedLanguage,);
+        //   break;
         default:
           pageToNavigate = Homepage(selectedLanguage: Language.Arabic);
       }

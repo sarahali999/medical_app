@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import '../controllers/user_controller.dart';
 import '../models/UserDetails.dart';
+import 'Settings.dart';
 import 'edit_profile_page.dart';
 import '../languages/lang.dart'; // Import the language enum
 
@@ -269,8 +270,10 @@ class UserProfile extends GetView<UserController> {
                 'Settings', 'الإعدادات', 'تنظیمات', 'ڕێکخستنەکان',
                 'Sazlamalar'),
             onPressed: () {
-              // Implement settings functionality
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );            },
           ).animate(onPlay: (controller) => controller.repeat(reverse: true))
               .tint(color: const Color(0xFF5BB9AE).withOpacity(0.2),
               duration: 1500.ms)

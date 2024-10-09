@@ -8,11 +8,10 @@ import '../languages/lang.dart';
 class QrCode extends StatelessWidget {
   final Language selectedLanguage;
 
-   QrCode({Key? key, required this.selectedLanguage}) : super(key: key);
+  QrCode({Key? key, required this.selectedLanguage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final UserController controller = Get.put(UserController());
 
     return Directionality(
@@ -23,8 +22,17 @@ class QrCode extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // عرض الـ randomCode في أعلى وسط الصفحة
                 Obx(() {
-                  // Use Obx to reactively rebuild based on loading state
+                  if (controller.isLoading.value) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return _buildRandomCodeText(controller.userInfoDetails.value?.data?.randomCode);
+                  }
+                }),
+                SizedBox(height: 20),
+                Obx(() {
+                  // إعادة بناء QR code بناءً على حالة التحميل
                   if (controller.isLoading.value) {
                     return CircularProgressIndicator();
                   } else {
@@ -39,6 +47,27 @@ class QrCode extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // إضافة ال randomCode أعلى وسط الصفحة
+  Widget _buildRandomCodeText(String? randomCode) {
+    if (randomCode == null || randomCode.isEmpty) {
+      return Text(
+        _getLocalizedText('qr_data_empty', selectedLanguage),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      );
+    }
+
+    return Text(
+      randomCode,
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    ).animate()
+        .fadeIn(duration: 700.ms)
+        .slide(begin: Offset(0, -0.5), curve: Curves.easeOutQuad);
   }
 
   Widget _buildQrCodeContainer(BuildContext context, String? qrData) {
@@ -131,21 +160,21 @@ class QrCode extends StatelessWidget {
   String _getLocalizedText(String key, Language language) {
     switch (language) {
       case Language.Arabic:
-        return _arabicTranslations[key] ?? key; // Add your Arabic translations
+        return _arabicTranslations[key] ?? key;
       case Language.Persian:
-        return _persianTranslations[key] ?? key; // Add your Persian translations
+        return _persianTranslations[key] ?? key;
       case Language.Kurdish:
-        return _kurdishTranslations[key] ?? key; // Add your Kurdish translations
+        return _kurdishTranslations[key] ?? key;
       case Language.English:
-        return _englishTranslations[key] ?? key; // Add your English translations
+        return _englishTranslations[key] ?? key;
       case Language.Turkmen:
-        return _turkmenTranslations[key] ?? key; // Add your Turkmen translations
+        return _turkmenTranslations[key] ?? key;
       default:
         return key;
     }
   }
 
-  // Add translation maps for each language
+  // Translation maps
   final Map<String, String> _arabicTranslations = {
     'qr_data_empty': 'بيانات QR فارغة أو غير صالحة',
     'refresh': 'تحديث',

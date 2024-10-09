@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter_map/flutter_map.dart' as flutter_map;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -14,6 +15,7 @@ class MarkerInfo {
   final LatLng point;
   final String name;
   double distance = 0;
+
   MarkerInfo({required this.point, required this.name});
 }
 
@@ -21,15 +23,17 @@ class MapPage extends StatefulWidget {
   final Language selectedLanguage;
   final LatLng initialLocation;
   final String locationName;
-  MapPage({ required this.selectedLanguage,
+  MapPage({
+    required this.selectedLanguage,
     required this.initialLocation,
-    required this.locationName,});
+    required this.locationName,
+  });
 
   @override
   _MapPageState createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إضافة TickerProviderStateMixin
   final flutter_map.MapController _mapController = flutter_map.MapController();
   LatLng currentLocation = LatLng(0, 0);
   TextEditingController searchController = TextEditingController();
@@ -39,11 +43,31 @@ class _MapPageState extends State<MapPage> {
   bool isMarkerListVisible = false;
   MarkerInfo? selectedMarker;
 
+  // إضافة متغيرات جديدة
+  List<LatLng> routePoints = [];
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
+    // تهيئة وحدة التحكم في الرسوم المتحركة
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
     _locateUser();
     _fetchMarkersFromApi();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // التخلص من وحدة التحكم في الرسوم المتحركة
+    super.dispose();
   }
 
   Future<void> _fetchMarkersFromApi() async {
@@ -56,15 +80,14 @@ class _MapPageState extends State<MapPage> {
         final List<dynamic> data = json.decode(response.body);
 
         markerInfos = data.map((json) {
-
-          final lat = json['lot'] != 0 ? json['lot'] as double? : 0.0; // Changed from 'lat' to 'lot'
-          final lng = json['lag'] != 0 ?  json['lag'] as double? : 0.0; // Changed from 'lng' to 'lag'
+          final lat = json['lot'] != 0 ? json['lot'] as double? : 0.0;
+          final lng = json['lag'] != 0 ? json['lag'] as double? : 0.0;
           final name = json['centerName'] as String?;
           return MarkerInfo(
-            point: LatLng(lat ?? 0.0  , lng ?? 0.0),
+            point: LatLng(lat ?? 0.0, lng ?? 0.0),
             name: name ?? "",
           );
-        }).whereType<MarkerInfo>().toList(); // Filter out null values
+        }).whereType<MarkerInfo>().toList();
 
         _calculateDistances();
 
@@ -110,6 +133,7 @@ class _MapPageState extends State<MapPage> {
       _updatePolylines();
       isMarkerListVisible = false;
       _mapController.move(info.point, 15.0);
+      _animationController.forward(); // بدء الرسوم المتحركة عند اختيار علامة
     });
   }
 
@@ -121,16 +145,20 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _updatePolylines() {
-    polylines.clear();
-    if (selectedMarker != null) {
-      polylines.add(
-        flutter_map.Polyline(
-          points: [currentLocation, selectedMarker!.point],
-          color: Colors.blue.withOpacity(0.7),
-          strokeWidth: 3.0,
-        ),
-      );
-    }
+    setState(() {
+      polylines.clear();
+      routePoints.clear();
+      if (selectedMarker != null) {
+        routePoints = [currentLocation, selectedMarker!.point];
+        polylines.add(
+          flutter_map.Polyline(
+            points: routePoints,
+            color: Colors.blue.withOpacity(0.7),
+            strokeWidth: 3.0,
+          ),
+        );
+      }
+    });
   }
 
   Future<void> _searchAndNavigate() async {
@@ -197,6 +225,7 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       selectedMarker = null;
       _updatePolylines();
+      _animationController.reverse(); // عكس الرسوم المتحركة عند إزالة التحديد
     });
   }
 
@@ -208,43 +237,10 @@ class _MapPageState extends State<MapPage> {
           : TextDirection.ltr,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.white.withOpacity(0.8),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-          ),
-          title: Text(
-            getTitle(),
-            style: TextStyle(color: Color(0xFF32817D), fontWeight: FontWeight.bold),
-          ),
-          iconTheme: IconThemeData(color: Color(0xFF32817D)),
-          flexibleSpace: ClipRRect(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-        ),
+        appBar: _buildAppBar(),
         body: Stack(
           children: [
-            FlutterMap(
-              mapController: _mapController,
-              options: MapOptions(
-                initialCenter: currentLocation,
-                initialZoom: 3.0,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                  subdomains: ['a', 'b', 'c', 'd'],
-                ),
-                PolylineLayer(polylines: polylines),
-                CurrentLocationLayer(),
-                MarkerLayer(markers: markers),
-              ],
-            ),
+            _buildMap(),
             _buildSearchBar(),
             if (isMarkerListVisible) _buildFloatingMarkerList(),
             if (selectedMarker != null) _buildSelectedMarkerInfo(),
@@ -255,6 +251,54 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      flexibleSpace: ClipRRect(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.blue.withOpacity(0.7), Colors.green.withOpacity(0.7)],
+              ),
+            ),
+          ),
+        ),
+      ),
+      title: Text(
+        getTitle(),
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      iconTheme: IconThemeData(color: Colors.white),
+    );
+  }
+
+  Widget _buildMap() {
+    return FlutterMap(
+      mapController: _mapController,
+      options: MapOptions(
+        initialCenter: currentLocation,
+        initialZoom: 3.0,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c', 'd'],
+        ),
+        PolylineLayer(
+          polylines: polylines,
+        ),
+        CurrentLocationLayer(),
+        MarkerLayer(markers: markers),
+      ],
+    );
+  }
+
   Widget _buildSearchBar() {
     return Positioned(
       top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
@@ -262,8 +306,8 @@ class _MapPageState extends State<MapPage> {
       right: 16,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -278,11 +322,11 @@ class _MapPageState extends State<MapPage> {
           decoration: InputDecoration(
             hintText: getSearchHint(),
             suffixIcon: IconButton(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.search, color: Colors.blue),
               onPressed: _searchAndNavigate,
             ),
             border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           ),
           onSubmitted: (value) => _searchAndNavigate(),
         ),
@@ -295,11 +339,11 @@ class _MapPageState extends State<MapPage> {
       top: kToolbarHeight + MediaQuery.of(context).padding.top + 70,
       right: 16,
       child: Container(
-        width: 200,
+        width: 220,
         height: 300,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -311,14 +355,18 @@ class _MapPageState extends State<MapPage> {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
               child: Text(
                 'Nearby Locations',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Color(0xFF32817D),
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -336,7 +384,7 @@ class _MapPageState extends State<MapPage> {
                       '${info.distance.toStringAsFixed(2)} km',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
-                    leading: Icon(Icons.location_on, color: Color(0xFF32817D)),
+                    leading: Icon(Icons.location_on, color: Colors.blue),
                     onTap: () => _selectMarker(info),
                   );
                 },
@@ -347,41 +395,55 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
-
   Widget _buildSelectedMarkerInfo() {
     return Positioned(
       bottom: 16,
       left: 16,
       right: 16,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 3),
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: Offset(0, 50 * (1 - _animation.value)),
+            child: Opacity(
+              opacity: _animation.value,
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.blue.withOpacity(0.9), Colors.green.withOpacity(0.9)],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      selectedMarker!.name,
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Distance: ${_getFormattedDistance()}',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              selectedMarker!.name,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Distance: ${_getFormattedDistance()}',
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -394,8 +456,8 @@ class _MapPageState extends State<MapPage> {
           FloatingActionButton(
             onPressed: _clearSelection,
             heroTag: 'clearSelection',
-            child: Icon(Icons.clear, color: Color(0xFF32817D)),
-            backgroundColor: Colors.white.withOpacity(0.8),
+            child: Icon(Icons.clear, color: Colors.white),
+            backgroundColor: Colors.red,
           ),
         SizedBox(height: 16),
         FloatingActionButton(
@@ -405,17 +467,15 @@ class _MapPageState extends State<MapPage> {
             });
           },
           heroTag: 'toggleList',
-          child: Icon(isMarkerListVisible ? Icons.list_alt :
-          Icons.list,
-              color: Color(0xFF32817D)),
-          backgroundColor: Colors.white.withOpacity(0.8),
+          child: Icon(isMarkerListVisible ? Icons.list_alt : Icons.list, color: Colors.white),
+          backgroundColor: Colors.orange,
         ),
         SizedBox(height: 16),
         FloatingActionButton(
           onPressed: _locateUser,
           heroTag: 'locateMe',
-          child: Icon(Icons.my_location, color: Color(0xFF32817D)),
-          backgroundColor: Colors.white.withOpacity(0.8),
+          child: Icon(Icons.my_location, color: Colors.white),
+          backgroundColor: Colors.blue,
         ),
       ],
     );

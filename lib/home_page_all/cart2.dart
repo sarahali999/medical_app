@@ -123,7 +123,7 @@ class _Cart2State extends State<Cart2> {
                 'Doly lukmançylyk ýagdaýy'
             ),
             style: TextStyle(
-              color: Color(0xFF5CBBE3),
+              color: Color(0xFFA17BA8),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -154,7 +154,7 @@ class _Cart2State extends State<Cart2> {
                     'هیچ نەخۆشییەک نییە',
                     'Anyklaýyş ýok'
                 ),
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF5CBBE3)),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFA17BA8)),
               ),
             ],
           ),
@@ -165,45 +165,96 @@ class _Cart2State extends State<Cart2> {
             itemCount: receipts.length,
             itemBuilder: (context, index) {
               final receipt = receipts[index];
-              final notes = receipt['notes'] ?? getLocalizedText(
-                  'لا توجد ملاحظات متاحة',
-                  'No notes available',
-                  'یادداشتی در دسترس نیست',
-                  'هیچ تێبینیەک بەردەست نییە',
-                  'Bellik ýok'
-              );
-
-              return Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  title: Text(
-                    getLocalizedText(
-                        'ملاحظات الحالة المرضية:',
-                        'Medical Condition Notes:',
-                        'یادداشت‌های وضعیت پزشکی:',
-                        'تێبینیەکانی دۆخی تەندروستی:',
-                        'Lukmançylyk ýagdaýy boýunça bellikler:'
-                    ),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF5CBBE3),
-                    ),
-                  ),
-                  subtitle: Text(
-                    notes,
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
-                ),
-              );
+              return buildDetailedMedicalCard(receipt);
             },
           ),
         ),
       ),
     );
+  }
+
+  Widget buildDetailedMedicalCard(dynamic receipt) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              getLocalizedText(
+                  'الحالة المرضية',
+                  'Medical Condition',
+                  'وضعیت پزشکی',
+                  'دۆخی تەندروستی',
+                  'Lukmançylyk ýagdaýy'
+              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(
+                  0xFFA17BA8)),
+            ),
+            SizedBox(height: 8),
+            buildInfoRow(
+                getLocalizedText('التشخيص:', 'Diagnosis:', 'تشخیص:', 'دەستنیشانکردن:', 'Anyklaýyş:'),
+                receipt['notes'] ?? getLocalizedText('غير متوفر', 'Not available', 'در دسترس نیست', 'بەردەست نییە', 'Elýeterli däl')
+            ),
+            buildInfoRow(
+                getLocalizedText('الطبيب المعالج:', 'Treating Doctor:', 'پزشک معالج:', 'پزیشکی چارەسەرکەر:', 'Bejeriş lukmany:'),
+                '${receipt['medicalStaff']['user']['firstName']} ${receipt['medicalStaff']['user']['secondName']}'
+            ),
+            buildInfoRow(
+                getLocalizedText('التخصص:', 'Specialization:', 'تخصص:', 'پسپۆڕی:', 'Hünär:'),
+                receipt['medicalStaff']['specialization'] ?? getLocalizedText('غير متوفر', 'Not available', 'در دسترس نیست', 'بەردەست نییە', 'Elýeterli däl')
+            ),
+            buildInfoRow(
+                getLocalizedText('المركز الطبي:', 'Medical Center:', 'مرکز پزشکی:', 'ناوەندی پزیشکی:', 'Lukmançylyk merkezi:'),
+                receipt['medicalStaff']['center']['centerName']
+            ),
+            buildInfoRow(
+                getLocalizedText('العنوان:', 'Address:', 'آدرس:', 'ناونیشان:', 'Salgy:'),
+                receipt['medicalStaff']['center']['addressCenter']
+            ),
+            buildInfoRow(
+                getLocalizedText('رقم الهاتف:', 'Phone Number:', 'شماره تلفن:', 'ژمارەی تەلەفۆن:', 'Telefon belgisi:'),
+                receipt['medicalStaff']['center']['phoneNumCenter']
+            ),
+            buildInfoRow(
+                getLocalizedText('تاريخ التشخيص:', 'Diagnosis Date:', 'تاریخ تشخیص:', 'بەرواری دەستنیشانکردن:', 'Anyklaýyş senesi:'),
+                formatDate(receipt['createdAt'])
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.black54),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
   }
 }
