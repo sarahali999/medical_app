@@ -32,45 +32,7 @@ class AnimatedUserCard extends StatelessWidget {
   }
 
   Widget _buildUserCard(BuildContext context, double screenWidth, double screenHeight, UserController controller) {
-    Map<String, Map<String, String>> userDetails = {
-      'Arabic': {
-        'greeting': 'الزائر العزيز',
-        'name': 'الاسم: ',
-        'number': 'الرقم: ',
-        'bloodType': 'فصيلة الدم: ',
-        'age': 'العمر: ',
-      },
-      'English': {
-        'greeting': 'Dear Visitor',
-        'name': 'Name: ',
-        'number': 'Number: ',
-        'bloodType': 'Blood Type: ',
-        'age': 'Age: ',
-      },
-      'Persian': {
-        'greeting': 'بازدیدکننده عزیز',
-        'name': 'نام: ',
-        'number': 'شماره: ',
-        'bloodType': 'گروه خونی: ',
-        'age': 'سن: ',
-      },
-      'Kurdish': {
-        'greeting': 'میوانی خۆشەویست',
-        'name': 'ناو: ',
-        'number': 'ژمارە: ',
-        'bloodType': 'شێوەی خوێن: ',
-        'age': 'تەمەن: ',
-      },
-      'Turkmen': {
-        'greeting': 'Hormatly Myhman',
-        'name': 'Ady: ',
-        'number': 'Belgisi: ',
-        'bloodType': 'Gan Topary: ',
-        'age': 'Ýaşy: ',
-      },
-    };
-
-    String languageKey = selectedLanguage.toString().split('.').last;
+    final appLocalizations = AppLocalizations(selectedLanguage);
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -99,36 +61,37 @@ class AnimatedUserCard extends StatelessWidget {
             ? Center(child: CircularProgressIndicator(color: Colors.white))
             : Column(
           children: [
-            _buildHeader(screenWidth, screenHeight, userDetails[languageKey]!),
-            _buildBody(screenWidth, screenHeight, userDetails[languageKey]!, controller),
+            _buildHeader(screenWidth, screenHeight, appLocalizations),
+            _buildBody(screenWidth, screenHeight, appLocalizations, controller),
           ],
         )),
       ),
     );
   }
 
-  Widget _buildBody(double screenWidth, double screenHeight, Map<String, String> translations, UserController controller) {
+  Widget _buildBody(double screenWidth, double screenHeight, AppLocalizations appLocalizations, UserController controller) {
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildInfoRow(Icons.person,
-              "${translations['name']}${controller.userInfoDetails.value?.data?.user?.firstName ?? ''} ${controller.userInfoDetails.value?.data?.user?.secondName ?? ''}", screenWidth),
+              "${appLocalizations.name}${controller.userInfoDetails.value?.data?.user?.firstName ?? ''} ${controller.userInfoDetails.value?.data?.user?.secondName ?? ''}", screenWidth),
           SizedBox(height: screenHeight * 0.01),
           _buildInfoRow(Icons.phone,
-              "${translations['number']}${controller.userInfoDetails.value?.data?.user?.phoneNumber ?? ''}", screenWidth),
+              "${appLocalizations.number}${controller.userInfoDetails.value?.data?.user?.phoneNumber ?? ''}", screenWidth),
           SizedBox(height: screenHeight * 0.01),
-          _buildInfoRow(Icons.opacity, "${translations['bloodType']}${controller.bloodType(
+          _buildInfoRow(Icons.opacity, "${appLocalizations.bloodType}${controller.bloodType(
               controller.userInfoDetails.value?.data?.bloodType ?? 0)}", screenWidth),
           SizedBox(height: screenHeight * 0.01),
           _buildInfoRow(Icons.cake,
-              "${translations['age']}${controller.userInfoDetails.value?.data?.birthYear ?? ''}",
+              "${appLocalizations.age}${controller.userInfoDetails.value?.data?.birthYear ?? ''}",
               screenWidth),
         ],
       ),
     );
   }
+
   Widget _buildInfoRow(IconData icon, String text, double screenWidth) {
     return Row(
       children: [
@@ -142,7 +105,7 @@ class AnimatedUserCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(double screenWidth, double screenHeight, Map<String, String> translations) {
+  Widget _buildHeader(double screenWidth, double screenHeight, AppLocalizations appLocalizations) {
     return Container(
       padding: EdgeInsets.all(screenWidth * 0.02),
       decoration: BoxDecoration(
@@ -157,7 +120,7 @@ class AnimatedUserCard extends StatelessWidget {
           Icon(Icons.person, color: Colors.white, size: screenWidth * 0.08),
           SizedBox(width: screenWidth * 0.02),
           Text(
-            translations['greeting']!,
+            appLocalizations.greeting,
             style: TextStyle(
               fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.bold,

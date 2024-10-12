@@ -39,66 +39,44 @@ class EmergencyContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations(selectedLanguage);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          title: getLocalizedText(
-            'جهة الاتصال الطارئة',
-            'پەیوەندیدەری بەرەوپێش',
-            'Emergency Contact',
-            'پەیوەندیدەری بەرەوپێش',
-            'Ýaňyşlygyň aragatnaşygy',
-          ),
+          title: localizations.emergencyContact,
         ),
         CustomTextField(
-          getLocalizedText(
-            'اسم جهة الاتصال الطارئة',
-            'نام فرد اضطراری',
-            'Emergency Contact Name',
-            'ناوی پەیوندیدەری بەرەوپێش',
-            'Ýaňyşlygyň aragatnaşygyň ady',
-          ),
+          localizations.emergencyContactName,
           emergencyContactNameController,
           textStyle: TextStyle(
             fontSize: 14,
             color: Colors.black,
           ),
         ),
-        _buildEmergencyPhoneNumberField(),
+        _buildEmergencyPhoneNumberField(localizations),
         CustomTextField(
-          getLocalizedText(
-            'العنوان',
-            'آدرس',
-            'Address',
-            'ناونیشان',
-            'Salgysy',
-          ),
+          localizations.address,
           emergencyContactAddressController,
           textStyle: TextStyle(
             fontSize: 14,
             color: Colors.black,
           ),
         ),
-        _buildConnectionDropdown(),
+        _buildConnectionDropdown(localizations),
       ],
     );
   }
 
-  Widget _buildEmergencyPhoneNumberField() {
+  Widget _buildEmergencyPhoneNumberField(AppLocalizations localizations) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            getLocalizedText(
-              'رقم الهاتف',
-              'شماره تيلفۆن',
-              'Phone Number',
-              'ژمارەی تەلەفۆن',
-              'Telefon belgisi',
-            ),
+            localizations.phoneNumber,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -108,17 +86,10 @@ class EmergencyContactPage extends StatelessWidget {
           SizedBox(height: 8),
           IntlPhoneField(
             decoration: InputDecoration(
-              labelText: getLocalizedText(
-                'رقم الهاتف',
-                'شماره تيلفۆن',
-                'Phone Number',
-                'ژمارەی تەلەفۆن',
-                'Telefon belgisi',
-              ),
+              labelText: localizations.phoneNumber,
               labelStyle: TextStyle(color: Colors.black, fontSize: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                // borderSide: BorderSide.none,
               ),
               filled: true,
               fillColor: Colors.white,
@@ -127,7 +98,7 @@ class EmergencyContactPage extends StatelessWidget {
             initialCountryCode: 'IQ',
             onChanged: (phone) {
               print(phone.completeNumber);
-              emergencyContactPhoneController.text = phone.completeNumber; // Save the phone number
+              emergencyContactPhoneController.text = phone.completeNumber;
             },
           ),
         ],
@@ -135,20 +106,14 @@ class EmergencyContactPage extends StatelessWidget {
     );
   }
 
-  Widget _buildConnectionDropdown() {
+  Widget _buildConnectionDropdown(AppLocalizations localizations) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            getLocalizedText(
-              'صلة القرابة',
-              'نسبت',
-              'Connection',
-              'پەیوەندی',
-              'Baglanyşyk',
-            ),
+            localizations.connection,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -160,7 +125,6 @@ class EmergencyContactPage extends StatelessWidget {
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                // borderSide: BorderSide.none,
               ),
               filled: true,
               fillColor: Colors.white,
@@ -170,13 +134,7 @@ class EmergencyContactPage extends StatelessWidget {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(
-                  getLocalizedText(
-                    value == 'Father' ? 'أب' : value == 'Mother' ? 'أم' : value == 'Brother' ? 'أخ' : value == 'Sister' ? 'أخت' : 'أخرى',
-                    value == 'Father' ? 'پدر' : value == 'Mother' ? 'مادر' : value == 'Brother' ? 'برادر' : value == 'Sister' ? 'خواهر' : 'دیگر',
-                    value,
-                    value == 'Father' ? 'باوک' : value == 'Mother' ? 'دایک' : value == 'Brother' ? 'برا' : value == 'Sister' ? 'خوشک' : 'تر',
-                    value == 'Father' ? 'Ata' : value == 'Mother' ? 'Ene' : value == 'Brother' ? 'Doganyňyz' : value == 'Sister' ? 'Uýadyňyz' : 'Beýlekiler',
-                  ),
+                  _getLocalizedConnection(value, localizations),
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
               );
@@ -191,18 +149,20 @@ class EmergencyContactPage extends StatelessWidget {
     );
   }
 
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
+  String _getLocalizedConnection(String value, AppLocalizations localizations) {
+    switch (value) {
+      case 'Father':
+        return localizations.father;
+      case 'Mother':
+        return localizations.mother;
+      case 'Brother':
+        return localizations.brother;
+      case 'Sister':
+        return localizations.sister;
+      case 'Other':
+        return localizations.other;
       default:
-        return english;
+        return value;
     }
   }
 }

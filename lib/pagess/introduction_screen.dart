@@ -3,10 +3,9 @@ import '../languages/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:lottie/lottie.dart';
-import 'login_reg.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'login_reg.dart';
 
 class IntroScreen extends StatefulWidget {
   final Language selectedLanguage;
@@ -18,6 +17,7 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen> {
   late Language selectedLanguage;
+  late AppLocalizations localizations;
   final ZoomDrawerController _zoomDrawerController = ZoomDrawerController();
   final GlobalKey _translationIconKey = GlobalKey();
   final PageController _pageController = PageController();
@@ -26,10 +26,13 @@ class _IntroScreenState extends State<IntroScreen> {
   void initState() {
     super.initState();
     selectedLanguage = widget.selectedLanguage;
+    localizations = AppLocalizations(selectedLanguage);
   }
 
   void _handleLanguageChange(Language language) {
     setState(() {
+      selectedLanguage = language;
+      localizations = AppLocalizations(language);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => IntroScreen(selectedLanguage: language)),
@@ -44,23 +47,6 @@ class _IntroScreenState extends State<IntroScreen> {
         selectedLanguage == Language.Kurdish
         ? TextDirection.rtl
         : TextDirection.ltr;
-  }
-
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.English:
-        return english;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
-      default:
-        return english;
-    }
   }
 
   @override
@@ -102,10 +88,10 @@ class _IntroScreenState extends State<IntroScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Tooltip(
-          message: 'Translate',
+          message: localizations.translate,
           child: Showcase(
             key: _translationIconKey,
-            description: 'Tap here to change the language',
+            description: localizations.tapToChangeLanguage,
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -139,136 +125,97 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
         ),
       ),
-        body: Center(
-          child: IntroductionScreen(
-            globalBackgroundColor: Colors.white, // استدعاء لون الخلفية هنا
-            pages: [
-              _buildPageViewModel(
-                svgAsset: 'assets/icons/nlogg.svg',
-                title: getLocalizedText(
-                  "سجل وادخل بسهولة",
-                  "ثبت نام و ورود آسان",
-                  "Easy Registration and Login",
-                  "تۆمارکردن و چوونەژوورەوەی ئاسان",
-                  "Aňsat Hasaba Alyş we Giriş",
-                ),
-                body: getLocalizedText(
-                  "سجل معلوماتك الكاملة بسهولة\nوادخل للاستفادة من خدماتنا",
-                  "به راحتی اطلاعات کامل خود را ثبت کنید\nو وارد شوید تا از خدمات ما بهره مند شوید",
-                  "Easily register your complete information\nand log in to benefit from our services",
-                  "بە ئاسانی زانیاریە تەواوەکانت تۆمار بکە\nو بچۆ ژوورەوە بۆ سوود وەرگرتن لە خزمەتگوزاریەکانمان",
-                  "Doly maglumatlaryňyzy aňsat hasaba alyň\nwe hyzmatlarymyzdan peýdalanmak üçin",
-                ),
-
-              ),
-              _buildPageViewModel(
-                svgAsset: 'assets/icons/nmap.svg',
-                title: getLocalizedText(
-                  "خدمات الخرائط",
-                  "خدمات نقشه",
-                  "Map Services",
-                  "خزمەتگوزاریەکانی نەخشە",
-                  "Karta Hyzmatlary",
-                ),
-                body: getLocalizedText(
-                  "استكشف المواقع الطبية القريبة\nواحصل على الاتجاهات بسهولة",
-                  "مکان های پزشکی نزدیک را کشف کنید\nو به راحتی مسیریابی کنید",
-                  "Discover nearby medical locations\nand get directions easily",
-                  "شوێنە پزیشکیە نزیکەکان بدۆزەرەوە\nو بە ئاسانی ئاراستەکان وەربگرە",
-                  "Golaýdaky lukmançylyk ýerlerini açyň\nwe aňsat görkezme alyň",
-                ),
-              ),
-              _buildPageViewModel(
-                svgAsset: 'assets/icons/nserv.svg',
-                title: getLocalizedText(
-                  "خدمات التطبيق العامة",
-                  "خدمات عمومی برنامه",
-                  "General App Services",
-                  "خزمەتگوزاریە گشتیەکانی بەرنامە",
-                  "Umumy Programmanyň Hyzmatlary",
-                ),
-                body: getLocalizedText(
-                  "احصل على تقارير طبية وإرشادات\nلتحسين رحلتك الصحية",
-                  "گزارش های پزشکی و راهنمایی دریافت کنید\nبرای بهبود سفر سلامتی شما",
-                  "Get medical reports and guidance\nto improve your health journey",
-                  "راپۆرت و رێنمایی پزیشکی وەربگرە\nبۆ باشترکردنی گەشتی تەندروستیت",
-                  "Lukmançylyk hasabatlaryny we görkezmelerini alyň\nsaglygyňyzy gowulandyrmak üçin",
-                ),
-
-              ),
-
-            ],
-
-        onDone: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage)),
-          );
-        },
-        showSkipButton: true,
-        showNextButton: true,
-        nextFlex: 1,
-        dotsFlex: 2,
-        skipOrBackFlex: 1,
-        animationDuration: 1000,
-        curve: Curves.fastOutSlowIn,
-        dotsDecorator: DotsDecorator(
-          spacing: EdgeInsets.all(5),
-          activeColor: Color(0xFF5BB9AE),
-          activeSize: Size(20, 10),
-          size: Size.square(10),
-          activeShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-
+      body: Center(
+        child: IntroductionScreen(
+          globalBackgroundColor: Colors.white,
+          pages: [
+            _buildPageViewModel(
+              svgAsset: 'assets/icons/nlogg.svg',
+              title: localizations.introScreenTitle1,
+              body: localizations.introScreenBody1,
+            ),
+            _buildPageViewModel(
+              svgAsset: 'assets/icons/nmap.svg',
+              title: localizations.introScreenTitle2,
+              body: localizations.introScreenBody2,
+            ),
+            _buildPageViewModel(
+              svgAsset: 'assets/icons/nserv.svg',
+              title: localizations.introScreenTitle3,
+              body: localizations.introScreenBody3,
+            ),
+          ],
+          onDone: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage)),
+            );
+          },
+          showSkipButton: true,
+          showNextButton: true,
+          nextFlex: 1,
+          dotsFlex: 2,
+          skipOrBackFlex: 1,
+          animationDuration: 1000,
+          curve: Curves.fastOutSlowIn,
+          dotsDecorator: DotsDecorator(
+            spacing: EdgeInsets.all(5),
+            activeColor: Color(0xFF5BB9AE),
+            activeSize: Size(20, 10),
+            size: Size.square(10),
+            activeShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
-        ),
-        skip: _buildButton(context, getLocalizedText("تخطي", "تخطي", "Skip", "تخطي", "تخطي"), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoadingScreen(
-                onLoaded: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
-                    ),
-                  );
-                },
-              ),
-            ),          );
-        }),
-        next: _buildIconButton(context, Icons.navigate_next),
-        done: _buildButton(context, getLocalizedText("تم", "تم", "Done", "تم", "تم"), () {
-          Navigator.push(
+          skip: _buildButton(context, localizations.skip, () {
+            Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LoadingScreen(onLoaded: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
-                    ),
-                  );
-                }),
-              )
-          );
-        }),
-      ),
+                builder: (context) => LoadingScreen(
+                  onLoaded: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+          next: _buildIconButton(context, Icons.navigate_next),
+          done: _buildButton(context, localizations.done, () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoadingScreen(onLoaded: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WelcomeScreen(selectedLanguage: selectedLanguage),
+                      ),
+                    );
+                  }),
+                )
+            );
+          }),
         ),
+      ),
     );
-  }PageViewModel _buildPageViewModel({
+  }
+
+  PageViewModel _buildPageViewModel({
     required String svgAsset,
     required String title,
     required String body,
   }) {
     return PageViewModel(
       decoration: PageDecoration(
-        pageColor: Colors.white, // Background color
+        pageColor: Colors.white,
       ),
       bodyWidget: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // Center the content vertically
-
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
             svgAsset,
@@ -278,11 +225,11 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
           SizedBox(height: 40),
           Align(
-            alignment: Alignment.center, // Center the text
+            alignment: Alignment.center,
             child: Text(
               body,
               textDirection: getTextDirection(),
-              textAlign: TextAlign.center, // Center the text
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -303,11 +250,11 @@ class _IntroScreenState extends State<IntroScreen> {
         color: Colors.white,
         margin: EdgeInsets.only(bottom: 50),
         child: Align(
-          alignment: Alignment.center, // Center the title
+          alignment: Alignment.center,
           child: Text(
             title,
             textDirection: getTextDirection(),
-            textAlign: TextAlign.center, // Center the title text
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
               fontSize: 30,
@@ -325,7 +272,6 @@ class _IntroScreenState extends State<IntroScreen> {
       ),
     );
   }
-
 
   Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
     return GestureDetector(
@@ -350,7 +296,6 @@ class _IntroScreenState extends State<IntroScreen> {
     return IconButton(
       icon: Icon(icon, color: Color(0xFF5BB9AE)),
       onPressed: () {
-        // تحقق من أن pageController يمكن الوصول إليه
         if (_pageController.hasClients && _pageController.page! < 2) {
           _pageController.nextPage(
             duration: Duration(milliseconds: 300),
@@ -360,34 +305,18 @@ class _IntroScreenState extends State<IntroScreen> {
       },
     );
   }
-
-
 }
+
 class SidebarMenu extends StatelessWidget {
   final Function(Language) onLanguageChange;
   final Language selectedLanguage;
 
   SidebarMenu({required this.onLanguageChange, required this.selectedLanguage});
 
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.English:
-        return english;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
-      default:
-        return english;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations(selectedLanguage);
+
     return Scaffold(
       backgroundColor: Color(0xFF5BB9AE),
       body: SafeArea(
@@ -397,13 +326,7 @@ class SidebarMenu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                getLocalizedText(
-                  'اختيار اللغة',
-                  'انتخاب زبان',
-                  'Language Selection',
-                  'هەڵبژاردنی زمان',
-                  'Dil seçimi',
-                ),
+                localizations.languageSelection,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,

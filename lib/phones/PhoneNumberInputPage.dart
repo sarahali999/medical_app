@@ -27,7 +27,7 @@ class _MyPhoneState extends State<MyPhone> {
     final password = passwordController.text.trim();
 
     if (phoneNumber.isEmpty || password.isEmpty) {
-      _showMessage('Phone number and password cannot be empty.');
+      _showMessage(AppLocalizations(widget.selectedLanguage).pleaseEnterPhoneNumber);
       return null;
     }
 
@@ -59,8 +59,7 @@ class _MyPhoneState extends State<MyPhone> {
           _showMessage(jsonResponse['message']);
         }
       } else {
-        _showMessage(
-            'Failed to connect to the server. Code: ${response.statusCode}');
+        _showMessage('Failed to connect to the server. Code: ${response.statusCode}');
       }
     } catch (error) {
       _showMessage('An error occurred. Please try again.');
@@ -95,166 +94,116 @@ class _MyPhoneState extends State<MyPhone> {
 
   @override
   Widget build(BuildContext context) {
-    String verificationText = '';
-    String phoneHintText = '';
-    String passwordHintText = '';
-    String loginButtonText = '';
-    String loginInstructionText = '';
-
-    switch (widget.selectedLanguage) {
-      case Language.Arabic:
-        verificationText = 'ادخل رقم الهاتف وكلمة المرور قبل البدء';
-        phoneHintText = 'رقم الهاتف';
-        passwordHintText = 'كلمة المرور';
-        loginButtonText = 'تسجيل الدخول';
-        break;
-      case Language.English:
-        verificationText = 'Phone Number Verification';
-        phoneHintText = 'Phone Number';
-        passwordHintText = 'Password';
-        loginButtonText = 'Login';
-        break;
-      case Language.Persian:
-        verificationText = 'تأیید شماره تلفن';
-        phoneHintText = 'شماره تلفن';
-        passwordHintText = 'کلمه عبور';
-        loginButtonText = 'ورود';
-        break;
-      case Language.Kurdish:
-        verificationText = 'پشت ژمارەی مۆبایل';
-        phoneHintText = 'ژمارەی مۆبایل';
-        passwordHintText = 'وشەی نهێنی';
-        loginButtonText = 'چوونەژوورەوە';
-        break;
-      case Language.Turkmen:
-        verificationText = 'Telefon belgisini tassykla';
-        phoneHintText = 'Telefon belgisi';
-        passwordHintText = 'Açar söz';
-        loginButtonText = 'Giriş';
-        break;
-    }
+    final localizations = AppLocalizations(widget.selectedLanguage);
 
     return Scaffold(
-        body: SingleChildScrollView(
-        child: Directionality( // Add Directionality here
-        textDirection: widget.selectedLanguage == Language.Arabic ||
-        widget.selectedLanguage == Language.Persian ||
-        widget.selectedLanguage == Language.Kurdish
-        ? TextDirection.rtl
-            : TextDirection.ltr,
-        child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25),
-    alignment: Alignment.center,
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-    SvgPicture.asset(
-    'assets/icons/ph6.svg',
-    height: 150,
-    width: 150,
-    ),
-    SizedBox(height: 40),
-    Text(
-    verificationText,
-    style: TextStyle(
-    fontSize: 22,
-    color: Colors.black,
-    ),
-    ),
-              SizedBox(height: 1),
-              Text(
-                loginInstructionText,
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 30),
-              IntlPhoneField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  labelText: phoneHintText,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+      body: SingleChildScrollView(
+        child: Directionality(
+          textDirection: widget.selectedLanguage == Language.Arabic ||
+              widget.selectedLanguage == Language.Persian ||
+              widget.selectedLanguage == Language.Kurdish
+              ? TextDirection.rtl
+              : TextDirection.ltr,
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 25),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                SvgPicture.asset(
+                  'assets/icons/ph6.svg',
+                  height: 150,
+                  width: 150,
+                ),
+                SizedBox(height: 40),
+                Text(
+                  localizations.phoneNumberVerification,
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.black,
                   ),
                 ),
-                initialCountryCode: 'IQ',
-                onChanged: (phone) {
-                  // Handle phone number change
-                },
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: passwordHintText,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF5BB9AE),
-                    shape: RoundedRectangleBorder(
+                SizedBox(height: 30),
+                IntlPhoneField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                    labelText: localizations.phoneNumber,
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                    final token = await login();
-                    if (token != null) {
-                      print('Token: $token');
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              LoadingScreen(
-                                onLoaded: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          MainScreen(
-                                            selectedLanguage: widget
-                                                .selectedLanguage,
-                                          ),
-                                    ),
-                                  );
-                                },
-                              ),
-                        ),
-                      );
-                    }
+                  initialCountryCode: 'IQ',
+                  onChanged: (phone) {
+                    // Handle phone number change
                   },
-                  child: isLoading
-                      ? CircularProgressIndicator(
-                    color: Colors.white,
-                  )
-                      : Text(
-                    loginButtonText,
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: localizations.password,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.05),
-            ],
+                SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 45,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF5BB9AE),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                      final token = await login();
+                      if (token != null) {
+                        print('Token: $token');
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoadingScreen(
+                              onLoaded: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainScreen(
+                                      selectedLanguage: widget.selectedLanguage,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                        : Text(
+                      localizations.login,
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              ],
+            ),
           ),
         ),
       ),
-        )
-        );
-
+    );
   }
 }

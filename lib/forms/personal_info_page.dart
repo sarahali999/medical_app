@@ -41,27 +41,27 @@ class PersonalInfoPage extends StatelessWidget {
     required this.onDayChanged,
     required this.onMonthChanged,
     required this.onYearChanged,
-
   });
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations(selectedLanguage);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: getLocalizedText('المعلومات الشخصية', 'زانیاری تایبەتی', 'Personal Information', 'زانیاری تایبەتی', '')),
+        SectionTitle(title: localizations.personalInformation),
         SizedBox(height: 1),
-        _buildNameFields(),
-        _buildAddressTitle(),
-        _buildAddressFields(),
-        _buildGenderDropdown(),
-        _buildDateOfBirthField(),
-
+        _buildNameFields(localizations),
+        _buildAddressTitle(localizations),
+        _buildAddressFields(localizations),
+        _buildGenderDropdown(localizations),
+        _buildDateOfBirthField(localizations),
       ],
     );
   }
 
-  Widget _buildNameFields() {
+  Widget _buildNameFields(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -80,31 +80,29 @@ class PersonalInfoPage extends StatelessWidget {
           children: [
             Expanded(
               child: CustomTextField(
-                getLocalizedText('الاسم الاول', 'نام اول', 'First Name', 'ناوی یەکەم', ''),
+                localizations.firstName,
                 firstname,
                 textStyle: TextStyle(
                   fontSize: 10,
                   color: Colors.black,
                 ),
-
               ),
             ),
             SizedBox(width: 8),
             Expanded(
               child: CustomTextField(
-                getLocalizedText('الاسم الثاني', 'نام دوم', 'Second Name', 'ناوی دووهەم', ''),
+                localizations.secondName,
                 lastNameController,
                 textStyle: TextStyle(
                   fontSize: 10,
                   color: Colors.black,
                 ),
-
               ),
             ),
             SizedBox(width: 8),
             Expanded(
               child: CustomTextField(
-                getLocalizedText('الاسم الثالث', 'نام سوم', 'Third Name', 'ناوی سێیەم', ''),
+                localizations.thirdName,
                 middleNameController,
                 textStyle: TextStyle(
                   fontSize: 10,
@@ -119,9 +117,9 @@ class PersonalInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressTitle() {
+  Widget _buildAddressTitle(AppLocalizations localizations) {
     return Text(
-      getLocalizedText('العنوان', 'آدرس', 'Address', 'ناونیشان', ''),
+      localizations.address,
       style: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
@@ -130,32 +128,32 @@ class PersonalInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressFields() {
+  Widget _buildAddressFields(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         CustomTextField(
-          getLocalizedText('البلد', 'کشور', 'Country', 'وڵات', ''),
+          localizations.country,
           alleyController,
         ),
         SizedBox(height: 8),
         CustomTextField(
-          getLocalizedText('المحافظة', 'استان', 'Province', 'پارێزگا', ''),
+          localizations.province,
           districtController,
         ),
         SizedBox(height: 8),
         CustomTextField(
-          getLocalizedText('القضاء', 'دادگاه', 'Judiciary', 'دادگا', ''),
+          localizations.judiciary,
           governorateController,
         ),
         SizedBox(height: 8),
         CustomTextField(
-          getLocalizedText('الزقاق', 'کوچه', 'Alley', 'کۆڵان', ''),
+          localizations.alley,
           countryController,
         ),
         SizedBox(height: 8),
         CustomTextField(
-          getLocalizedText('الدار', 'خانه', 'House', 'ماڵ', ''),
+          localizations.house,
           houseController,
         ),
         SizedBox(height: 8),
@@ -163,14 +161,14 @@ class PersonalInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGenderDropdown() {
+  Widget _buildGenderDropdown(AppLocalizations localizations) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: DropdownButtonFormField<int>(
         value: selectedGender != null && (selectedGender == 1 || selectedGender == 2)
             ? selectedGender
             : 1, // Default to 'Male' if null or invalid
-        items: _getGenderOptions().map((option) {
+        items: _getGenderOptions(localizations).map((option) {
           return DropdownMenuItem<int>(
             value: option['key'],
             child: Text(
@@ -185,11 +183,10 @@ class PersonalInfoPage extends StatelessWidget {
           }
         },
         decoration: InputDecoration(
-          labelText: getLocalizedText('الجنس', 'جنس', 'Gender', 'رەگەز', ''),
+          labelText: localizations.gender,
           labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            // borderSide: BorderSide.none,
           ),
           filled: true,
           fillColor: Colors.white,
@@ -198,14 +195,15 @@ class PersonalInfoPage extends StatelessWidget {
       ),
     );
   }
-  Widget _buildDateOfBirthField() {
+
+  Widget _buildDateOfBirthField(AppLocalizations localizations) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            getLocalizedText('تاريخ الميلاد', 'تاریخ تولد', 'Date of Birth', 'رێکەوتی لەدایکبوون', ''),
+            localizations.dateOfBirth,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -217,7 +215,7 @@ class PersonalInfoPage extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildDateDropdown(
-                  getLocalizedText('اليوم', 'روز', 'Day', 'ڕۆژ', ''),
+                  localizations.day,
                   List.generate(31, (index) => (index + 1).toString()),
                   selectedDay?.toString(),
                   onDayChanged,
@@ -226,7 +224,7 @@ class PersonalInfoPage extends StatelessWidget {
               SizedBox(width: 8),
               Expanded(
                 child: _buildDateDropdown(
-                  getLocalizedText('الشهر', 'ماه', 'Month', 'مانگ', ''),
+                  localizations.month,
                   List.generate(12, (index) => (index + 1).toString()),
                   selectedMonth,
                   onMonthChanged,
@@ -235,7 +233,7 @@ class PersonalInfoPage extends StatelessWidget {
               SizedBox(width: 8),
               Expanded(
                 child: _buildDateDropdown(
-                  getLocalizedText('السنة', 'سال', 'Year', 'ساڵ', ''),
+                  localizations.year,
                   List.generate(DateTime.now().year - 1900 + 1, (index) => (DateTime.now().year - index).toString()),
                   selectedYear,
                   onYearChanged,
@@ -263,7 +261,6 @@ class PersonalInfoPage extends StatelessWidget {
         labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          // borderSide: BorderSide.none,
         ),
         filled: true,
         fillColor: Colors.white,
@@ -272,30 +269,16 @@ class PersonalInfoPage extends StatelessWidget {
     );
   }
 
-  List<Map<String, dynamic>> _getGenderOptions() {
+  List<Map<String, dynamic>> _getGenderOptions(AppLocalizations localizations) {
     return [
       {
-        "value": getLocalizedText('ذكر', 'نر', 'Male', 'نر', ''),
+        "value": localizations.male,
         "key": 1
       },
       {
-        "value": getLocalizedText('انثى', 'ژنان', 'Female', 'ژن', ''),
+        "value": localizations.female,
         "key": 2
       },
     ];
-  }
-
-
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String defaultText) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.Kurdish:
-        return kurdish;
-      default:
-        return english;
-    }
   }
 }

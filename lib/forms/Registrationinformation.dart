@@ -21,25 +21,27 @@ class AccountInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations(selectedLanguage);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: getLocalizedText('معلومات الحساب', 'اطلاعات حساب', 'Account Information', 'زانیاری هەژمار', '')),
+        SectionTitle(title: localizations.accountInformation),
         SizedBox(height: 16),
-        _buildUsernameField(),
+        _buildUsernameField(localizations),
         SizedBox(height: 16),
-        _buildEmailField(),
+        _buildEmailField(localizations),
         SizedBox(height: 16),
-        _buildPasswordField(),
+        _buildPasswordField(localizations),
         SizedBox(height: 16),
-        _buildPhoneNumberField(),
+        _buildPhoneNumberField(localizations),
       ],
     );
   }
 
-  Widget _buildUsernameField() {
+  Widget _buildUsernameField(AppLocalizations localizations) {
     return CustomTextField(
-      getLocalizedText('اسم المستخدم', 'نام کاربری', 'Username', 'ناوی بەکارهێنەر', ''),
+      localizations.username,
       usernameController,
       textStyle: TextStyle(
         fontSize: 16,
@@ -48,9 +50,9 @@ class AccountInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmailField() {
+  Widget _buildEmailField(AppLocalizations localizations) {
     return CustomTextField(
-      getLocalizedText('البريد الإلكتروني', 'ایمیل', 'Email', 'ئیمەیل', ''),
+      localizations.email,
       emailController,
       textStyle: TextStyle(
         fontSize: 16,
@@ -59,9 +61,9 @@ class AccountInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPasswordField() {
+  Widget _buildPasswordField(AppLocalizations localizations) {
     return CustomTextField(
-      getLocalizedText('كلمة المرور', 'رمز عبور', 'Password', 'وشەی نهێنی', ''),
+      localizations.password,
       passwordController,
       textStyle: TextStyle(
         fontSize: 16,
@@ -70,12 +72,12 @@ class AccountInfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPhoneNumberField() {
+  Widget _buildPhoneNumberField(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          getLocalizedText('رقم الهاتف', 'شماره تلفن', 'Phone Number', 'ژمارەی تەلەفۆن', ''),
+          localizations.phoneNumber8,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -86,11 +88,10 @@ class AccountInfoPage extends StatelessWidget {
         IntlPhoneField(
           controller: phoneNumberController,
           decoration: InputDecoration(
-            labelText: getLocalizedText('رقم الهاتف', 'شماره تيلفۆن', 'Phone Number', 'ژمارەی تەلەفۆن', ''),
+            labelText: localizations.phoneNumber,
             labelStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              // borderSide: BorderSide.none,
             ),
             filled: true,
             fillColor: Colors.white,
@@ -102,34 +103,12 @@ class AccountInfoPage extends StatelessWidget {
           },
           validator: (phone) {
             if (phone == null || phone.number.isEmpty) {
-              return getLocalizedText(
-                  'يرجى إدخال رقم الهاتف',
-                  'لطفاً شماره تلفن را وارد کنید',
-                  'Please enter a phone number',
-                  'تکایە ژمارەی تەلەفۆن داخڵ بکە',
-                  ''
-              );
+              return localizations.pleaseEnterPhoneNumber;
             }
             return null;
           },
         ),
       ],
     );
-  }
-
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
-      case Language.English:
-      default:
-        return english;
-    }
   }
 }

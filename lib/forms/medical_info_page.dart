@@ -18,25 +18,16 @@ class MedicalInfoPage extends StatelessWidget {
     required this.onBloodTypeChanged,
   });
 
-
   @override
   Widget build(BuildContext context) {
-    final bloodTypes = [
-      'A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'
-    ];
-
+    final localizations = AppLocalizations(selectedLanguage);
+    final bloodTypes = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          title: getLocalizedText(
-              'المعلومات الطبية',
-              'زانیاری پزیشکی',
-              'Medical Information',
-              'زانیاری پزیشکی',
-              ''
-          ),
+          title: localizations.medicalInformation,
         ),
         DropdownButtonFormField<int>(
           value: selectedBloodType,
@@ -45,27 +36,20 @@ class MedicalInfoPage extends StatelessWidget {
             return DropdownMenuItem<int>(
               value: index,
               child: Text(
-                bloodTypes[index], // Fixed to show the correct blood type
+                bloodTypes[index],
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
             );
           }).toList(),
           decoration: InputDecoration(
-            labelText: getLocalizedText(
-                'نوع الدم',
-                'گروه خونی',
-                'Blood Type',
-                'جۆری خوون',
-                ''
-            ),
+            labelText: localizations.bloodType,
             labelStyle: const TextStyle(
-             fontSize: 16,
+              fontSize: 16,
               color: Colors.black87,
-                fontWeight: FontWeight.w500,
-                      ),
+              fontWeight: FontWeight.w500,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-            //  borderSide: BorderSide.none,
             ),
             filled: true,
             fillColor: Colors.white,
@@ -73,32 +57,16 @@ class MedicalInfoPage extends StatelessWidget {
           ),
         ),
         CustomTextField(
-          getLocalizedText('الأمراض المزمنة', 'بیماری‌های مزمن', 'Chronic Diseases', 'نەخۆشیە مزمنەکان', ''),
-         chronicDiseasesController,
+          localizations.chronicDiseases,
+          chronicDiseasesController,
           textStyle: TextStyle(fontSize: 14, color: Colors.black),
         ),
         CustomTextField(
-          getLocalizedText('الحساسية', 'آلرژی‌ها', 'Allergies', 'تێکەڵەکان', ''),
-          allergiesController, // Pass the controller directly
+          localizations.allergies,
+          allergiesController,
           textStyle: TextStyle(fontSize: 14, color: Colors.black),
         ),
       ],
     );
-  }
-
-  String getLocalizedText(String arabic, String persian, String english, String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
-      case Language.English:
-      default:
-        return english;
-    }
   }
 }

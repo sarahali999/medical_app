@@ -5,7 +5,7 @@ import '../controllers/user_controller.dart';
 import '../models/UserDetails.dart';
 import 'Settings.dart';
 import 'edit_profile_page.dart';
-import '../languages/lang.dart'; // Import the language enum
+import '../languages/lang.dart';
 
 class UserProfile extends GetView<UserController> {
   final Language selectedLanguage;
@@ -15,6 +15,8 @@ class UserProfile extends GetView<UserController> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations(selectedLanguage);
+
     return Directionality(
       textDirection: _getTextDirection(),
       child: Scaffold(
@@ -23,20 +25,16 @@ class UserProfile extends GetView<UserController> {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else if (controller.userInfoDetails.value == null) {
-            return Center(child: Text(_getLocalizedText(
-                'No data available', 'بيانات غير متوفرة', 'داده‌ای موجود نیست',
-                'داتا بەردەست نیە', 'Maglumat ýok')));
+            return Center(child: Text(localizations.noDataAvailable));
           } else {
             return CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
-                      _buildProfileHeader(controller.userInfoDetails.value!
-                          .data!),
-                      _buildInfoSection(controller.userInfoDetails.value!
-                          .data!),
-                      _buildActionButtons(context),
+                      _buildProfileHeader(controller.userInfoDetails.value!.data!, localizations),
+                      _buildInfoSection(controller.userInfoDetails.value!.data!, localizations),
+                      _buildActionButtons(context, localizations),
                     ],
                   ),
                 ),
@@ -56,25 +54,7 @@ class UserProfile extends GetView<UserController> {
         : TextDirection.ltr;
   }
 
-  String _getLocalizedText(String english, String arabic, String persian,
-      String kurdish, String turkmen) {
-    switch (selectedLanguage) {
-      case Language.English:
-        return english;
-      case Language.Arabic:
-        return arabic;
-      case Language.Persian:
-        return persian;
-      case Language.Kurdish:
-        return kurdish;
-      case Language.Turkmen:
-        return turkmen;
-      default:
-        return english;
-    }
-  }
-
-  Widget _buildProfileHeader(Data user) {
+  Widget _buildProfileHeader(Data user, AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -96,8 +76,7 @@ class UserProfile extends GetView<UserController> {
           ).animate().scale(duration: 500.ms, curve: Curves.easeOutBack),
           const SizedBox(height: 16),
           Text(
-            "${user.user?.firstName ?? ''} ${user.user?.secondName ?? ''} ${user
-                .user?.thirdName ?? ''}",
+            "${user.user?.firstName ?? ''} ${user.user?.secondName ?? ''} ${user.user?.thirdName ?? ''}",
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -111,23 +90,20 @@ class UserProfile extends GetView<UserController> {
               fontSize: 16,
               color: Colors.grey[600],
             ),
-          ).animate().fadeIn(duration: 500.ms, delay: 250.ms).slideY(
-              begin: 0.5, end: 0),
+          ).animate().fadeIn(duration: 500.ms, delay: 250.ms).slideY(begin: 0.5, end: 0),
         ],
       ),
     );
   }
 
-  Widget _buildInfoSection(Data user) {
+  Widget _buildInfoSection(Data userData, AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _getLocalizedText(
-                'Personal Information', 'معلومات شخصية', 'اطلاعات شخصی',
-                'زانیاری کەسی', 'Şahsy maglumat'),
+            localizations.personalInformation,
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -135,63 +111,38 @@ class UserProfile extends GetView<UserController> {
             ),
           ),
           const SizedBox(height: 16),
-          _buildInfoTile(Icons.cake,
-              _getLocalizedText('Age', 'العمر', 'سن', 'تەمەن', 'Ýaş'),
-              "${user.birthYear ?? ''} ${_getLocalizedText(
-                  'years', 'سنة', 'سال', 'ساڵ', 'ýaş')}"),
-          _buildInfoTile(Icons.local_hospital, _getLocalizedText(
-              'Blood Type', 'فصيلة الدم', 'گروه خونی', 'گرووپی خوێن',
-              'Gan topary'), controller.bloodType(user.bloodType)),
-          _buildInfoTile(Icons.phone, _getLocalizedText(
-              'Phone Number', 'رقم الهاتف', 'شماره تلفن', 'ژمارەی تەلەفۆن',
-              'Telefon belgisi'), user.user?.phoneNumber ?? ''),
-          _buildInfoTile(Icons.email, _getLocalizedText(
-              'Email', 'البريد الإلكتروني', 'ایمیل', 'ئیمەیل', 'E-poçta'),
-              user.user?.email ?? ''),
-          _buildInfoTile(Icons.person, _getLocalizedText(
-              'Full Name', 'الاسم الكامل', 'نام کامل', 'ناوی تەواو',
-              'Doly ady'),
-              "${user.user?.firstName ?? ''} ${user.user?.secondName ??
-                  ''} ${user.user?.thirdName ?? ''}"),
-          _buildInfoTile(Icons.home, _getLocalizedText(
-              'Address', 'العنوان', 'آدرس', 'ناونیشان', 'Salgy'),
-              "${user.address ?? ''}, ${user.country ?? ''}, ${user.district ??
-                  ''}, ${user.province ?? ''}, ${user.house ?? ''}"),
-          _buildInfoTile(Icons.heart_broken, _getLocalizedText(
-              'Chronic Diseases', 'الأمراض المزمنة', 'بیماری‌های مزمن',
-              'نەخۆشیە درێژخایەنەکان', 'Dowamly keseller'),
-              user.chronicDiseases ??
-                  _getLocalizedText('None', 'غير موجود', 'هیچ', 'هیچ', 'Ýok')),
-          _buildInfoTile(Icons.warning, _getLocalizedText(
-              'Allergies', 'الحساسيات', 'آلرژی‌ها', 'هەستیارییەکان',
-              'Allergiýalar'), user.allergies ??
-              _getLocalizedText('None', 'غير موجود', 'هیچ', 'هیچ', 'Ýok')),
-          _buildInfoTile(Icons.contacts, _getLocalizedText(
-              'Emergency Contact Name', 'اسم جهة الاتصال للطوارئ',
-              'نام تماس اضطراری', 'ناوی پەیوەندی کتوپڕ',
-              'Gyssagly habarlaşmak üçin adam'),
-              user.emergencyContactFullName ?? ''),
-          _buildInfoTile(Icons.phone_in_talk, _getLocalizedText(
-              'Emergency Contact Number', 'رقم هاتف جهة الاتصال للطوارئ',
-              'شماره تماس اضطراری', 'ژمارەی پەیوەندی کتوپڕ',
-              'Gyssagly habarlaşmak üçin belgi'),
-              user.emergencyContactPhoneNumber ?? ''),
-          _buildInfoTile(Icons.family_restroom, _getLocalizedText(
-              'Emergency Contact Relationship', 'علاقة جهة الاتصال للطوارئ',
-              'نسبت تماس اضطراری', 'پەیوەندی کەسی کتوپڕ',
-              'Gyssagly habarlaşmak üçin garyndaşlyk'),
-              _getEmergencyContactRelationship(
-                  user.emergencyContactRelationship)),
-          _buildInfoTile(Icons.code, _getLocalizedText(
-              'Random Code', 'الرمز العشوائي', 'کد تصادفی', 'کۆدی هەڕەمەکی',
-              'Tötänleýin kod'), user.randomCode ?? ''),
-          _buildInfoTile(Icons.wc,
-              _getLocalizedText('Gender', 'الجنس', 'جنسیت', 'ڕەگەز', 'Jyns'),
-              _getGender(user.gender)),
+          _buildInfoTile(Icons.person, localizations.fullName, "${userData.user?.firstName ?? ''} ${userData.user?.secondName ?? ''} ${userData.user?.thirdName ?? ''}"),
+          _buildInfoTile(Icons.email, localizations.email, userData.user?.email ?? ''),
+          _buildInfoTile(Icons.phone, localizations.phoneNumber, userData.user?.phoneNumber ?? ''),
+          _buildInfoTile(Icons.cake, localizations.birthYear, userData.birthYear ?? ''),
+          _buildInfoTile(Icons.wc, localizations.gender, _getGender(userData.gender, localizations)),
+          _buildInfoTile(Icons.local_hospital, localizations.bloodType, controller.bloodType(userData.bloodType)),
+          _buildInfoTile(Icons.location_city, localizations.address, "${userData.address ?? ''}, ${userData.alley ?? ''}, ${userData.house ?? ''}"),
+          _buildInfoTile(Icons.flag, localizations.country, userData.country ?? ''),
+          _buildInfoTile(Icons.location_on, localizations.province, userData.province ?? ''),
+          _buildInfoTile(Icons.location_city, localizations.district, userData.district ?? ''),
+          _buildInfoTile(Icons.medical_services, localizations.chronicDiseases, userData.chronicDiseases ?? localizations.none),
+          _buildInfoTile(Icons.warning, localizations.allergies, userData.allergies ?? localizations.none),
+          _buildInfoTile(Icons.contacts, localizations.emergencyContactName, userData.emergencyContactFullName ?? ''),
+          _buildInfoTile(Icons.phone_in_talk, localizations.emergencyContactNumber, userData.emergencyContactPhoneNumber ?? ''),
+          _buildInfoTile(Icons.family_restroom, localizations.emergencyContactRelationship, _getEmergencyContactRelationship(userData.emergencyContactRelationship, localizations)),
+          _buildInfoTile(Icons.home, localizations.emergencyContactAddress, "${userData.emergencyContactAddress ?? ''}, ${userData.emergencyContactAlley ?? ''}, ${userData.emergencyContactHouse ?? ''}"),
+          _buildInfoTile(Icons.flag, localizations.emergencyContactCountry, userData.emergencyContactCountry ?? ''),
+          _buildInfoTile(Icons.location_on, localizations.emergencyContactProvince, userData.emergencyContactProvince ?? ''),
+          _buildInfoTile(Icons.location_city, localizations.emergencyContactDistrict, userData.emergencyContactDistrict ?? ''),
+          _buildInfoTile(Icons.code, localizations.randomCode, userData.randomCode ?? ''),
+          _buildInfoTile(Icons.person_outline, localizations.username, userData.user?.username ?? ''),
+          _buildInfoTile(Icons.event, localizations.createdAt, _formatDateTime(userData.createdAt)),
+          _buildInfoTile(Icons.update, localizations.modifiedAt, _formatDateTime(userData.modifiedAt)),
         ],
       ),
-    ).animate().fadeIn(duration: 500.ms, delay: 500.ms).slideY(
-        begin: 0.1, end: 0);
+    ).animate().fadeIn(duration: 500.ms, delay: 500.ms).slideY(begin: 0.1, end: 0);
+  }
+
+  String _formatDateTime(String? dateTimeString) {
+    if (dateTimeString == null) return '';
+    final dateTime = DateTime.parse(dateTimeString);
+    return "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
   }
 
   Widget _buildInfoTile(IconData icon, String title, String value) {
@@ -232,7 +183,7 @@ class UserProfile extends GetView<UserController> {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context, AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Column(
@@ -240,17 +191,14 @@ class UserProfile extends GetView<UserController> {
         children: [
           _buildGradientButton(
             icon: Icons.edit,
-            label: _getLocalizedText(
-                'Edit Profile', 'تعديل الملف الشخصي', 'ویرایش پروفایل',
-                'دەستکاری پرۆفایل', 'Profili üýtgetmek'),
+            label: localizations.editProfile,
             onPressed: () async {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      EditProfilePage(
-                          userData: controller.userInfoDetails.value!.data!,
-                          selectedLanguage: selectedLanguage),
+                  builder: (context) => EditProfilePage(
+                      userData: controller.userInfoDetails.value!.data!,
+                      selectedLanguage: selectedLanguage),
                 ),
               );
               if (result == true) {
@@ -266,17 +214,14 @@ class UserProfile extends GetView<UserController> {
           const SizedBox(height: 16),
           _buildOutlinedIconButton(
             icon: Icons.settings,
-            label: _getLocalizedText(
-                'Settings', 'الإعدادات', 'تنظیمات', 'ڕێکخستنەکان',
-                'Sazlamalar'),
+            label: localizations.settings,
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );            },
           ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-              .tint(color: const Color(0xFF5BB9AE).withOpacity(0.2),
-              duration: 1500.ms)
+              .tint(color: const Color(0xFF5BB9AE).withOpacity(0.2), duration: 1500.ms)
               .animate()
               .fadeIn(duration: 500.ms, delay: 1000.ms)
               .slideX(begin: -0.1, end: 0),
@@ -329,31 +274,31 @@ class UserProfile extends GetView<UserController> {
     );
   }
 
-  String _getEmergencyContactRelationship(int? relationship) {
+  String _getEmergencyContactRelationship(int? relationship, AppLocalizations localizations) {
     switch (relationship) {
       case 1:
-        return _getLocalizedText('Father', 'أب', 'پدر', 'باوک', 'Kaka');
+        return localizations.father;
       case 2:
-        return _getLocalizedText('Mother', 'أم', 'مادر', 'دایک', 'Ene');
+        return localizations.mother;
       case 3:
-        return _getLocalizedText('Brother', 'أخ', 'برادر', 'برا', 'Dogan');
+        return localizations.brother;
       case 4:
-        return _getLocalizedText('Sister', 'أخت', 'خواهر', 'خوشک', 'Uýa');
+        return localizations.sister;
       case 5:
-        return _getLocalizedText('Friend', 'صديق', 'دوست', 'هاوڕێ', 'Dost');
+        return localizations.friend;
       default:
-        return _getLocalizedText(
-            'Unknown', 'غير معروف', 'ناشناخته', 'نەزانراو', 'Näbelli');
+        return localizations.unknown;
     }
   }
-  String _getGender(int? gender) {
+
+  String _getGender(int? gender, AppLocalizations localizations) {
     switch (gender) {
       case 1:
-        return _getLocalizedText('Male', 'ذكر', 'مرد', 'نێر', 'Erkek');
+        return localizations.male;
       case 2:
-        return _getLocalizedText('Female', 'انثى', 'زن', 'مێ', 'Kadın');
+        return localizations.female;
       default:
-        return _getLocalizedText('Unknown', 'غير معروف', 'ناشناخته', 'نەزانراو', 'Näbelli');
+        return localizations.unknown;
     }
   }
 }
