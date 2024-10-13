@@ -17,39 +17,37 @@ class QrCode extends StatelessWidget {
     return Directionality(
       textDirection: _getTextDirection(selectedLanguage),
       child: Scaffold(
-        body: Container(
+        body: SafeArea(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // عرض الـ randomCode في أعلى وسط الصفحة
-                Obx(() {
-                  if (controller.isLoading.value) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return _buildRandomCodeText(controller.userInfoDetails.value?.data?.randomCode);
-                  }
-                }),
-                SizedBox(height: 20),
-                Obx(() {
-                  // إعادة بناء QR code بناءً على حالة التحميل
-                  if (controller.isLoading.value) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return _buildQrCodeContainer(context, controller.userInfoDetails.value?.data?.randomCode);
-                  }
-                }),
-                SizedBox(height: 20),
-                _buildActionButtons(controller),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Obx(() {
+                    if (controller.isLoading.value) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return _buildRandomCodeText(controller.userInfoDetails.value?.data?.randomCode);
+                    }
+                  }),
+                  SizedBox(height: 20),
+                  Obx(() {
+                    if (controller.isLoading.value) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return _buildQrCodeContainer(context, controller.userInfoDetails.value?.data?.randomCode);
+                    }
+                  }),
+                  SizedBox(height: 50),
+                  _buildActionButtons(controller),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
-
-  // إضافة ال randomCode أعلى وسط الصفحة
   Widget _buildRandomCodeText(String? randomCode) {
     if (randomCode == null || randomCode.isEmpty) {
       return Text(
@@ -69,7 +67,6 @@ class QrCode extends StatelessWidget {
         .fadeIn(duration: 700.ms)
         .slide(begin: Offset(0, -0.5), curve: Curves.easeOutQuad);
   }
-
   Widget _buildQrCodeContainer(BuildContext context, String? qrData) {
     if (qrData == null || qrData.isEmpty) {
       return Text(
@@ -80,6 +77,7 @@ class QrCode extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       height: MediaQuery.of(context).size.width * 0.8,
+      constraints: BoxConstraints(maxWidth: 300, maxHeight: 300),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -174,7 +172,6 @@ class QrCode extends StatelessWidget {
     }
   }
 
-  // Translation maps
   final Map<String, String> _arabicTranslations = {
     'qr_data_empty': 'بيانات QR فارغة أو غير صالحة',
     'refresh': 'تحديث',

@@ -15,7 +15,6 @@ class MarkerInfo {
   final LatLng point;
   final String name;
   double distance = 0;
-
   MarkerInfo({required this.point, required this.name});
 }
 
@@ -33,7 +32,7 @@ class MapPage extends StatefulWidget {
   _MapPageState createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إضافة TickerProviderStateMixin
+class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   final flutter_map.MapController _mapController = flutter_map.MapController();
   LatLng currentLocation = LatLng(0, 0);
   TextEditingController searchController = TextEditingController();
@@ -43,15 +42,14 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
   bool isMarkerListVisible = false;
   MarkerInfo? selectedMarker;
 
-  // إضافة متغيرات جديدة
-  List<LatLng> routePoints = [];
+  List<LatLng> curvedRoutePoints = [];
   late AnimationController _animationController;
   late Animation<double> _animation;
+  late AnimationController _zoomAnimationController;
 
   @override
   void initState() {
     super.initState();
-    // تهيئة وحدة التحكم في الرسوم المتحركة
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -60,13 +58,18 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
       parent: _animationController,
       curve: Curves.easeInOut,
     );
+    _zoomAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
     _locateUser();
     _fetchMarkersFromApi();
   }
 
   @override
   void dispose() {
-    _animationController.dispose(); // التخلص من وحدة التحكم في الرسوم المتحركة
+    _animationController.dispose();
+    _zoomAnimationController.dispose();
     super.dispose();
   }
 
@@ -117,7 +120,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
               ),
             ),
           )).toList();
-          _updatePolylines();
+          _updateCurvedPolylines();
         });
       } else {
         print("Failed to load markers. Status code: ${response.statusCode}");
@@ -130,13 +133,12 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
   void _selectMarker(MarkerInfo info) {
     setState(() {
       selectedMarker = info;
-      _updatePolylines();
+      _updateCurvedPolylines();
       isMarkerListVisible = false;
-      _mapController.move(info.point, 15.0);
-      _animationController.forward(); // بدء الرسوم المتحركة عند اختيار علامة
+      _smoothAnimateToMarker(info.point);
+      _animationController.forward();
     });
   }
-
   void _calculateDistances() {
     for (var info in markerInfos) {
       info.distance = const Distance().as(LengthUnit.Kilometer, currentLocation, info.point);
@@ -144,15 +146,15 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
     markerInfos.sort((a, b) => a.distance.compareTo(b.distance));
   }
 
-  void _updatePolylines() {
+  void _updateCurvedPolylines() {
     setState(() {
       polylines.clear();
-      routePoints.clear();
+      curvedRoutePoints.clear();
       if (selectedMarker != null) {
-        routePoints = [currentLocation, selectedMarker!.point];
+        curvedRoutePoints = _generateCurvedRoute(currentLocation, selectedMarker!.point);
         polylines.add(
           flutter_map.Polyline(
-            points: routePoints,
+            points: curvedRoutePoints,
             color: Colors.blue.withOpacity(0.7),
             strokeWidth: 3.0,
           ),
@@ -160,7 +162,41 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
       }
     });
   }
+  void _smoothAnimateToMarker(LatLng target) {
+    final latTween = Tween<double>(begin: _mapController.camera.center.latitude, end: target.latitude);
+    final lngTween = Tween<double>(begin: _mapController.camera.center.longitude, end: target.longitude);
+    final zoomTween = Tween<double>(begin: _mapController.camera.zoom, end: 15.0);
 
+    _zoomAnimationController.reset();
+    _zoomAnimationController.forward();
+
+    _zoomAnimationController.addListener(() {
+      final animatedLatLng = LatLng(
+        latTween.evaluate(_zoomAnimationController),
+        lngTween.evaluate(_zoomAnimationController),
+      );
+      final animatedZoom = zoomTween.evaluate(_zoomAnimationController);
+      _mapController.move(animatedLatLng, animatedZoom);
+    });
+  }
+  List<LatLng> _generateCurvedRoute(LatLng start, LatLng end) {
+    final Distance distance = const Distance();
+    final double distanceInKm = distance.as(LengthUnit.Kilometer, start, end);
+    final int numberOfPoints = (distanceInKm * 10).round(); // 10 points per km
+
+    List<LatLng> curvedPoints = [];
+    for (int i = 0; i <= numberOfPoints; i++) {
+      double t = i / numberOfPoints;
+      double lat = _quadraticBezier(start.latitude, (start.latitude + end.latitude) / 2 + 0.1, end.latitude, t);
+      double lng = _quadraticBezier(start.longitude, (start.longitude + end.longitude) / 2, end.longitude, t);
+      curvedPoints.add(LatLng(lat, lng));
+    }
+    return curvedPoints;
+  }
+
+  double _quadraticBezier(double start, double control, double end, double t) {
+    return (1 - t) * (1 - t) * start + 2 * (1 - t) * t * control + t * t * end;
+  }
   Future<void> _searchAndNavigate() async {
     if (searchController.text.isEmpty) return;
     final query = searchController.text;
@@ -177,7 +213,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
           currentLocation = LatLng(lat, lng);
           _mapController.move(currentLocation, 15.0);
           _calculateDistances();
-          _updatePolylines();
+          _updateCurvedPolylines();
         });
       }
     } catch (e) {
@@ -220,12 +256,11 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
     double distance = const Distance().as(LengthUnit.Kilometer, currentLocation, selectedMarker!.point);
     return '${distance.toStringAsFixed(2)} km';
   }
-
   void _clearSelection() {
     setState(() {
       selectedMarker = null;
-      _updatePolylines();
-      _animationController.reverse(); // عكس الرسوم المتحركة عند إزالة التحديد
+      _updateCurvedPolylines();
+      _animationController.reverse();
     });
   }
 
@@ -284,6 +319,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
       options: MapOptions(
         initialCenter: currentLocation,
         initialZoom: 3.0,
+        onTap: (_, __) => _clearSelection(),
       ),
       children: [
         TileLayer(
@@ -298,7 +334,6 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
       ],
     );
   }
-
   Widget _buildSearchBar() {
     return Positioned(
       top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
@@ -508,7 +543,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin { // إ
         currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
         _mapController.move(currentLocation, 15.0);
         _calculateDistances();
-        _updatePolylines();
+        _updateCurvedPolylines();
       });
 
       print("Map moved to: ${currentLocation.latitude}, ${currentLocation.longitude}");
