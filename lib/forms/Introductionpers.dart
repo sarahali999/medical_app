@@ -11,6 +11,7 @@ import 'emergency_contact_page.dart';
 import 'step_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 class PatientInfoIntroScreen extends StatefulWidget {
   final Language selectedLanguage;
 
@@ -213,7 +214,6 @@ class _PatientInfoIntroScreenState extends State<PatientInfoIntroScreen> with Ti
                   style: TextStyle(
                       fontSize: 22,
                       color: Color(0xFF5BB9AE),
-                      fontFamily: 'Zain'
                   ),                     ),
                 onDone: () {
                   submitPatientData();
@@ -223,7 +223,6 @@ class _PatientInfoIntroScreenState extends State<PatientInfoIntroScreen> with Ti
                   style: TextStyle(
                       fontSize: 22,
                       color: Color(0xFF5BB9AE),
-                      fontFamily: 'Zain'
                   ),                     ),
                 skip: SizedBox.shrink(),
                 nextFlex: 0,

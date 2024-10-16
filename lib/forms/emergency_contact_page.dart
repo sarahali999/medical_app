@@ -15,9 +15,8 @@ class EmergencyContactPage extends StatelessWidget {
   final TextEditingController emergencyContactDistrictController;
   final TextEditingController emergencyContactAlleyController;
   final TextEditingController emergencyContactHouseController;
-
   final List<String> _connectionOptions = [
-    'Father',
+    'Father',  // يجب أن تطابق تمامًا النصوص التي تعرفها في دالة الترجمة
     'Mother',
     'Brother',
     'Sister',
@@ -56,15 +55,47 @@ class EmergencyContactPage extends StatelessWidget {
           ),
         ),
         _buildEmergencyPhoneNumberField(localizations),
+        _buildConnectionDropdown(localizations),
         CustomTextField(
-          localizations.address,
-          emergencyContactAddressController,
+          localizations.emergencyContactCountry,
+          emergencyContactCountryController,
           textStyle: TextStyle(
             fontSize: 14,
             color: Colors.black,
           ),
         ),
-        _buildConnectionDropdown(localizations),
+        CustomTextField(
+          localizations.emergencyContactProvince,
+          emergencyContactProvinceController,
+          textStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+        ),
+        CustomTextField(
+          localizations.emergencyContactDistrict,
+          emergencyContactDistrictController,
+          textStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+        ),
+        CustomTextField(
+          localizations.alley,
+          emergencyContactAlleyController,
+          textStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+        ),
+        CustomTextField(
+          localizations.house,
+          emergencyContactHouseController,
+          textStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+        ),
       ],
     );
   }
@@ -148,21 +179,19 @@ class EmergencyContactPage extends StatelessWidget {
       ),
     );
   }
-
   String _getLocalizedConnection(String value, AppLocalizations localizations) {
-    switch (value) {
-      case 'Father':
-        return localizations.father;
-      case 'Mother':
-        return localizations.mother;
-      case 'Brother':
-        return localizations.brother;
-      case 'Sister':
-        return localizations.sister;
-      case 'Other':
-        return localizations.other;
-      default:
-        return value;
+    if (value == 'Father') {
+      return localizations.father;
+    } else if (value == 'Mother') {
+      return localizations.mother;
+    } else if (value == 'Brother') {
+      return localizations.brother;
+    } else if (value == 'Sister') {
+      return localizations.sister;
+    } else if (value == 'Other') {
+      return localizations.other;
+    } else {
+      return localizations.unknown;  // إذا كان هناك قيمة غير معروفة، ارجع إلى "غير معروف"
     }
   }
 }

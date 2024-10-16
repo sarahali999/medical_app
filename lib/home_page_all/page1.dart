@@ -9,7 +9,6 @@ class QrCode extends StatelessWidget {
   final Language selectedLanguage;
 
   QrCode({Key? key, required this.selectedLanguage}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final UserController controller = Get.put(UserController());

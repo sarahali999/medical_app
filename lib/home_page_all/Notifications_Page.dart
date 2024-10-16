@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class Publicnotices extends StatefulWidget {
   @override
@@ -8,79 +9,98 @@ class Publicnotices extends StatefulWidget {
 }
 
 class _PublicnoticesState extends State<Publicnotices> {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
-  final List<Map<String, dynamic>> notices = [
-    {
-      'title': 'إرشادات صحية هامة',
-      'content': 'نرجو منكم الالتزام بارتداء الكمامة وتعقيم اليدين باستمرار. توجد محطات تعقيم في جميع أنحاء المبنى.',
-      'icon': Icons.health_and_safety,
-    },
-    {
-      'title': 'خدمات طبية متاحة',
-      'content': 'يوجد فريق طبي متخصص متاح على مدار الساعة. إذا شعرت بتوعك، يرجى التوجه إلى مكتب الاستقبال للمساعدة الفورية.',
-      'icon': Icons.local_hospital,
-    },
-    {
-      'title': 'جدول أخذ الأدوية',
-      'content': 'تذكير: يرجى الالتزام بجدول أخذ أدويتكم كما هو موصوف من قبل طبيبكم. إذا كنتم بحاجة إلى مساعدة، فريقنا الطبي مستعد لمساعدتكم.',
-      'icon': Icons.medication,
-    },
-    {
-      'title': 'نظام غذائي خاص',
-      'content': 'نقدم وجبات تتناسب مع احتياجاتكم الغذائية الخاصة. يرجى إبلاغ موظفي الاستقبال بأي متطلبات غذائية محددة.',
-      'icon': Icons.restaurant_menu,
-    },
-    {
-      'title': 'راحتكم أولويتنا',
-      'content': 'إذا كنتم بحاجة إلى أي مساعدة إضافية أو لديكم أي استفسارات، لا تترددوا في التواصل مع فريقنا. نحن هنا لضمان راحتكم وسلامتكم.',
-      'icon': Icons.support_agent,
-    },
-  ];
+  List<Map<String, dynamic>> _notifications = [];
 
   @override
   void initState() {
     super.initState();
-    _initializeNotifications();
+    _loadNotifications();
+    _initializeOneSignal();
   }
 
-  void _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
-    await _flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification tap
-        print('Notification tapped with payload: ${response.payload}');
-      },
-    );
+  void _initializeOneSignal() async {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    OneSignal.initialize("050d7df1-2374-4fb5-9b4e-a800bb099f7b");
+
+    // Request notification permissions
+    OneSignal.Notifications.requestPermission(true).then((accepted) {
+      print("Notification permissions accepted: $accepted");
+    });
+
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      print('Notification received in foreground: ${event.notification.title} - ${event.notification.body}');
+      _addNotification(event.notification);
+    });
+
+    OneSignal.Notifications.addClickListener((event) {
+      print('Notification clicked: ${event.notification.body}');
+      _addNotification(event.notification);
+    });
+
+    OneSignal.Notifications.addPermissionObserver((state) {
+      print("Permission state changed: $state");
+    });
+
+    _checkStoredNotifications();
   }
 
-  Future<void> _showNotification(String title, String content) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
-      channelDescription: 'your_channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-      styleInformation: BigTextStyleInformation(''),
-    );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-    await _flutterLocalNotificationsPlugin.show(
-      0,
-      title,
-      content,
-      platformChannelSpecifics,
-      payload: 'item x',
-    );
+  void _checkStoredNotifications() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? storedNotifications = prefs.getStringList('notifications');
+    if (storedNotifications != null && storedNotifications.isNotEmpty) {
+      print('Found stored notifications: ${storedNotifications.length}');
+      _loadNotifications();
+    } else {
+      print('No stored notifications found');
+    }
+  }
+
+  void _addNotification(OSNotification notification) {
+    final Map<String, dynamic> notificationMap = {
+      'title': notification.title ?? 'No Title',
+      'body': notification.body ?? 'No Content',
+      'additionalData': notification.additionalData,
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+
+    print('Adding notification: $notificationMap');
+
+    setState(() {
+      _notifications.insert(0, notificationMap);
+    });
+
+    _saveNotifications();
+  }
+
+  void _loadNotifications() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String>? notificationStrings = prefs.getStringList('notifications');
+      print('Loaded notifications: $notificationStrings');
+      if (notificationStrings != null && notificationStrings.isNotEmpty) {
+        setState(() {
+          _notifications = notificationStrings
+              .map((str) => json.decode(str) as Map<String, dynamic>)
+              .toList();
+        });
+      } else {
+        print('No stored notifications found');
+      }
+    } catch (e) {
+      print('Error loading notifications: $e');
+    }
+    print('Notifications after loading: $_notifications');
+  }
+
+  void _saveNotifications() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> notificationStrings = _notifications.map((n) => json.encode(n)).toList();
+      await prefs.setStringList('notifications', notificationStrings);
+      print('Saved notifications: $notificationStrings');
+    } catch (e) {
+      print('Error saving notifications: $e');
+    }
   }
 
   @override
@@ -96,75 +116,72 @@ class _PublicnoticesState extends State<Publicnotices> {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                setState(() {
+                  _loadNotifications();
+                });
+              },
+            ),
+          ],
         ),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF5BB9AE)!,
-                Color(0xFFBCE3F3)!],
+              colors: [Color(0xFF5BB9AE), Color(0xFFBCE3F3)],
             ),
           ),
-          child: AnimationLimiter(
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              itemCount: notices.length,
-              itemBuilder: (BuildContext context, int index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 500),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: Card(
-                        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.teal[100],
-                                child: Icon(notices[index]['icon'] as IconData, color: Color(0xFF5BB9AE)),
-                              ),
-                              title: Text(
-                                notices[index]['title']!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Color(0xFF5BB9AE),
-                                ),
-                              ),
-                              subtitle: Text(
-                                notices[index]['content']!,
-                                style: TextStyle(fontSize: 16, height: 1.5, color: Colors.black54),
-                                textAlign: TextAlign.justify,
-                              ),
-                              trailing: Icon(Icons.arrow_drop_down, color: Color(0xFF5BB9AE)),
-                              onTap: () {
-                                // Handle expansion logic if needed
-                                _showNotification(
-                                  notices[index]['title']!,
-                                  notices[index]['content']!,
-                                );
-                              },
-                            ),
-                            Divider(
-                              color: Color(0xFF5BB9AE),
-                              height: 1,
-                              thickness: 1,
-                            ),
-                          ],
+          child: _notifications.isEmpty
+              ? Center(child: Text('لا توجد إشعارات حالياً', style: TextStyle(fontSize: 18)))
+              : ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            itemCount: _notifications.length,
+            itemBuilder: (BuildContext context, int index) {
+              final notification = _notifications[index];
+              String? imageUrl = notification['additionalData']?['image'];
+
+              return Card(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    if (imageUrl != null)
+                      ClipRRect(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                        child: Image.network(
+                          imageUrl,
+                          height: 180,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
                         ),
                       ),
+                    ListTile(
+                      title: Text(
+                        notification['title'] ?? 'No Title',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Color(0xFF5BB9AE),
+                        ),
+                      ),
+                      subtitle: Text(
+                        notification['body'] ?? 'No Content',
+                        style: TextStyle(fontSize: 16, height: 1.5, color: Colors.black54),
+                        textAlign: TextAlign.justify,
+                      ),
+                      trailing: Icon(Icons.notifications, color: Color(0xFF5BB9AE)),
                     ),
-                  ),
-                );
-              },
-            ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
