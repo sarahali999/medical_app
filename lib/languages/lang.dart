@@ -10,9 +10,7 @@ enum Language {
 
 class AppLocalizations {
   final Language language;
-
   AppLocalizations(this.language);
-
   static AppLocalizations of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }

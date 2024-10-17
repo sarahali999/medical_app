@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:get/get.dart';
+
+import '../controllers/user_controller.dart';
 
 class Publicnotices extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class Publicnotices extends StatefulWidget {
 
 class _PublicnoticesState extends State<Publicnotices> {
   List<Map<String, dynamic>> _notifications = [];
+  final UserController controller = Get.put(UserController());
 
   @override
   void initState() {
@@ -21,6 +25,8 @@ class _PublicnoticesState extends State<Publicnotices> {
   void _initializeOneSignal() async {
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     OneSignal.initialize("050d7df1-2374-4fb5-9b4e-a800bb099f7b");
+    var externalId = controller.userInfoDetails.value?.data?.userId;
+     OneSignal.login(externalId.toString());
 
     // Request notification permissions
     OneSignal.Notifications.requestPermission(true).then((accepted) {
