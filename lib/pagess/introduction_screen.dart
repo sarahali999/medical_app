@@ -152,7 +152,7 @@ class _IntroScreenState extends State<IntroScreen> {
             );
           },
           showSkipButton: true,
-          showNextButton: true,
+          showNextButton: false,
           nextFlex: 1,
           dotsFlex: 2,
           skipOrBackFlex: 1,
@@ -184,7 +184,7 @@ class _IntroScreenState extends State<IntroScreen> {
               ),
             );
           }),
-          next: _buildIconButton(context, Icons.navigate_next),
+          // next: _buildIconButton(context, Icons.navigate_next),
           done: _buildButton(context, localizations.done, () {
             Navigator.push(
                 context,
@@ -292,20 +292,20 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 
-  Widget _buildIconButton(BuildContext context, IconData icon) {
-    return IconButton(
-      icon: Icon(icon, color: Color(0xFF5BB9AE)),
-      onPressed: () {
-        if (_pageController.hasClients && _pageController.page! < 2) {
-          _pageController.nextPage(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      },
-    );
+  // Widget _buildIconButton(BuildContext context, IconData icon) {
+  //   return IconButton(
+  //     icon: Icon(icon, color: Color(0xFF5BB9AE)),
+  //     onPressed: () {
+  //       if (_pageController.hasClients && _pageController.page! < 2) {
+  //         _pageController.nextPage(
+  //           duration: Duration(milliseconds: 300),
+  //           curve: Curves.easeInOut,
+  //         );
+  //       }
+  //     },
+  //   );
   }
-}
+
 
 class SidebarMenu extends StatelessWidget {
   final Function(Language) onLanguageChange;

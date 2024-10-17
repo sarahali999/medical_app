@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';  // استيراد SharedPreferences
+import '../home_page_all/home.dart';
 import '../languages/lang.dart';
 import 'introduction_screen.dart';
 
@@ -34,10 +36,32 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller.forward();
 
+    _checkTokenAndNavigate();  // تحقق من الـ token وقم بالتوجيه
+  }
+
+  Future<void> _checkTokenAndNavigate() async {
+    // الحصول على SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // التحقق مما إذا كان الـ token موجودًا
+    String? token = prefs.getString('token');
+
+    // بعد مدة العرض (5 ثواني)، قم بتوجيه المستخدم بناءً على حالة الـ token
     Timer(Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => IntroScreen(selectedLanguage: widget.selectedLanguage)),
-      );
+      if (token != null && token.isNotEmpty) {
+        // إذا كان الـ token موجودًا، قم بتوجيه المستخدم إلى MainScreen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => MainScreen(selectedLanguage: widget.selectedLanguage),
+          ),
+        );
+      } else {
+        // إذا لم يكن هناك token، قم بتوجيه المستخدم إلى IntroScreen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => IntroScreen(selectedLanguage: widget.selectedLanguage),
+          ),
+        );
+      }
     });
   }
 

@@ -83,8 +83,10 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
         final List<dynamic> data = json.decode(response.body);
 
         markerInfos = data.map((json) {
-          final lat = json['lot'] != 0 ? json['lot'] as double? : 0.0;
-          final lng = json['lag'] != 0 ? json['lag'] as double? : 0.0;
+          final lng = json['lot'] != 0 ? json['lot'] as double? : 0.0;
+
+          final lat = json['lag'] != 0 ? json['lag'] as double? : 0.0;
+
           final name = json['centerName'] as String?;
           return MarkerInfo(
             point: LatLng(lat ?? 0.0, lng ?? 0.0),
