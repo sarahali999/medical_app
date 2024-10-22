@@ -36,6 +36,7 @@ dependencies:
   provider: ^6.1.2
   showcaseview: ^3.0.0
   flutter_local_notifications: ^17.2.2
+  flutter_launcher_icons: ^0.13.1  # Add this line
   fluttertoast: ^8.0.9
   shared_preferences: ^2.3.2
   flutter_polyline_points: ^2.0.0
@@ -63,7 +64,10 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/icons/
-
+#  flutter_icons:
+#      android: true
+#      ios: true
+#      image_path: "assets/images/"  # Replace with the path to your icon image
   fonts:
     - family: Main
       fonts:

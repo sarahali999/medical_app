@@ -218,7 +218,7 @@ class UserProfile extends GetView<UserController> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                MaterialPageRoute(builder: (context) => SettingsScreen(selectedLanguage: selectedLanguage,)),
               );            },
           ).animate(onPlay: (controller) => controller.repeat(reverse: true))
               .tint(color: const Color(0xFF5BB9AE).withOpacity(0.2), duration: 1500.ms)

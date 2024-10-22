@@ -95,112 +95,129 @@ class _MyPhoneState extends State<MyPhone> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations(widget.selectedLanguage);
+    final isRTL = widget.selectedLanguage == Language.Arabic ||
+        widget.selectedLanguage == Language.Persian ||
+        widget.selectedLanguage == Language.Kurdish;
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Directionality(
-          textDirection: widget.selectedLanguage == Language.Arabic ||
-              widget.selectedLanguage == Language.Persian ||
-              widget.selectedLanguage == Language.Kurdish
-              ? TextDirection.rtl
-              : TextDirection.ltr,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 25),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-                SvgPicture.asset(
-                  'assets/icons/ph6.svg',
-                  height: 150,
-                  width: 150,
-                ),
-                SizedBox(height: 40),
-                Text(
-                  localizations.phoneNumberVerification,
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 30),
-                IntlPhoneField(
-                  controller: phoneController,
-                  decoration: InputDecoration(
-                    labelText: localizations.phoneNumber,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+          textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+          child: Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 25),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    SvgPicture.asset(
+                      'assets/icons/ph6.svg',
+                      height: 150,
+                      width: 150,
                     ),
-                  ),
-                  initialCountryCode: 'IQ',
-                  onChanged: (phone) {
-                    // Handle phone number change
-                  },
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: localizations.password,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  height: 45,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF5BB9AE),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: isLoading
-                        ? null
-                        : () async {
-                      final token = await login();
-                      if (token != null) {
-                        print('Token: $token');
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoadingScreen(
-                              onLoaded: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MainScreen(
-                                      selectedLanguage: widget.selectedLanguage,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: isLoading
-                        ? CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : Text(
-                      localizations.login,
+                    SizedBox(height: 40),
+                    Text(
+                      localizations.phoneNumberVerification,
                       style: TextStyle(
                         fontSize: 22,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
-                  ),
+                    SizedBox(height: 30),
+                    IntlPhoneField(
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                        labelText: localizations.phoneNumber,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      initialCountryCode: 'IQ',
+                      onChanged: (phone) {
+                        // Handle phone number change
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: localizations.password,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF5BB9AE),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                          final token = await login();
+                          if (token != null) {
+                            print('Token: $token');
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoadingScreen(
+                                  onLoaded: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainScreen(
+                                          selectedLanguage: widget.selectedLanguage,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: isLoading
+                            ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                            : Text(
+                          localizations.login,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              ],
-            ),
+              ),
+              // Back Button
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 10,
+                left: isRTL ? null : 10,
+                right: isRTL ? 10 : null,
+                child: IconButton(
+                  icon: Icon(
+                   Icons.arrow_back_ios,
+                    color: Color(0xFF5BB9AE),
+                    size: 28,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ],
           ),
         ),
       ),
