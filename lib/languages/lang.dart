@@ -705,6 +705,125 @@ class AppLocalizations {
   );
 
 
+  String get settingsTitle => _getLocalizedText(
+    arabic: "الإعدادات",
+    persian: "تنظیمات",
+    english: "Settings",
+    kurdish: "ڕێکخستنەکان",
+    turkmen: "Sazlamalar",
+  );
+
+  String get generalSection => _getLocalizedText(
+    arabic: "عام",
+    persian: "عمومی",
+    english: "General",
+    kurdish: "گشتی",
+    turkmen: "Umumy",
+  );
+
+  String get languageOption => _getLocalizedText(
+    arabic: "اللغة",
+    persian: "زبان",
+    english: "Language",
+    kurdish: "زمان",
+    turkmen: "Dil",
+  );
+
+  String get deleteAccountOption => _getLocalizedText(
+    arabic: "حذف الحساب",
+    persian: "حذف حساب",
+    english: "Delete Account",
+    kurdish: "سڕینەوەی هەژمار",
+    turkmen: "Hasaby öçürmek",
+  );
+
+  String get legalSection => _getLocalizedText(
+    arabic: "قانوني",
+    persian: "قانونی",
+    english: "Legal",
+    kurdish: "یاسایی",
+    turkmen: "Kanuny",
+  );
+
+  String get privacyPolicy => _getLocalizedText(
+    arabic: "سياسة الخصوصية",
+    persian: "سیاست حفظ حریم خصوصی",
+    english: "Privacy Policy",
+    kurdish: "سیاسەتی تایبەتمەندی",
+    turkmen: "Gizlinlik syýasaty",
+  );
+
+  String get termsOfService => _getLocalizedText(
+    arabic: "شروط الخدمة",
+    persian: "شرایط خدمات",
+    english: "Terms of Service",
+    kurdish: "مەرجەکانی خزمەتگوزاری",
+    turkmen: "Hyzmat şertleri",
+  );
+
+  String get appSettingsSection => _getLocalizedText(
+    arabic: "إعدادات التطبيق",
+    persian: "تنظیمات برنامه",
+    english: "App Settings",
+    kurdish: "ڕێکخستنەکانی بەرنامە",
+    turkmen: "Programma sazlamalary",
+  );
+
+  String get notifications => _getLocalizedText(
+    arabic: "الإشعارات",
+    persian: "اعلان‌ها",
+    english: "Notifications",
+    kurdish: "ئاگادارکردنەوەکان",
+    turkmen: "Duýduryşlar",
+  );
+
+  String get security => _getLocalizedText(
+    arabic: "الأمان",
+    persian: "امنیت",
+    english: "Security",
+    kurdish: "ئاسایش",
+    turkmen: "Howpsuzlyk",
+  );
+
+  String get chooseLanguage => _getLocalizedText(
+    arabic: "اختر اللغة",
+    persian: "زبان را انتخاب کنید",
+    english: "Choose Language",
+    kurdish: "زمان هەڵبژێرە",
+    turkmen: "Dil saýlaň",
+  );
+
+  String get deleteAccountTitle => _getLocalizedText(
+    arabic: "حذف الحساب",
+    persian: "حذف حساب",
+    english: "Delete Account",
+    kurdish: "سڕینەوەی هەژمار",
+    turkmen: "Hasaby öçürmek",
+  );
+
+  String get deleteAccountConfirmation => _getLocalizedText(
+    arabic: "هل أنت متأكد أنك تريد حذف حسابك؟ هذا الإجراء لا يمكن التراجع عنه.",
+    persian: "آیا مطمئن هستید که می‌خواهید حساب خود را حذف کنید؟ این عمل غیرقابل برگشت است.",
+    english: "Are you sure you want to delete your account? This action cannot be undone.",
+    kurdish: "دڵنیایت کە دەتەوێت هەژمارەکەت بسڕیتەوە؟ ئەم کردارە ناتوانرێت بگەڕێندرێتەوە.",
+    turkmen: "Hasabyňyzy öçürmek isleýärsiňizmi? Bu hereketi yzyna gaýtaryp bolmaz.",
+  );
+
+  String get cancel => _getLocalizedText(
+    arabic: "إلغاء",
+    persian: "لغو",
+    english: "Cancel",
+    kurdish: "هەڵوەشاندنەوە",
+    turkmen: "Ýatyr",
+  );
+
+  String get confirmDelete => _getLocalizedText(
+    arabic: "نعم، احذف الحساب",
+    persian: "بله، حساب را حذف کن",
+    english: "Yes, Delete Account",
+    kurdish: "بەڵێ، هەژمارەکە بسڕەوە",
+    turkmen: "Hawa, hasaby öçür",
+  );
   String _getLocalizedText({
     required String arabic,
     required String persian,

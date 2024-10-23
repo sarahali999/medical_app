@@ -58,11 +58,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const Divider(),
-                _buildLanguageOption('العربية', Language.Arabic),
-                _buildLanguageOption('English', Language.English),
-                _buildLanguageOption('فارسی', Language.Persian),
-                _buildLanguageOption('کوردی', Language.Kurdish),
-                _buildLanguageOption('Türkmençe', Language.Turkmen),
+                _buildLanguageOption(context,'العربية', Language.Arabic),
+                _buildLanguageOption(context,'English', Language.English),
+                _buildLanguageOption(context,'فارسی', Language.Persian),
+                _buildLanguageOption(context,'کوردی', Language.Kurdish),
+                _buildLanguageOption(context,'Türkmençe', Language.Turkmen),
               ],
             ),
           ),
@@ -72,7 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   // بناء خيار اللغة
-  Widget _buildLanguageOption(String title, Language language) {
+  Widget _buildLanguageOption(BuildContext context, String title, Language language) {
     return ListTile(
       title: Text(title),
       trailing: _currentLanguage == language
